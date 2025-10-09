@@ -2,10 +2,30 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Shield, Lock, Mail, User as UserIcon, Building, Eye, EyeOff } from "lucide-react";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Shield,
+  Lock,
+  Mail,
+  User as UserIcon,
+  Building,
+  Eye,
+  EyeOff,
+} from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 
@@ -16,17 +36,24 @@ export default function Login() {
   const [showLoginPassword, setShowLoginPassword] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
-
+  const [role, setRole] = useState("");
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    
+
     setTimeout(() => {
       toast({
         title: "Login Successful",
         description: "Welcome to NIRNAY Platform",
       });
-      navigate("/dashboard");
+
+      // 🔹 Navigate based on selected role
+      if (role === "user") navigate("/researcher");
+      else if (role === "reviewer") navigate("/apex");
+      else if (role === "naccer") navigate("/analytics");
+      else navigate("/dashboard");
+
+      setIsLoading(false);
     }, 1000);
   };
 
@@ -47,7 +74,7 @@ export default function Login() {
       {/* Left Panel - Coal Themed Background */}
       <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden">
         {/* Coal Background Image with Overlay */}
-        <div 
+        <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
             backgroundImage: 'url("/image.png")',
@@ -55,7 +82,7 @@ export default function Login() {
         >
           {/* Dark Overlay for better text readability */}
           <div className="absolute inset-0 bg-gradient-to-br from-gray-900/80 to-gray-800/60"></div>
-          
+
           {/* Coal Pattern Overlay */}
           <div className="absolute inset-0 opacity-20">
             <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-black via-gray-800 to-gray-900 mix-blend-overlay"></div>
@@ -65,9 +92,18 @@ export default function Login() {
         {/* Floating Elements with Coal Theme */}
         <div className="absolute inset-0">
           <div className="absolute top-20 left-20 w-32 h-32 bg-gray-800/30 rounded-full blur-3xl animate-float"></div>
-          <div className="absolute top-40 right-32 w-24 h-24 bg-gray-700/30 rounded-full blur-2xl animate-float" style={{ animationDelay: '1s' }}></div>
-          <div className="absolute bottom-32 left-40 w-40 h-40 bg-gray-900/30 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }}></div>
-          <div className="absolute bottom-20 right-20 w-28 h-28 bg-gray-800/30 rounded-full blur-2xl animate-float" style={{ animationDelay: '0.5s' }}></div>
+          <div
+            className="absolute top-40 right-32 w-24 h-24 bg-gray-700/30 rounded-full blur-2xl animate-float"
+            style={{ animationDelay: "1s" }}
+          ></div>
+          <div
+            className="absolute bottom-32 left-40 w-40 h-40 bg-gray-900/30 rounded-full blur-3xl animate-float"
+            style={{ animationDelay: "2s" }}
+          ></div>
+          <div
+            className="absolute bottom-20 right-20 w-28 h-28 bg-gray-800/30 rounded-full blur-2xl animate-float"
+            style={{ animationDelay: "0.5s" }}
+          ></div>
         </div>
 
         {/* Content */}
@@ -77,7 +113,9 @@ export default function Login() {
               <Shield className="h-24 w-24 text-white" />
             </div>
           </div>
-          <h1 className="text-5xl font-bold mb-4 text-center text-white">NIRNAY</h1>
+          <h1 className="text-5xl font-bold mb-4 text-center text-white">
+            NIRNAY
+          </h1>
           <p className="text-xl mb-2 text-center text-gray-200">
             National Intelligent Research & Development
           </p>
@@ -85,16 +123,18 @@ export default function Login() {
             Network for Analytical Year-round Yield
           </p>
           <div className="mt-8 flex items-center gap-3">
-            <div className="h-px w-12 bg-amber-600"></div>
-            <div className="h-px w-12 bg-gray-400"></div>
-            <div className="h-px w-12 bg-gray-600"></div>
+            <div className="h-px w-12 bg-orange-600"></div>
+            <div className="h-px w-12 bg-white"></div>
+            <div className="h-px w-12 bg-green-600"></div>
           </div>
           <p className="mt-6 text-center text-gray-300 max-w-md">
-            AI-Powered R&D Proposal Evaluation System under Ministry of Coal, Government of India
+            AI-Powered R&D Proposal Evaluation System under Ministry of Coal,
+            Government of India
           </p>
           <div className="mt-8 bg-gray-800/50 backdrop-blur-sm p-4 rounded-lg border border-gray-700/50">
             <p className="text-sm text-gray-300 text-center">
-              Empowering coal research and innovation through advanced AI evaluation
+              Empowering coal research and innovation through advanced AI
+              evaluation
             </p>
           </div>
         </div>
@@ -111,14 +151,18 @@ export default function Login() {
               </div>
               <div>
                 <h1 className="text-2xl font-bold text-primary">NIRNAY</h1>
-                <p className="text-xs text-muted-foreground">Ministry of Coal</p>
+                <p className="text-xs text-muted-foreground">
+                  Ministry of Coal
+                </p>
               </div>
             </div>
           </div>
 
           <Card className="shadow-lg border-2">
             <CardHeader className="space-y-1">
-              <CardTitle className="text-2xl font-bold text-primary">Welcome</CardTitle>
+              <CardTitle className="text-2xl font-bold text-primary">
+                Welcome
+              </CardTitle>
               <CardDescription>
                 Sign in to access the NIRNAY evaluation platform
               </CardDescription>
@@ -135,14 +179,21 @@ export default function Login() {
                   <form onSubmit={handleLogin} className="space-y-4">
                     <div className="space-y-2">
                       <Label htmlFor="role">Role</Label>
-                      <Select defaultValue="user">
+                      <Select
+                        value={role}
+                        onValueChange={(value) => setRole(value)}
+                      >
                         <SelectTrigger>
                           <SelectValue placeholder="Select your role" />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="user">Researcher</SelectItem>
-                          <SelectItem value="naccer">NaCCER Official</SelectItem>
-                          <SelectItem value="reviewer">Expert Reviewer</SelectItem>
+                          <SelectItem value="naccer">
+                            NaCCER Official
+                          </SelectItem>
+                          <SelectItem value="reviewer">
+                            Expert Reviewer
+                          </SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -188,9 +239,13 @@ export default function Login() {
                     <div className="flex items-center justify-between text-sm">
                       <label className="flex items-center gap-2">
                         <input type="checkbox" className="rounded" />
-                        <span className="text-muted-foreground">Remember me</span>
+                        <span className="text-muted-foreground">
+                          Remember me
+                        </span>
                       </label>
-                      <a href="#" className="text-accent hover:underline">Forgot password?</a>
+                      <a href="#" className="text-accent hover:underline">
+                        Forgot password?
+                      </a>
                     </div>
                     <Button
                       type="submit"
@@ -260,7 +315,9 @@ export default function Login() {
 
                     {/* Organization */}
                     <div className="space-y-2">
-                      <Label htmlFor="organization">Name of the Organization *</Label>
+                      <Label htmlFor="organization">
+                        Name of the Organization *
+                      </Label>
                       <Input
                         id="organization"
                         placeholder="IIT Delhi"
@@ -337,7 +394,9 @@ export default function Login() {
 
                     {/* Confirm Password */}
                     <div className="space-y-2">
-                      <Label htmlFor="confirm-password">Re-enter Password *</Label>
+                      <Label htmlFor="confirm-password">
+                        Re-enter Password *
+                      </Label>
                       <div className="relative">
                         <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                         <Input
@@ -376,7 +435,15 @@ export default function Login() {
               </Tabs>
 
               <div className="mt-6 text-center text-sm text-muted-foreground">
-                <p>Need help? Contact <a href="mailto:support@nirnay.gov.in" className="text-gray-700 hover:underline font-medium">support@nirnay.gov.in</a></p>
+                <p>
+                  Need help? Contact{" "}
+                  <a
+                    href="mailto:support@nirnay.gov.in"
+                    className="text-gray-700 hover:underline font-medium"
+                  >
+                    support@nirnay.gov.in
+                  </a>
+                </p>
               </div>
             </CardContent>
           </Card>

@@ -9,7 +9,9 @@ import Dashboard from "./pages/Dashboard";
 import Analytics from "./pages/Analytics";
 import NotFound from "./pages/NotFound";
 import GoogleTranslate from "./components/GoogleTranslate";
-
+import ResearcherPage from "./pages/Researcher";
+import ApexPage from "./pages/Apex";
+import FormSubmission from "./pages/Forms"
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -25,6 +27,9 @@ const App = () => (
           <Route path="/index" element={<Index />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/analytics" element={<Analytics />} />
+         <Route path="/researcher" element={<ResearcherPage />} />
+        <Route path="/apex" element={<ApexPage />} />
+          <Route path="/form/:formType" element={<FormSubmission />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
