@@ -8,11 +8,14 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Analytics from "./pages/Analytics";
 import NotFound from "./pages/NotFound";
+import GoogleTranslate from "./components/GoogleTranslate";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
+          <GoogleTranslate />
+
     <TooltipProvider>
       <Toaster />
       <Sonner />

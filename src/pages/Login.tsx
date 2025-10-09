@@ -4,13 +4,16 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Shield, Lock, Mail, User as UserIcon, Building } from "lucide-react";
+import { Shield, Lock, Mail, User as UserIcon, Building, Eye, EyeOff } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showLoginPassword, setShowLoginPassword] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -27,40 +30,73 @@ export default function Login() {
     }, 1000);
   };
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
+
+  const toggleLoginPasswordVisibility = () => {
+    setShowLoginPassword(!showLoginPassword);
+  };
+
   return (
     <div className="min-h-screen flex">
-      {/* Left Panel - Animated Background */}
-      <div className="hidden lg:flex lg:w-1/2 gradient-hero relative overflow-hidden">
-        {/* Floating Particles Animation */}
+      {/* Left Panel - Coal Themed Background */}
+      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden">
+        {/* Coal Background Image with Overlay */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center"
+          style={{
+            backgroundImage: 'url("/image.png")',
+          }}
+        >
+          {/* Dark Overlay for better text readability */}
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-900/80 to-gray-800/60"></div>
+          
+          {/* Coal Pattern Overlay */}
+          <div className="absolute inset-0 opacity-20">
+            <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-black via-gray-800 to-gray-900 mix-blend-overlay"></div>
+          </div>
+        </div>
+
+        {/* Floating Elements with Coal Theme */}
         <div className="absolute inset-0">
-          <div className="absolute top-20 left-20 w-32 h-32 bg-royal/20 rounded-full blur-3xl animate-float"></div>
-          <div className="absolute top-40 right-32 w-24 h-24 bg-sky/20 rounded-full blur-2xl animate-float" style={{ animationDelay: '1s' }}></div>
-          <div className="absolute bottom-32 left-40 w-40 h-40 bg-primary-glow/20 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }}></div>
-          <div className="absolute bottom-20 right-20 w-28 h-28 bg-royal/20 rounded-full blur-2xl animate-float" style={{ animationDelay: '0.5s' }}></div>
+          <div className="absolute top-20 left-20 w-32 h-32 bg-gray-800/30 rounded-full blur-3xl animate-float"></div>
+          <div className="absolute top-40 right-32 w-24 h-24 bg-gray-700/30 rounded-full blur-2xl animate-float" style={{ animationDelay: '1s' }}></div>
+          <div className="absolute bottom-32 left-40 w-40 h-40 bg-gray-900/30 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }}></div>
+          <div className="absolute bottom-20 right-20 w-28 h-28 bg-gray-800/30 rounded-full blur-2xl animate-float" style={{ animationDelay: '0.5s' }}></div>
         </div>
 
         {/* Content */}
-        <div className="relative z-10 flex flex-col items-center justify-center w-full p-12 text-primary-foreground">
+        <div className="relative z-10 flex flex-col items-center justify-center w-full p-12 text-white">
           <div className="mb-8">
-            <div className="bg-card/10 backdrop-blur-sm p-6 rounded-2xl shadow-glow">
-              <Shield className="h-24 w-24 text-primary-foreground" />
+            <div className="bg-gray-800/40 backdrop-blur-sm p-6 rounded-2xl shadow-lg border border-gray-700/50">
+              <Shield className="h-24 w-24 text-white" />
             </div>
           </div>
-          <h1 className="text-5xl font-bold mb-4 text-center">NIRNAY</h1>
-          <p className="text-xl mb-2 text-center text-primary-foreground/90">
+          <h1 className="text-5xl font-bold mb-4 text-center text-white">NIRNAY</h1>
+          <p className="text-xl mb-2 text-center text-gray-200">
             National Intelligent Research & Development
           </p>
-          <p className="text-lg text-center text-primary-foreground/80">
+          <p className="text-lg text-center text-gray-300">
             Network for Analytical Year-round Yield
           </p>
           <div className="mt-8 flex items-center gap-3">
-            <div className="h-px w-12 bg-saffron"></div>
-            <div className="h-px w-12 bg-primary-foreground"></div>
-            <div className="h-px w-12 bg-green-india"></div>
+            <div className="h-px w-12 bg-amber-600"></div>
+            <div className="h-px w-12 bg-gray-400"></div>
+            <div className="h-px w-12 bg-gray-600"></div>
           </div>
-          <p className="mt-6 text-center text-primary-foreground/70 max-w-md">
+          <p className="mt-6 text-center text-gray-300 max-w-md">
             AI-Powered R&D Proposal Evaluation System under Ministry of Coal, Government of India
           </p>
+          <div className="mt-8 bg-gray-800/50 backdrop-blur-sm p-4 rounded-lg border border-gray-700/50">
+            <p className="text-sm text-gray-300 text-center">
+              Empowering coal research and innovation through advanced AI evaluation
+            </p>
+          </div>
         </div>
       </div>
 
@@ -70,8 +106,8 @@ export default function Login() {
           {/* Mobile Logo */}
           <div className="lg:hidden flex items-center justify-center mb-8">
             <div className="flex items-center gap-3">
-              <div className="bg-gradient-primary p-3 rounded-xl">
-                <Shield className="h-8 w-8 text-primary-foreground" />
+              <div className="bg-gradient-to-br from-gray-800 to-gray-900 p-3 rounded-xl">
+                <Shield className="h-8 w-8 text-white" />
               </div>
               <div>
                 <h1 className="text-2xl font-bold text-primary">NIRNAY</h1>
@@ -91,7 +127,7 @@ export default function Login() {
               <Tabs defaultValue="login" className="w-full">
                 <TabsList className="grid w-full grid-cols-2 mb-4">
                   <TabsTrigger value="login">Login</TabsTrigger>
-                  <TabsTrigger value="signup">Sign Up</TabsTrigger>
+                  <TabsTrigger value="signup">Register</TabsTrigger>
                 </TabsList>
 
                 {/* Login Tab */}
@@ -104,9 +140,9 @@ export default function Login() {
                           <SelectValue placeholder="Select your role" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="user">Researcher / PI</SelectItem>
+                          <SelectItem value="user">Researcher</SelectItem>
                           <SelectItem value="naccer">NaCCER Official</SelectItem>
-                          <SelectItem value="reviewer">Expert Reviewer (CIL)</SelectItem>
+                          <SelectItem value="reviewer">Expert Reviewer</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -129,11 +165,24 @@ export default function Login() {
                         <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                         <Input
                           id="password"
-                          type="password"
+                          type={showLoginPassword ? "text" : "password"}
                           placeholder="••••••••"
-                          className="pl-10"
+                          className="pl-10 pr-10"
                           required
                         />
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                          onClick={toggleLoginPasswordVisibility}
+                        >
+                          {showLoginPassword ? (
+                            <EyeOff className="h-4 w-4 text-muted-foreground" />
+                          ) : (
+                            <Eye className="h-4 w-4 text-muted-foreground" />
+                          )}
+                        </Button>
                       </div>
                     </div>
                     <div className="flex items-center justify-between text-sm">
@@ -145,7 +194,7 @@ export default function Login() {
                     </div>
                     <Button
                       type="submit"
-                      className="w-full gradient-primary shadow-glow"
+                      className="w-full bg-gradient-to-r from-gray-800 to-gray-900 hover:from-gray-700 hover:to-gray-800 text-white shadow-lg"
                       disabled={isLoading}
                     >
                       {isLoading ? "Signing in..." : "Sign In"}
@@ -156,59 +205,168 @@ export default function Login() {
                 {/* Sign Up Tab */}
                 <TabsContent value="signup">
                   <form onSubmit={handleLogin} className="space-y-4">
+                    {/* Name */}
                     <div className="space-y-2">
-                      <Label htmlFor="name">Full Name</Label>
+                      <Label htmlFor="name">Name *</Label>
                       <div className="relative">
                         <UserIcon className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                         <Input
                           id="name"
-                          placeholder="Dr. John Doe"
+                          placeholder="Dr. Ram Kunar"
                           className="pl-10"
+                          maxLength={50}
                           required
                         />
                       </div>
                     </div>
+
+                    {/* Title */}
                     <div className="space-y-2">
-                      <Label htmlFor="institution">Institution</Label>
-                      <div className="relative">
-                        <Building className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                        <Input
-                          id="institution"
-                          placeholder="IIT Delhi"
-                          className="pl-10"
-                          required
-                        />
-                      </div>
+                      <Label htmlFor="title">Select Title</Label>
+                      <Select>
+                        <SelectTrigger id="title" className="w-full">
+                          <SelectValue placeholder="Select" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Dr.">Dr.</SelectItem>
+                          <SelectItem value="Mr.">Mr.</SelectItem>
+                          <SelectItem value="Ms.">Ms.</SelectItem>
+                          <SelectItem value="Prof.">Prof.</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
+
+                    {/* Qualification */}
                     <div className="space-y-2">
-                      <Label htmlFor="signup-email">Email</Label>
+                      <Label htmlFor="qualification">Qualification *</Label>
+                      <Input
+                        id="qualification"
+                        placeholder="Ph.D. in Computer Science"
+                        maxLength={100}
+                        required
+                      />
+                    </div>
+
+                    {/* Designation */}
+                    <div className="space-y-2">
+                      <Label htmlFor="designation">Designation *</Label>
+                      <Input
+                        id="designation"
+                        placeholder="Assistant Professor"
+                        maxLength={50}
+                        required
+                      />
+                    </div>
+
+                    {/* Organization */}
+                    <div className="space-y-2">
+                      <Label htmlFor="organization">Name of the Organization *</Label>
+                      <Input
+                        id="organization"
+                        placeholder="IIT Delhi"
+                        maxLength={50}
+                        required
+                      />
+                    </div>
+
+                    {/* Research Interest */}
+                    <div className="space-y-2">
+                      <Label htmlFor="research">Research Interest Area *</Label>
+                      <Input
+                        id="research"
+                        placeholder="Artificial Intelligence, ML"
+                        maxLength={100}
+                        required
+                      />
+                    </div>
+
+                    {/* Email */}
+                    <div className="space-y-2">
+                      <Label htmlFor="signup-email">E-mail ID *</Label>
                       <div className="relative">
                         <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                         <Input
                           id="signup-email"
                           type="email"
-                          placeholder="your.email@example.com"
+                          placeholder="abc@example.com"
                           className="pl-10"
                           required
                         />
                       </div>
                     </div>
+
+                    {/* Contact Number */}
                     <div className="space-y-2">
-                      <Label htmlFor="signup-password">Password</Label>
+                      <Label htmlFor="contact">Contact No. *</Label>
+                      <Input
+                        id="contact"
+                        type="tel"
+                        placeholder="8888999900"
+                        maxLength={15}
+                        required
+                      />
+                    </div>
+
+                    {/* Password */}
+                    <div className="space-y-2">
+                      <Label htmlFor="signup-password">Password *</Label>
                       <div className="relative">
                         <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                         <Input
                           id="signup-password"
-                          type="password"
+                          type={showPassword ? "text" : "password"}
                           placeholder="••••••••"
-                          className="pl-10"
+                          className="pl-10 pr-10"
                           required
                         />
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                          onClick={togglePasswordVisibility}
+                        >
+                          {showPassword ? (
+                            <EyeOff className="h-4 w-4 text-muted-foreground" />
+                          ) : (
+                            <Eye className="h-4 w-4 text-muted-foreground" />
+                          )}
+                        </Button>
                       </div>
                     </div>
+
+                    {/* Confirm Password */}
+                    <div className="space-y-2">
+                      <Label htmlFor="confirm-password">Re-enter Password *</Label>
+                      <div className="relative">
+                        <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                        <Input
+                          id="confirm-password"
+                          type={showConfirmPassword ? "text" : "password"}
+                          placeholder="••••••••"
+                          className="pl-10 pr-10"
+                          required
+                        />
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                          onClick={toggleConfirmPasswordVisibility}
+                        >
+                          {showConfirmPassword ? (
+                            <EyeOff className="h-4 w-4 text-muted-foreground" />
+                          ) : (
+                            <Eye className="h-4 w-4 text-muted-foreground" />
+                          )}
+                        </Button>
+                      </div>
+                    </div>
+
+                    {/* Submit Button */}
                     <Button
                       type="submit"
-                      className="w-full gradient-primary shadow-glow"
+                      className="w-full bg-gradient-to-r from-gray-800 to-gray-900 hover:from-gray-700 hover:to-gray-800 text-white shadow-lg"
                       disabled={isLoading}
                     >
                       Create Account
@@ -218,7 +376,7 @@ export default function Login() {
               </Tabs>
 
               <div className="mt-6 text-center text-sm text-muted-foreground">
-                <p>Need help? Contact <a href="mailto:support@nirnay.gov.in" className="text-accent hover:underline">support@nirnay.gov.in</a></p>
+                <p>Need help? Contact <a href="mailto:support@nirnay.gov.in" className="text-gray-700 hover:underline font-medium">support@nirnay.gov.in</a></p>
               </div>
             </CardContent>
           </Card>

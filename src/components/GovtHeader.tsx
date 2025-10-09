@@ -8,28 +8,60 @@ interface GovtHeaderProps {
   userName?: string;
 }
 
-export const GovtHeader = ({ showAuth = false, onLogout, userName }: GovtHeaderProps) => {
+export const GovtHeader = ({
+  showAuth = false,
+  onLogout,
+  userName,
+}: GovtHeaderProps) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <>
       {/* Top Bar - Government of India */}
-      <div className="bg-primary text-primary-foreground py-2 px-4 border-b-2 border-saffron">
+      <div className="bg-primary text-primary-foreground py-1 px-4 border-b-2 border-saffron">
         <div className="container mx-auto flex items-center justify-between text-sm">
           <div className="flex items-center gap-2">
-            <img 
-              src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg" 
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg"
               alt="Government of India"
               className="h-6 w-6"
             />
             <span className="font-semibold">Government of India</span>
-            <span className="hidden md:inline text-primary-foreground/80 ml-2">| Ministry of Coal</span>
+            <span className="hidden md:inline text-primary-foreground/80 ml-2">
+              | Ministry of Coal
+            </span>
           </div>
           <div className="flex items-center gap-4">
-            <button className="text-xs hover:text-secondary transition">हिंदी</button>
-            <button className="text-xs font-medium">English</button>
-            <button className="text-xs hover:text-secondary transition hidden md:inline">A+</button>
-            <button className="text-xs hover:text-secondary transition hidden md:inline">A-</button>
+            <button className="text-xs hover:text-secondary transition hidden md:inline">
+              Skip to Main Content
+            </button>
+
+            <button className="text-xs hover:text-secondary transition hidden md:inline">
+              A-
+            </button>
+            <button className="text-xs hover:text-secondary transition hidden md:inline">
+              A
+            </button>
+            <button className="text-xs hover:text-secondary transition hidden md:inline">
+              A+
+            </button>
+            <button className="text-xs hover:text-secondary transition hidden md:inline">
+              ☾
+            </button>
+            <button
+              className="text-xs hover:text-secondary transition hidden md:inline w-12 h-12 bg-center bg-contain bg-no-repeat"
+              style={{
+               // Must be in public folder
+              }}
+              aria-label="Screen reader access"
+            > Screen reader  icon</button>
+              {/* <button
+              className="text-xs hover:text-secondary transition hidden md:inline w-12 h-12 bg-center bg-contain bg-no-repeat"
+              style={{
+               // Must be in public folder
+              }}
+              aria-label="Screen reader access"
+            > Translation</button> */}
           </div>
         </div>
       </div>
@@ -46,17 +78,39 @@ export const GovtHeader = ({ showAuth = false, onLogout, userName }: GovtHeaderP
                 </div>
                 <div>
                   <h1 className="text-2xl font-bold text-primary">NIRNAY</h1>
-                  <p className="text-xs text-muted-foreground">AI-Powered R&D Evaluation System</p>
+                  <p className="text-xs text-muted-foreground">
+                    AI-Powered R&D Evaluation System
+                  </p>
                 </div>
               </div>
             </div>
 
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center gap-6">
-              <a href="/" className="text-foreground hover:text-accent transition font-medium">Home</a>
-              <a href="/dashboard" className="text-foreground hover:text-accent transition font-medium">Dashboard</a>
-              <a href="/analytics" className="text-foreground hover:text-accent transition font-medium">Analytics</a>
-              <a href="#" className="text-foreground hover:text-accent transition font-medium">Help</a>
+              <a
+                href="/"
+                className="text-foreground hover:text-accent transition font-medium"
+              >
+                Home
+              </a>
+              <a
+                href="/dashboard"
+                className="text-foreground hover:text-accent transition font-medium"
+              >
+                Dashboard
+              </a>
+              <a
+                href="/analytics"
+                className="text-foreground hover:text-accent transition font-medium"
+              >
+                Analytics
+              </a>
+              <a
+                href="#"
+                className="text-foreground hover:text-accent transition font-medium"
+              >
+                Help
+              </a>
             </nav>
 
             {/* Auth Section */}
@@ -106,10 +160,30 @@ export const GovtHeader = ({ showAuth = false, onLogout, userName }: GovtHeaderP
           {mobileMenuOpen && (
             <div className="md:hidden mt-4 pt-4 border-t border-border animate-fade-in">
               <nav className="flex flex-col gap-3">
-                <a href="/" className="text-foreground hover:text-accent transition font-medium py-2">Home</a>
-                <a href="/dashboard" className="text-foreground hover:text-accent transition font-medium py-2">Dashboard</a>
-                <a href="/analytics" className="text-foreground hover:text-accent transition font-medium py-2">Analytics</a>
-                <a href="#" className="text-foreground hover:text-accent transition font-medium py-2">Help</a>
+                <a
+                  href="/"
+                  className="text-foreground hover:text-accent transition font-medium py-2"
+                >
+                  Home
+                </a>
+                <a
+                  href="/dashboard"
+                  className="text-foreground hover:text-accent transition font-medium py-2"
+                >
+                  Dashboard
+                </a>
+                <a
+                  href="/analytics"
+                  className="text-foreground hover:text-accent transition font-medium py-2"
+                >
+                  Analytics
+                </a>
+                <a
+                  href="#"
+                  className="text-foreground hover:text-accent transition font-medium py-2"
+                >
+                  Help
+                </a>
                 {!showAuth && (
                   <div className="flex gap-2 mt-2">
                     <Button variant="outline" className="flex-1" asChild>
