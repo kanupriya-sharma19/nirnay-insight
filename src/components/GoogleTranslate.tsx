@@ -21,7 +21,7 @@ export default function GoogleTranslate() {
         if (translateElement) {
           // Hide the "Select Language" text
           const spans = translateElement.getElementsByTagName('span');
-          for (let span of spans) {
+          for (const span of spans) {
             if (span.textContent?.includes('Select Language') || span.textContent?.includes('Website Translator')) {
               span.style.display = 'none';
             }
@@ -29,7 +29,7 @@ export default function GoogleTranslate() {
           
           // Hide the dropdown arrow initially
           const arrows = translateElement.getElementsByClassName('goog-te-menu-value-indicator');
-          for (let arrow of arrows) {
+          for (const arrow of arrows) {
             (arrow as HTMLElement).style.opacity = '0';
           }
         }

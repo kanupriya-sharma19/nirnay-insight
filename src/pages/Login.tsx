@@ -34,11 +34,25 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showLoginPassword, setShowLoginPassword] = useState(false);
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
   const { toast } = useToast();
   const [role, setRole] = useState("");
+
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Check if passwords match (only for signup)
+    if (password && confirmPassword && password !== confirmPassword) {
+      toast({
+        variant: "destructive",
+        title: "Password Mismatch",
+        description: "The passwords you entered do not match. Please try again.",
+      });
+      return;
+    }
+
     setIsLoading(true);
 
     setTimeout(() => {
@@ -375,6 +389,8 @@ export default function Login() {
                           placeholder="••••••••"
                           className="pl-10 pr-10"
                           required
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
                         />
                         <Button
                           type="button"
@@ -394,9 +410,7 @@ export default function Login() {
 
                     {/* Confirm Password */}
                     <div className="space-y-2">
-                      <Label htmlFor="confirm-password">
-                        Re-enter Password *
-                      </Label>
+                      <Label htmlFor="confirm-password">Re-enter Password *</Label>
                       <div className="relative">
                         <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                         <Input
@@ -405,6 +419,8 @@ export default function Login() {
                           placeholder="••••••••"
                           className="pl-10 pr-10"
                           required
+                          value={confirmPassword}
+                          onChange={(e) => setConfirmPassword(e.target.value)}
                         />
                         <Button
                           type="button"
@@ -420,6 +436,9 @@ export default function Login() {
                           )}
                         </Button>
                       </div>
+                      {confirmPassword && password !== confirmPassword && (
+                        <p className="text-xs text-red-500">Passwords do not match</p>
+                      )}
                     </div>
 
                     {/* Submit Button */}
