@@ -1,5 +1,5 @@
 {
-  "name": "vite_react_shadcn_ts",
+  "name": "nirnay",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -79,5 +79,17 @@
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.38.0",
     "vite": "^5.4.19"
-  }
+  },
+  "description": "**URL**: https://lovable.dev/projects/fb69e38b-2a6b-47ab-a1ce-b7e22e3fc342",
+  "main": "src/main.tsx",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kanupriya-sharma19/nirnay-insight.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kanupriya-sharma19/nirnay-insight/issues"
+  },
+  "homepage": "https://github.com/kanupriya-sharma19/nirnay-insight#readme"
 }
