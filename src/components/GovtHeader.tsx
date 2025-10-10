@@ -1,11 +1,20 @@
+// components/GovtHeader.tsx
 import { Button } from "@/components/ui/button";
-import { Shield, Menu, Bell, User, LogOut } from "lucide-react";
+import { Shield, Menu, Bell, User, LogOut, CheckCircle, AlertCircle } from "lucide-react";
 import { useState } from "react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 interface GovtHeaderProps {
   showAuth?: boolean;
   onLogout?: () => void;
   userName?: string;
+}
+
+interface Notification {
+  title: string;
+  message: string;
+  time: string;
+  type: "approved" | "revision";
 }
 
 export const GovtHeader = ({
@@ -14,6 +23,26 @@ export const GovtHeader = ({
   userName = "Dr. Rajesh Kumar",
 }: GovtHeaderProps) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [notifOpen, setNotifOpen] = useState(false);
+
+  // Notifications based on role/user
+  const notifications: Notification[] =
+    userName === "Dr. Rajesh Kumar"
+      ? [
+          {
+            title: "Development and Field Trial of 500 T Capacity SAGES-III",
+            message: "Your proposal has been approved by SSRC",
+            time: "2 hours ago",
+            type: "approved",
+          },
+          {
+            title: "Electrostatic deposition and functionalization of MWCNTs",
+            message: "Revision required — reviewer requested changes",
+            time: "1 day ago",
+            type: "revision",
+          },
+        ]
+      : [];
 
   return (
     <>
@@ -22,7 +51,7 @@ export const GovtHeader = ({
         <div className="w-full flex items-center justify-between text-sm">
           <div className="flex items-center gap-2 justify-start text-left pl-0">
             <div
-              className="h-12 w-12 flex items-center justify-center  ml-0"
+              className="h-12 w-12 flex items-center justify-center ml-0"
               style={{
                 backgroundImage: 'url("/National-Emblem.png")',
                 backgroundSize: "contain",
@@ -104,11 +133,19 @@ export const GovtHeader = ({
               </a>
             </nav>
 
-            {/* User Section - Always show user info, no login/signup */}
+            {/* User Section */}
             <div className="flex items-center gap-3">
-              <Button variant="ghost" size="icon" className="relative">
+              {/* Notifications Bell */}
+              <Button
+                variant="ghost"
+                size="icon"
+                className="relative"
+                onClick={() => setNotifOpen(true)}
+              >
                 <Bell className="h-5 w-5" />
-                <span className="absolute top-1 right-1 h-2 w-2 bg-destructive rounded-full"></span>
+                {notifications.length > 0 && (
+                  <span className="absolute top-1 right-1 h-2 w-2 bg-destructive rounded-full"></span>
+                )}
               </Button>
 
               <div className="flex items-center gap-2 pl-3 border-l border-border">
@@ -181,6 +218,40 @@ export const GovtHeader = ({
           )}
         </div>
       </header>
+
+      {/* Notifications Popup */}
+      <Dialog open={notifOpen} onOpenChange={() => setNotifOpen(false)}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-semibold">Notifications</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3 mt-3">
+            {notifications.length === 0 ? (
+              <p className="text-gray-500 text-center py-4">No new notifications</p>
+            ) : (
+              notifications.map((notif, i) => (
+                <div
+                  key={i}
+                  className={`flex items-start gap-3 p-3 rounded-lg ${
+                    notif.type === "approved" ? "bg-green-50" : "bg-yellow-50"
+                  }`}
+                >
+                  {notif.type === "approved" ? (
+                    <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
+                  ) : (
+                    <AlertCircle className="h-5 w-5 text-yellow-600 mt-0.5" />
+                  )}
+                  <div>
+                    <p className="font-medium">{notif.title}</p>
+                    <p className="text-sm text-gray-600">{notif.message}</p>
+                    <p className="text-xs text-gray-500 mt-1">{notif.time}</p>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </>
   );
 };
