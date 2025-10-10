@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
+import { Textarea } from "@/components/ui/textarea";
 import {
   FileText,
   Upload,
@@ -28,7 +29,7 @@ export default function Dashboard() {
   // sample proposals extended with new fields
   const proposals = [
     {
-      id: "PRO-2024-001",
+      id: "II-2024-001",
       title: "AI-based Coal Quality Assessment System",
       thrustArea: "Innovation & Indigenization",
       status: "Under Review",
@@ -43,7 +44,7 @@ export default function Dashboard() {
       aiInsights: "Technical feasibility is good; scale-up cost needs attention.",
     },
     {
-      id: "PRO-2024-002",
+      id: "CC-2024-002",
       title: "Sustainable Mining Practices using IoT",
       thrustArea: "Clean Coal Technologies",
       status: "Approved",
@@ -58,7 +59,7 @@ export default function Dashboard() {
       aiInsights: "High innovation and strong cost-benefit. Recommend fast-track.",
     },
     {
-      id: "PRO-2023-045",
+      id: "SE-2023-045",
       title: "Worker Safety Enhancement through ML",
       thrustArea: "Safety & Environment",
       status: "Rejected",
@@ -73,7 +74,7 @@ export default function Dashboard() {
       aiInsights: "Dataset size too small and unclear deployment plan.",
     },
     {
-      id: "PRO-2024-003",
+      id: "II-2024-003",
       title: "Predictive Maintenance of Mining Equipment using Digital Twins",
       thrustArea: "Innovation & Indigenization",
       status: "Approved",
@@ -88,7 +89,7 @@ export default function Dashboard() {
       aiInsights: "High practical value and good industrial readiness.",
     },
     {
-      id: "PRO-2024-004",
+      id: "CC-2024-004",
       title: "Clean Coal Gasification for Low Emission Power Plants",
       thrustArea: "Clean Coal Technologies",
       status: "Under Review",
@@ -103,7 +104,7 @@ export default function Dashboard() {
       aiInsights: "Strong potential for emission reduction with moderate cost.",
     },
     {
-      id: "PRO-2024-005",
+      id: "SE-2024-005",
       title: "AI-Driven Accident Prevention System in Mines",
       thrustArea: "Safety & Environment",
       status: "Approved",
@@ -118,7 +119,7 @@ export default function Dashboard() {
       aiInsights: "Strong technical maturity and excellent safety ROI.",
     },
     {
-      id: "PRO-2024-006",
+      id: "WW-2024-006",
       title: "Waste-to-Wealth Conversion using Bio-Coal Technology",
       thrustArea: "Waste to Wealth",
       status: "Under Review",
@@ -133,7 +134,7 @@ export default function Dashboard() {
       aiInsights: "Good concept, but needs validation of yield rates.",
     },
     {
-      id: "PRO-2024-007",
+      id: "SE-2024-007",
       title: "Real-Time Dust Exposure Monitoring for Miners",
       thrustArea: "Safety & Environment",
       status: "Under Review",
@@ -148,7 +149,7 @@ export default function Dashboard() {
       aiInsights: "Feasible and low-cost but needs better integration strategy.",
     },
     {
-      id: "PRO-2024-008",
+      id: "EX-2024-008",
       title: "3D Geological Modeling using AI for Resource Estimation",
       thrustArea: "Exploration",
       status: "Approved",
@@ -163,7 +164,7 @@ export default function Dashboard() {
       aiInsights: "Excellent scalability and inter-departmental utility.",
     },
     {
-      id: "PRO-2024-009",
+      id: "CC-2024-009",
       title: "AI-Powered Carbon Capture and Utilization",
       thrustArea: "Clean Coal Technologies",
       status: "Rejected",
@@ -178,7 +179,7 @@ export default function Dashboard() {
       aiInsights: "Innovative idea but lacks clear industrial scalability plan.",
     },
     {
-      id: "PRO-2024-010",
+      id: "SE-2024-010",
       title: "Smart Helmet with Real-Time Vital Monitoring for Miners",
       thrustArea: "Safety & Environment",
       status: "Approved",
@@ -194,8 +195,6 @@ export default function Dashboard() {
     },
   ];
 
-
-
   const filterOptions = {
     Status: ["All", "Approved", "Under Review", "Rejected"],
     "Thrust Area": [
@@ -208,7 +207,6 @@ export default function Dashboard() {
       "Innovation & Indigenization",
       "Exploration"
     ],
-
     "Evaluation Score": ["All", "≥ 8", "5–7", "Below 5"],
     "Submit Date": ["All", "Last 7 Days", "Last 30 Days", "Older"],
   } as const;
@@ -218,6 +216,9 @@ export default function Dashboard() {
 
   const [openDetail, setOpenDetail] = useState(false);
   const [selectedProposal, setSelectedProposal] = useState<any | null>(null);
+  const [showJustification, setShowJustification] = useState(false);
+  const [selectedAction, setSelectedAction] = useState<string>("");
+  const [justification, setJustification] = useState("");
 
   const getStatusBadge = (status: string) => {
     const styles: Record<string, string> = {
@@ -275,7 +276,7 @@ export default function Dashboard() {
       }
 
       if (filterType === "Evaluation Score") {
-        const score = p.evaluationScore; // out of 10
+        const score = p.evaluationScore;
         if (filterValue === "≥ 8") return score >= 8;
         if (filterValue === "5–7") return score >= 5 && score < 8;
         if (filterValue === "Below 5") return score < 5;
@@ -285,7 +286,6 @@ export default function Dashboard() {
     });
   }, [filterType, filterValue]);
 
-  // AI suggestion (dummy) — in real app call LLM and pass proposal
   const getAiDecision = (p: any) => {
     if (p.evaluationScore >= 8) return { decision: "Accept", reason: "High technical & financial scores." };
     if (p.evaluationScore >= 5) return { decision: "Revise", reason: "Needs improvements in cost breakdown." };
@@ -295,16 +295,44 @@ export default function Dashboard() {
   const openDetails = (p: any) => {
     setSelectedProposal(p);
     setOpenDetail(true);
+    setShowJustification(false);
+    setSelectedAction("");
+    setJustification("");
   };
 
   const closeDetails = () => {
     setSelectedProposal(null);
     setOpenDetail(false);
+    setShowJustification(false);
+    setSelectedAction("");
+    setJustification("");
   };
 
-  // chart data for radar (component breakdown) using dummy split
+  const handleActionClick = (action: string) => {
+    setSelectedAction(action);
+    setShowJustification(true);
+  };
+
+  const handleSubmitDecision = () => {
+    if (!justification.trim()) {
+      alert("Please provide a justification for your decision.");
+      return;
+    }
+    
+    let message = "";
+    if (selectedAction === "revision") {
+      message = `Decision: Request Revision\nJustification: ${justification}\n\nThe proposer will be notified to revise and resubmit.`;
+    } else if (selectedAction === "accept") {
+      message = `Decision: Accept & Forward\nJustification: ${justification}\n\nProposal will be forwarded to domain experts (APEX, Coal, etc.) as per thrust area.`;
+    } else if (selectedAction === "reject") {
+      message = `Decision: Reject & Notify\nJustification: ${justification}\n\nOfficial rejection mail will be sent to proposer.`;
+    }
+    
+    alert(message);
+    closeDetails();
+  };
+
   const getBreakdownData = (p: any) => {
-    // split evaluationScore into components — this is illustrative
     const tech = Math.min(10, (p.evaluationScore * 0.4) + 1);
     const fin = Math.min(10, (p.evaluationScore * 0.25));
     const impact = Math.min(10, (p.evaluationScore * 0.2) + 0.5);
@@ -317,9 +345,8 @@ export default function Dashboard() {
     ];
   };
 
-  // simple format for money
   const formatINR = (n: number) => {
-    return `₹${(n / 100000).toFixed(2)}L`;// show in lakhs for readability
+    return `₹${(n / 100000).toFixed(2)}L`;
   };
 
   return (
@@ -334,7 +361,6 @@ export default function Dashboard() {
               <h1 className="text-3xl font-bold mb-2">Welcome back, Dr. Kumar! 👋</h1>
               <p className="text-primary-foreground/90">Track your proposals and manage your R&D projects efficiently</p>
             </div>
-           
           </div>
         </div>
 
@@ -403,13 +429,11 @@ export default function Dashboard() {
                               <h3 className="font-bold text-lg text-primary">{proposal.title}</h3>
                             </div>
 
-                            {/* meta: id + institute */}
                             <p className="text-sm text-muted-foreground mb-1">• {proposal.instituteName}</p>
 
                             <div className="flex flex-wrap gap-2 mb-3">
                               <Badge className={`govt-badge ${getThrustColor(proposal.thrustArea)} text-white`}>{proposal.thrustArea}</Badge>
                               <Badge className={`govt-badge ${getStatusBadge(proposal.status)}`}>{proposal.status}</Badge>
-                              {/* evaluation score badge */}
                               <Badge className="govt-badge bg-primary text-white">Score: {proposal.evaluationScore.toFixed(1)}/10</Badge>
                             </div>
 
@@ -421,22 +445,16 @@ export default function Dashboard() {
                           </div>
                         </div>
 
-                        {/* Evaluation Score with Stars */}
                         <div className="flex items-center gap-2 mt-2">
                           <span className="text-sm text-muted-foreground">Evaluation Score:</span>
                           <span className="font-semibold text-primary">{proposal.evaluationScore.toFixed(1)} / 10</span>
-
                         </div>
-
                       </div>
 
-                      <div className="flex lg:flex-col gap-2 w-full lg:w-auto">
-                        <Button variant="outline" size="sm" className="flex-1" onClick={() => openDetails(proposal)}>
+                      <div className="flex lg:flex-col gap-2 w-full lg:w-auto border-t lg:border-t-0 pt-4 lg:pt-0 ">
+                        <Button variant="outline" size="lg" className="bg-slate-800 text-white hover:bg-slate-500 shadow-lg transition" onClick={() => openDetails(proposal)}>
                           View Details
                         </Button>
-                        {/* <a href={proposal.pdfLink} target="_blank" rel="noreferrer">
-                          <Button size="sm" className="flex-1 bg-card">View PDF</Button>
-                        </a> */}
                       </div>
                     </div>
                   </div>
@@ -517,7 +535,7 @@ export default function Dashboard() {
                     <p className="text-sm text-muted-foreground">Comparison (cost focus): This proposal requests {formatINR(selectedProposal.financialBreakdown.requested)} compared to a previous similar project which cost {formatINR(selectedProposal.financialBreakdown.previousCost)}.</p>
                   </div>
 
-                  <div className="flex gap-3">
+                  <div className="flex gap-3 mb-4">
                     <Button onClick={() => {
                       const ai = getAiDecision(selectedProposal);
                       alert(`AI Suggestion: ${ai.decision}\nReason: ${ai.reason}`);
@@ -527,56 +545,53 @@ export default function Dashboard() {
                       <Button variant="outline">View PDF</Button>
                     </a>
                   </div>
+
+                  {/* Justification Section */}
+                  {showJustification && (
+                    <div className="mt-6 p-4 border-2 border-accent rounded-lg bg-accent/5">
+                      <h4 className="font-medium mb-2">Justify Your Decision</h4>
+                      <p className="text-sm text-muted-foreground mb-3">
+                        Please provide a detailed justification for your decision. This will be recorded and sent to the proposer.
+                      </p>
+                      <Textarea
+                        placeholder="Enter your justification here..."
+                        value={justification}
+                        onChange={(e) => setJustification(e.target.value)}
+                        className="min-h-[120px] mb-3"
+                      />
+                      <div className="flex gap-2 justify-end">
+                        <Button variant="outline" onClick={() => {
+                          setShowJustification(false);
+                          setSelectedAction("");
+                          setJustification("");
+                        }}>
+                          Cancel
+                        </Button>
+                        <Button onClick={handleSubmitDecision} className="bg-primary hover:bg-primary/90">
+                          Submit Decision
+                        </Button>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 <div className="col-span-1">
                   <div className="sticky top-6 space-y-4">
-                    {/* Quick Actions */}
                     <div className="p-4 border rounded-lg">
-                      <h4 className="font-medium mb-2">Quick Actions (AI Suggested)</h4>
+                      <h4 className="font-medium mb-2">AI Evaluation</h4>
                       <p className="text-sm text-muted-foreground mb-2">
-                        My AI suggests the following actions based on evaluation and financials:
+                        AI has analyzed this proposal based on technical merit, financial feasibility, and impact assessment.
                       </p>
-                      <div className="flex flex-col gap-2">
-                        <Button
-                          onClick={() =>
-                            alert(
-                              'AI Suggestion: Review\nReason: Needs improvements in cost breakdown and clarity on subtopics.\nYou can add your comments before sending to proposer.'
-                            )
-                          }
-                        >
-                          Review (Revision)
-                        </Button>
-                        <Button
-                          onClick={() =>
-                            alert(
-                              'AI Suggestion: Accept\nReason: High technical & financial scores. Forwarding to domain experts (APEX, Coal, etc.) as per thrust area.'
-                            )
-                          }
-                        >
-                          Accept & Forward
-                        </Button>
-                        <Button
-                          onClick={() =>
-                            alert(
-                              'AI Suggestion: Reject\nReason: Low evaluation score and feasibility concerns. Official mail will be sent to proposer.'
-                            )
-                          }
-                        >
-                          Reject & Notify
-                        </Button>
-                      </div>
                     </div>
 
-
-                    <div className="p-4 border rounded-lg">
+                    {/* <div className="p-4 border rounded-lg">
                       <h4 className="font-medium mb-2">Financial Snapshot</h4>
                       <p className="text-sm text-muted-foreground">Requested: {formatINR(selectedProposal.financialBreakdown.requested)}</p>
                       <p className="text-sm text-muted-foreground">ROI: {selectedProposal.financialBreakdown.estimatedROIpercent}%</p>
-                    </div>
+                    </div> */}
 
                     <div className="p-4 border rounded-lg">
-                      <h4 className="font-medium mb-2">Highlight Chatbot</h4>
+                      <h4 className="font-medium mb-2">Nirnay Assistant</h4>
                       <p className="text-sm text-muted-foreground mb-2">Ask quick questions about this proposal.</p>
                       <Button onClick={() => alert('Opening small chat UI (placeholder)')}>Ask AI</Button>
                     </div>
@@ -586,7 +601,32 @@ export default function Dashboard() {
             )}
 
             <DialogFooter>
-              <Button variant="outline" onClick={closeDetails}>Close</Button>
+              {!showJustification && (
+                <div className="flex flex-col sm:flex-row gap-3 w-full">
+                  <div className="flex gap-3 flex-1">
+                    <Button
+                     
+                      className="bg-slate-800 text-white hover:bg-slate-500 shadow-lg transition"
+                      variant="outline"
+                      onClick={() => handleActionClick("revision")}
+                    >
+                      Request Revision
+                    </Button>
+                    <Button
+                      className="bg-slate-800 text-white hover:bg-slate-700 shadow-lg transition"
+                      onClick={() => handleActionClick("accept")}
+                    >
+                      Accept & Forward
+                    </Button>
+                    <Button
+                      className="bg-slate-800 text-white hover:bg-slate-500 shadow-lg transition"
+                      onClick={() => handleActionClick("reject")}
+                    >
+                      Reject & Notify
+                    </Button>
+                  </div>
+                </div>
+              )}
             </DialogFooter>
           </DialogContent>
         </Dialog>

@@ -56,6 +56,21 @@ export const GovtHeader = ({
             type: "revision",
           },
         ]
+      : userName === "Dr. Priya Sharma"
+      ? [
+          {
+            title: "New High-Priority Proposal Received",
+            message: "WW-2024-011: Advanced Coal Waste Recycling Technology - Score: 8.7/10",
+            time: "30 minutes ago",
+            type: "approved",
+          },
+          {
+            title: "Quarterly Review Meeting",
+            message: "Apex Committee meeting scheduled for next week",
+            time: "2 hours ago",
+            type: "revision",
+          },
+        ]
       : [];
 
   return (
@@ -233,7 +248,9 @@ export const GovtHeader = ({
                   <User className="h-5 w-5 text-accent" />
                   <div className="hidden md:block text-sm">
                     <p className="font-medium text-foreground">{userName}</p>
-                    <p className="text-xs text-muted-foreground">Researcher</p>
+                    <p className="text-xs text-muted-foreground">
+                      {userName === "Dr. Priya Sharma" ? "Apex Committee Member" : "Researcher"}
+                    </p>
                   </div>
                 </div>
                 <Button
@@ -292,7 +309,9 @@ export const GovtHeader = ({
                   <User className="h-5 w-5 text-accent" />
                   <div>
                     <p className="font-medium text-foreground">{userName}</p>
-                    <p className="text-xs text-muted-foreground">Researcher</p>
+                    <p className="text-xs text-muted-foreground">
+                      {userName === "Dr. Priya Sharma" ? "Apex Committee Member" : "Researcher"}
+                    </p>
                   </div>
                 </div>
               </nav>
