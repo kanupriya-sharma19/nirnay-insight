@@ -83,7 +83,7 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <GovtHeader showAuth userName="Dr. Rajesh Kumar" onLogout={() => navigate("/login")} />
+      <GovtHeader showAuth userName="Dr. Rajesh Kumar" onLogout={() => navigate("/")} />
 
       <main className="flex-1 container mx-auto px-4 py-8">
         {/* Welcome Banner */}

@@ -63,7 +63,7 @@ export default function Analytics() {
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
-      <GovtHeader showAuth userName="Dr. NaCCER Admin" onLogout={() => navigate("/login")} />
+      <GovtHeader showAuth userName="Dr. Ghanshyam Tiwari" onLogout={() => navigate("/")} />
 
       <main className="flex-1 container mx-auto px-4 py-8">
         {/* Page Header */}
