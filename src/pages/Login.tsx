@@ -65,7 +65,7 @@ export default function Login() {
       if (role === "user") navigate("/researcher");
       else if (role === "reviewer") navigate("/apex");
       else if (role === "naccer") navigate("/analytics");
-      else navigate("/dashboard");
+      else navigate("/NACCER");
 
       setIsLoading(false);
     }, 1000);

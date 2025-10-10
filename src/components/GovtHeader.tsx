@@ -114,7 +114,7 @@ export const GovtHeader = ({
                 Home
               </a>
               <a
-                href="/dashboard"
+                href="/NACCER"
                 className="text-foreground hover:text-accent transition font-medium"
               >
                 Dashboard
@@ -188,7 +188,7 @@ export const GovtHeader = ({
                   Home
                 </a>
                 <a
-                  href="/dashboard"
+                  href="/NACCER"
                   className="text-foreground hover:text-accent transition font-medium py-2"
                 >
                   Dashboard

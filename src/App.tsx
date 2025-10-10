@@ -25,7 +25,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/index" element={<Index />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/NACCER" element={<Dashboard />} />
           <Route path="/analytics" element={<Analytics />} />
          <Route path="/researcher" element={<ResearcherPage />} />
         <Route path="/apex" element={<ApexPage />} />

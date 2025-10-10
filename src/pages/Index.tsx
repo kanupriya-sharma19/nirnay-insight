@@ -94,7 +94,7 @@ export default function Index() {
                 size="lg" 
                 variant="outline" 
                 className="border-2 border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary text-lg px-8"
-                onClick={() => navigate("/dashboard")}
+                onClick={() => navigate("/NACCER")}
               >
                 View Dashboard
               </Button>
