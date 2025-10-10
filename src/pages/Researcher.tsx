@@ -229,17 +229,12 @@ export default function ResearcherPage() {
                       </div>
 
                       <div className="flex lg:flex-col gap-2">
-                        <Button
-                          size="lg"
-                          className="bg-blue-600 text-white hover:bg-blue-700 shadow-lg transition"
-                        >
-                          View Details
-                        </Button>
+                     
                         {proposal.status === "Revision Required" && (
                           <Button
                             size="lg"
                             className="bg-blue-600 text-white hover:bg-blue-700 shadow-lg transition"
-                            onClick={() => navigate(`/revision/${index}`)}
+                            onClick={() => navigate(`/revision`)}
                           >
                             Complete Revision
                           </Button>

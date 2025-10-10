@@ -1,8 +1,22 @@
 // components/GovtHeader.tsx
 import { Button } from "@/components/ui/button";
-import { Shield, Menu, Bell, User, LogOut, CheckCircle, AlertCircle } from "lucide-react";
+import {
+  Shield,
+  Menu,
+  Bell,
+  User,
+  LogOut,
+  CheckCircle,
+  AlertCircle,
+} from "lucide-react";
 import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { useNavigate } from "react-router-dom";
 
 interface GovtHeaderProps {
   showAuth?: boolean;
@@ -24,7 +38,7 @@ export const GovtHeader = ({
 }: GovtHeaderProps) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
-
+  const navigate = useNavigate();
   // Notifications based on role/user
   const notifications: Notification[] =
     userName === "Dr. Rajesh Kumar"
@@ -97,7 +111,9 @@ export const GovtHeader = ({
                   <Shield className="h-8 w-8 text-primary-foreground" />
                 </div>
                 <div>
-                  <h1 className="text-2xl font-bold text-primary">NIRNAY | HackX01</h1>
+                  <h1 className="text-2xl font-bold text-primary">
+                    NIRNAY | HackX01
+                  </h1>
                   <p className="text-xs text-muted-foreground">
                     AI-Powered R&D Evaluation System
                   </p>
@@ -159,8 +175,10 @@ export const GovtHeader = ({
                 <Button
                   variant="ghost"
                   size="icon"
-                  onClick={onLogout}
-                  className="hover:bg-destructive/10"
+                  onClick={() => {
+                    if (onLogout) onLogout();
+                    navigate("/"); // redirect to home page
+                  }}
                 >
                   <LogOut className="h-4 w-4" />
                 </Button>
@@ -223,11 +241,15 @@ export const GovtHeader = ({
       <Dialog open={notifOpen} onOpenChange={() => setNotifOpen(false)}>
         <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle className="text-xl font-semibold">Notifications</DialogTitle>
+            <DialogTitle className="text-xl font-semibold">
+              Notifications
+            </DialogTitle>
           </DialogHeader>
           <div className="space-y-3 mt-3">
             {notifications.length === 0 ? (
-              <p className="text-gray-500 text-center py-4">No new notifications</p>
+              <p className="text-gray-500 text-center py-4">
+                No new notifications
+              </p>
             ) : (
               notifications.map((notif, i) => (
                 <div

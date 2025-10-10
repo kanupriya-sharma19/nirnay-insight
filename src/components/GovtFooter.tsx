@@ -2,11 +2,11 @@ export const GovtFooter = () => {
   return (
     <footer className="bg-primary text-primary-foreground mt-auto">
       {/* Government Logos */}
-      <div className="border-t-2 border-saffron bg-card">
+      <div className="border-t-2 border-saffron bg-white">
         <div className="container mx-auto px-4 py-2">
-          <div className="flex flex-wrap items-center justify-center gap-8 opacity-70">
+          <div className="flex flex-wrap items-center justify-center gap-8">
             <div className="flex flex-col items-center gap-1">
-              <img src="/Emblem_final.svg" alt="Emblem" className="h-8" />
+              <img src="/Emblem_final.svg" alt="Emblem" className="h-14" />
             </div>
 
             <div className="flex flex-col items-center gap-1">
