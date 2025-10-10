@@ -97,7 +97,7 @@ export const GovtHeader = ({
                   <Shield className="h-8 w-8 text-primary-foreground" />
                 </div>
                 <div>
-                  <h1 className="text-2xl font-bold text-primary">NIRNAY</h1>
+                  <h1 className="text-2xl font-bold text-primary">NIRNAY | HackX01</h1>
                   <p className="text-xs text-muted-foreground">
                     AI-Powered R&D Evaluation System
                   </p>

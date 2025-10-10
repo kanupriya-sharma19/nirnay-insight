@@ -10,10 +10,10 @@ export const GovtFooter = () => {
             </div>
 
             <div className="flex flex-col items-center gap-1">
-              <img src="final.png" alt="Digital India" className="h-14" />
+              <img src="/final.png" alt="Digital India" className="h-14" />
             </div>
             <div className="flex flex-col items-center gap-1">
-              <img src="cmpdi.png" alt="MyGov" className="h-12" />
+              <img src="/cmpdi.png" alt="MyGov" className="h-12" />
             </div>
             <div className="flex flex-col items-center gap-1">
               <img src="/Emblem_final.svg" alt="Emblem" className="h-8" />

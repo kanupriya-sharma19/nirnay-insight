@@ -12,16 +12,11 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
 import {
   FileText,
   Plus,
-  Video,
-  BarChart3,
-  Clock,
   CheckCircle,
-  AlertCircle,
-  Bell,
+  Clock,
   TrendingUp,
   Shield,
   Recycle,
@@ -31,51 +26,9 @@ import {
   Lightbulb,
 } from "lucide-react";
 
-const formTypes = [
-  {
-    id: "form-i",
-    name: "Project Proposal",
-    description: "Format for submission of Project proposal (Form - I)",
-    icon: FileText,
-    status: "completed" as const,
-    count: 5,
-  },
-  {
-    id: "form-ia",
-    name: "Endorsement",
-    description: "Endorsement from Head of Institution (Form - IA)",
-    icon: FileText,
-    status: "pending" as const,
-    count: 2,
-  },
-  {
-    id: "form-ii",
-    name: "Fund Requisition",
-    description: "Fund Requisition for Project (Form - II)",
-    icon: FileText,
-    status: "completed" as const,
-    count: 3,
-  },
-];
-
 export default function ResearcherPage() {
   const navigate = useNavigate();
-  const [openNotif, setOpenNotif] = useState(false);
 
-  const notifications = [
-    {
-      title: "Development and Field Trial of 500 T Capacity SAGES-III",
-      message: "Your proposal has been approved by SSRC",
-      time: "2 hours ago",
-      type: "approved" as const,
-    },
-    {
-      title: "Electrostatic deposition and functionalization of MWCNTs",
-      message: "Revision required — reviewer requested changes",
-      time: "1 day ago",
-      type: "revision" as const,
-    },
-  ];
   const proposals = [
     {
       title:
@@ -88,7 +41,7 @@ export default function ResearcherPage() {
     {
       title:
         "Electrostatic deposition and functionalization of MWCNTs for detection of Coal Mine Methane (CMM)",
-      startDate: "10.8.2025",
+      startDate: "10.08.2025",
       endDate: "14.02.2025",
       status: "Revision Required",
       thrustArea: "Safety & Environment" as const,
@@ -107,48 +60,38 @@ export default function ResearcherPage() {
     "Productivity Improvement": {
       icon: Shield,
       color: "bg-indigo-500",
-      description:
-        "Advanced technology for improvement of production & productivity",
     },
     "Safety & Environment": {
       icon: Shield,
       color: "bg-red-500",
-      description: "Improvement of safety, health and environment",
     },
     "Waste to Wealth": {
       icon: Recycle,
       color: "bg-green-500",
-      description: "Conversion of mining waste to valuable resources",
     },
     "Clean Coal Technologies": {
       icon: Zap,
       color: "bg-teal-500",
-      description: "Alternative use of coal and clean coal technologies",
     },
     "Coal Beneficiation": {
       icon: Factory,
       color: "bg-blue-500",
-      description: "Coal beneficiation and utilization",
     },
-    Exploration: {
+    "Exploration": {
       icon: Search,
       color: "bg-amber-500",
-      description: "Advanced exploration techniques",
     },
     "Innovation & Indigenization": {
       icon: Lightbulb,
       color: "bg-purple-500",
-      description: "Innovation under Make-in-India Concept",
     },
   };
 
-  const getThrustColor = (area: keyof typeof thrustAreas) => {
-    return thrustAreas[area]?.color || "bg-primary";
-  };
+  const getThrustColor = (area: keyof typeof thrustAreas) =>
+    thrustAreas[area]?.color || "bg-primary";
 
-  const getThrustIcon = (area: keyof typeof thrustAreas) => {
-    return thrustAreas[area]?.icon || FileText;
-  };
+  const getThrustIcon = (area: keyof typeof thrustAreas) =>
+    thrustAreas[area]?.icon || FileText;
 
   const stats = [
     {
@@ -177,6 +120,22 @@ export default function ResearcherPage() {
     },
   ];
 
+  const formTemplates = [
+    "Form - I: Project Proposal",
+    "Form - IA: Endorsement from Head of Institution",
+    "Form - II: Fund Requisition",
+    "Form - III: Financial Expenditure Statement",
+    "Form - IV: Expenditure Statement for Equipment",
+    "Form - V: Physical Progress Report",
+    "Form - VI: Project Completion Report",
+    "Form - VII: Extension of Project Duration",
+    "Form - VIII: Cost Revision or Re-appropriation",
+    "Form - IX: List of Equipment Procured in the Past",
+    "Form - X: List of Computer and Accessories Procured",
+    "Form - XI: Justification of Salary & Wages",
+    "Form - XII: Justification for TA-DA",
+  ];
+
   const getStatusBadge = (status: string) => {
     const styles = {
       "Under Review": "bg-yellow-100 text-yellow-800 border-yellow-200",
@@ -187,35 +146,23 @@ export default function ResearcherPage() {
     return styles[status as keyof typeof styles] || "bg-gray-100 text-gray-800";
   };
 
-  const getFormStatusBadge = (status: "completed" | "pending" | "draft") => {
-    const styles = {
-      completed: "bg-green-100 text-green-800",
-      pending: "bg-yellow-100 text-yellow-800",
-      draft: "bg-blue-100 text-blue-800",
-    };
-    return styles[status] || "bg-gray-100 text-gray-800";
-  };
-
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       <GovtHeader />
 
       <main className="flex-1 container mx-auto px-4 py-8">
-        {/* Welcome Banner */}
-
-        <div className="gradient-primary rounded-2xl p-8 mb-8 text-primary-foreground shadow-glow">
+        {/* Welcome Section */}
+        <div className="rounded-2xl bg-gradient-to-r from-blue-600 to-blue-500 p-8 mb-8 text-white shadow-lg">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
-              <h1 className="text-3xl font-bold mb-2">
-                Welcome back, Dr. Kumar!
-              </h1>
-              <p className="text-primary-foreground/90">
+              <h1 className="text-3xl font-bold mb-1">Welcome back, Dr. Kumar!</h1>
+              <p className="text-blue-100">
                 Track your proposals and manage your R&D projects efficiently
               </p>
             </div>
             <Button
               size="lg"
-              className="bg-white text-blue-600 hover:bg-blue-50 shadow-lg"
+              className="bg-white text-blue-700 hover:bg-blue-50 shadow-lg"
               onClick={() => navigate("/form/form-i")}
             >
               <Plus className="mr-2 h-5 w-5" />
@@ -223,20 +170,16 @@ export default function ResearcherPage() {
             </Button>
           </div>
         </div>
-        {/* Stats Grid */}
+
+        {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           {stats.map((stat, index) => (
-            <Card
-              key={index}
-              className="border-2 hover:shadow-lg transition-shadow"
-            >
+            <Card key={index} className="border-2 hover:shadow-lg transition-shadow">
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-gray-600 mb-1">{stat.label}</p>
-                    <p className="text-3xl font-bold text-gray-900">
-                      {stat.value}
-                    </p>
+                    <p className="text-3xl font-bold text-gray-900">{stat.value}</p>
                   </div>
                   <div className={`p-3 rounded-xl bg-gray-100 ${stat.color}`}>
                     <stat.icon className="h-6 w-6" />
@@ -247,13 +190,11 @@ export default function ResearcherPage() {
           ))}
         </div>
 
-        {/* Proposals List */}
+        {/* Proposals */}
         <Card className="border-2 mb-8">
           <CardHeader>
             <CardTitle className="text-2xl">My Proposals</CardTitle>
-            <CardDescription>
-              Current projects under implementation
-            </CardDescription>
+            <CardDescription>Current projects under implementation</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -271,39 +212,34 @@ export default function ResearcherPage() {
                             <ThrustIcon className="h-5 w-5 text-blue-600" />
                           </div>
                           <div className="flex-1">
-                            <h3 className="font-bold text-lg text-gray-900">
-                              {proposal.title}
-                            </h3>
+                            <h3 className="font-bold text-lg text-gray-900">{proposal.title}</h3>
                             <div className="flex flex-wrap gap-2 mt-2">
-                              <Badge
-                                className={`${getThrustColor(
-                                  proposal.thrustArea
-                                )} text-white`}
-                              >
+                              <Badge className={`${getThrustColor(proposal.thrustArea)} text-white`}>
                                 {proposal.thrustArea}
                               </Badge>
-                              <Badge
-                                className={getStatusBadge(proposal.status)}
-                              >
+                              <Badge className={getStatusBadge(proposal.status)}>
                                 {proposal.status}
                               </Badge>
                             </div>
                           </div>
                         </div>
 
-                        <div className="flex items-center gap-6 text-sm text-gray-600 mt-3">
-                          <span> Submitted On: {proposal.startDate}</span>
-                        </div>
+                        <p className="text-sm text-gray-600 mt-2">
+                          Submitted On: {proposal.startDate}
+                        </p>
                       </div>
 
                       <div className="flex lg:flex-col gap-2">
-                        <Button variant="outline" size="sm" className="flex-1">
+                        <Button
+                          size="lg"
+                          className="bg-blue-600 text-white hover:bg-blue-700 shadow-lg transition"
+                        >
                           View Details
                         </Button>
                         {proposal.status === "Revision Required" && (
                           <Button
-                            size="sm"
-                            className="flex-1 bg-orange-500 hover:bg-orange-600 text-white"
+                            size="lg"
+                            className="bg-blue-600 text-white hover:bg-blue-700 shadow-lg transition"
                             onClick={() => navigate(`/revision/${index}`)}
                           >
                             Complete Revision
@@ -318,83 +254,26 @@ export default function ResearcherPage() {
           </CardContent>
         </Card>
 
-        {/* Forms Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          {formTypes.map((form) => {
-            const FormIcon = form.icon;
-            return (
-              <Card
-                key={form.id}
-                className="border-2 hover:border-blue-300 transition-colors cursor-pointer group hover:shadow-md"
-                onClick={() => navigate(`/form/${form.id}`)}
-              >
-                <CardHeader className="pb-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 bg-blue-100 rounded-lg group-hover:bg-blue-200 transition">
-                        <FormIcon className="h-5 w-5 text-blue-600" />
-                      </div>
-                      <CardTitle className="text-lg">{form.name}</CardTitle>
-                    </div>
-                    <Badge className={getFormStatusBadge(form.status)}>
-                      {form.count}
-                    </Badge>
-                  </div>
-                  <CardDescription>{form.description}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">
-                      {form.status === "completed"
-                        ? "✅ Ready to submit"
-                        : form.status === "pending"
-                        ? "🔄 Action required"
-                        : "📝 In draft"}
-                    </span>
-                    <Button variant="ghost" size="sm">
-                      Open →
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
-
-        {/* Quick Actions */}
-        <div className="grid md:grid-cols-2 gap-6">
-          <Card className="border-2 hover:border-blue-300 transition-colors cursor-pointer group hover:shadow-md">
-            <CardHeader>
-              <div className="flex items-center gap-3">
-                <div className="p-3 bg-purple-100 rounded-xl group-hover:bg-purple-200 transition">
-                  <Video className="h-6 w-6 text-purple-600" />
+        {/* Other Forms (non-clickable) */}
+        <Card className="border-2 mb-12">
+          <CardHeader>
+            <CardTitle>Other Forms</CardTitle>
+            <CardDescription>Project-related documentation</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2 max-h-96 overflow-y-auto">
+              {formTemplates.map((form, index) => (
+                <div
+                  key={index}
+                  className="flex items-center border rounded-md px-3 py-2 bg-gray-50 text-gray-700 text-sm hover:bg-gray-100 cursor-default"
+                >
+                  <FileText className="mr-2 h-4 w-4 text-gray-500" />
+                  {form}
                 </div>
-                <div>
-                  <CardTitle>Video Pitch 🎥</CardTitle>
-                  <CardDescription>
-                    Upload 3-minute presentation for your proposal
-                  </CardDescription>
-                </div>
-              </div>
-            </CardHeader>
-          </Card>
-
-          <Card className="border-2 hover:border-blue-300 transition-colors cursor-pointer group hover:shadow-md">
-            <CardHeader>
-              <div className="flex items-center gap-3">
-                <div className="p-3 bg-green-100 rounded-xl group-hover:bg-green-200 transition">
-                  <BarChart3 className="h-6 w-6 text-green-600" />
-                </div>
-                <div>
-                  <CardTitle>Track Progress 📊</CardTitle>
-                  <CardDescription>
-                    Monitor your proposal review status
-                  </CardDescription>
-                </div>
-              </div>
-            </CardHeader>
-          </Card>
-        </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
       </main>
 
       <GovtFooter />
