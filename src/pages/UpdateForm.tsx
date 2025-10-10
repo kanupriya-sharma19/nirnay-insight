@@ -88,11 +88,7 @@ export default function UpdateFormPage() {
 
   const requiredFields = [
     "methodology",
-    "literatureReview",
-    "expectedOutcomes",
-    "budgetJustification",
     "proposedOutlay",
-    "equipmentOutlay",
   ];
 
   const completionPercentage = calculateCompletion(formData, requiredFields);
@@ -134,10 +130,9 @@ export default function UpdateFormPage() {
       return;
     }
 
-    toast.success("Proposal submitted successfully for review");
-    setTimeout(() => {
-      navigate("/researcher");
-    }, 1500);
+    generatePDF(formData, revisionFormTemplate);
+    navigate('/researcher');
+      window.scrollTo(0, 0);
   };
 
   const thrustAreas = [
@@ -324,60 +319,7 @@ export default function UpdateFormPage() {
           </CardContent>
         </Card>
 
-        {/* Literature Review - Revision Required */}
-        <Card className="border-2 border-warning mb-8">
-          <CardHeader className="bg-warning/5">
-            <div>
-              <CardTitle className="flex items-center gap-2">
-                17. Past Experience and Institutional Expertise
-                <Badge className="bg-yellow-100 text-yellow-800 border-yellow-200">
-                  Update Required
-                </Badge>
-              </CardTitle>
-              <CardDescription className="mt-2">
-                Include at least 5 recent publications (2023-2025) on similar methane
-                detection systems
-              </CardDescription>
-            </div>
-          </CardHeader>
-          <CardContent className="pt-6">
-            <Textarea
-              placeholder="Provide updated literature review with recent publications..."
-              value={formData.literatureReview}
-              onChange={(e) => handleInputChange("literatureReview", e.target.value)}
-              className="min-h-[200px]"
-              rows={6}
-            />
-          </CardContent>
-        </Card>
-
-        {/* Expected Outcomes - Revision Required */}
-        <Card className="border-2 border-warning mb-8">
-          <CardHeader className="bg-warning/5">
-            <div>
-              <CardTitle className="flex items-center gap-2">
-                7. How the Project is Beneficial to Coal Industry
-                <Badge className="bg-yellow-100 text-yellow-800 border-yellow-200">
-                  Update Required
-                </Badge>
-              </CardTitle>
-              <CardDescription className="mt-2">
-                Specify quantifiable metrics for detection sensitivity, response time, and
-                target detection limits
-              </CardDescription>
-            </div>
-          </CardHeader>
-          <CardContent className="pt-6">
-            <Textarea
-              placeholder="List expected outcomes with specific performance metrics..."
-              value={formData.expectedOutcomes}
-              onChange={(e) => handleInputChange("expectedOutcomes", e.target.value)}
-              className="min-h-[200px]"
-              rows={6}
-            />
-          </CardContent>
-        </Card>
-
+       
         {/* Proposed Outlay Table */}
         <Card className="border-2 border-warning mb-8">
           <CardHeader className="bg-warning/5">
@@ -406,191 +348,7 @@ export default function UpdateFormPage() {
           </CardContent>
         </Card>
 
-        {/* Equipment Outlay Table */}
-        <Card className="border-2 border-warning mb-8">
-          <CardHeader className="bg-warning/5">
-            <div>
-              <CardTitle className="flex items-center gap-2">
-                13. Outlay for Equipment
-                <Badge className="bg-red-100 text-red-800 border-red-200">
-                  Revision Required
-                </Badge>
-              </CardTitle>
-              <CardDescription className="mt-2">
-                List all equipment with specifications and costs
-              </CardDescription>
-            </div>
-          </CardHeader>
-          <CardContent className="pt-6">
-            <TableField
-              field={{
-                name: "equipmentOutlay",
-                label: "Equipment Outlay",
-                columns: [
-                  "Generic Name of Equipment",
-                  "Specifications",
-                  "Number",
-                  "Imported/Indigenous",
-                  "Estimated Cost (₹ in Lakhs)",
-                  "Foreign Exchange Component",
-                ],
-              }}
-              value={formData.equipmentOutlay || []}
-              onChange={(value) => handleInputChange("equipmentOutlay", value)}
-            />
-          </CardContent>
-        </Card>
-
-        {/* Consumable Outlay Table */}
-        <Card className="border-2 border-warning mb-8">
-          <CardHeader className="bg-warning/5">
-            <div>
-              <CardTitle className="flex items-center gap-2">
-                15. Outlay for Consumable Materials
-                <Badge className="bg-yellow-100 text-yellow-800 border-yellow-200">
-                  Update Required
-                </Badge>
-              </CardTitle>
-              <CardDescription className="mt-2">
-                Provide year-wise breakdown of consumable materials
-              </CardDescription>
-            </div>
-          </CardHeader>
-          <CardContent className="pt-6">
-            <TableField
-              field={{
-                name: "consumableOutlay",
-                label: "Consumable Outlay",
-                columns: [
-                  "Head",
-                  "1st Year (₹)",
-                  "2nd Year (₹)",
-                  "3rd Year (₹)",
-                  "Total (₹)",
-                  "Foreign Exchange Component",
-                ],
-              }}
-              value={formData.consumableOutlay || []}
-              onChange={(value) => handleInputChange("consumableOutlay", value)}
-            />
-          </CardContent>
-        </Card>
-
-        {/* Equipment Justification */}
-        <Card className="border-2 border-warning mb-8">
-          <CardHeader className="bg-warning/5">
-            <div>
-              <CardTitle className="flex items-center gap-2">
-                14. Justification for Equipment
-                <Badge className="bg-red-100 text-red-800 border-red-200">
-                  Revision Required
-                </Badge>
-              </CardTitle>
-              <CardDescription className="mt-2">
-                Provide detailed justification for equipment costs and specifications
-              </CardDescription>
-            </div>
-          </CardHeader>
-          <CardContent className="pt-6">
-            <Textarea
-              placeholder="Justify all equipment items with proper reasoning..."
-              value={formData.budgetJustification}
-              onChange={(e) => handleInputChange("budgetJustification", e.target.value)}
-              className="min-h-[150px]"
-              rows={5}
-            />
-          </CardContent>
-        </Card>
-
-        {/* Document Uploads */}
-        <Card className="border-2 mb-8">
-          <CardHeader className="bg-gray-50">
-            <CardTitle>Required Documents</CardTitle>
-            <CardDescription>Upload all mandatory forms and supporting documents</CardDescription>
-          </CardHeader>
-          <CardContent className="pt-6">
-            <div className="space-y-4">
-              <div className="flex items-center justify-between p-4 border-2 rounded-lg bg-white">
-                <div className="flex items-center gap-3">
-                  <FileText className="h-5 w-5 text-gray-500" />
-                  <div>
-                    <p className="font-semibold">Form-IA (with HOD Signature)</p>
-                    <p className="text-sm text-gray-600">
-                      Institutional endorsement with proper authorization
-                    </p>
-                  </div>
-                </div>
-                {uploads.formIA ? (
-                  <Badge className="bg-green-100 text-green-800 border-green-200">
-                    <CheckCircle2 className="h-3 w-3 mr-1" />
-                    Uploaded
-                  </Badge>
-                ) : (
-                  <Button
-                    variant="outline"
-                    onClick={() => handleFileChange("formIA")}
-                  >
-                    <Upload className="h-4 w-4 mr-2" />
-                    Upload
-                  </Button>
-                )}
-              </div>
-
-              <div className="flex items-center justify-between p-4 border-2 rounded-lg bg-white">
-                <div className="flex items-center gap-3">
-                  <FileText className="h-5 w-5 text-gray-500" />
-                  <div>
-                    <p className="font-semibold">Form-IV (Updated)</p>
-                    <p className="text-sm text-gray-600">
-                      Expenditure statement for equipment with revisions
-                    </p>
-                  </div>
-                </div>
-                {uploads.formIV ? (
-                  <Badge className="bg-green-100 text-green-800 border-green-200">
-                    <CheckCircle2 className="h-3 w-3 mr-1" />
-                    Uploaded
-                  </Badge>
-                ) : (
-                  <Button
-                    variant="outline"
-                    onClick={() => handleFileChange("formIV")}
-                  >
-                    <Upload className="h-4 w-4 mr-2" />
-                    Upload
-                  </Button>
-                )}
-              </div>
-
-              <div className="flex items-center justify-between p-4 border-2 rounded-lg bg-white">
-                <div className="flex items-center gap-3">
-                  <FileText className="h-5 w-5 text-gray-500" />
-                  <div>
-                    <p className="font-semibold">Vendor Quotations</p>
-                    <p className="text-sm text-gray-600">
-                      Equipment quotations for budget justification
-                    </p>
-                  </div>
-                </div>
-                {uploads.quotations ? (
-                  <Badge className="bg-green-100 text-green-800 border-green-200">
-                    <CheckCircle2 className="h-3 w-3 mr-1" />
-                    Uploaded
-                  </Badge>
-                ) : (
-                  <Button
-                    variant="outline"
-                    onClick={() => handleFileChange("quotations")}
-                  >
-                    <Upload className="h-4 w-4 mr-2" />
-                    Upload
-                  </Button>
-                )}
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
+  
         {/* Progress and Actions */}
         <div className="space-y-6 mb-8">
           <Card className="border-2">

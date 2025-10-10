@@ -58,34 +58,36 @@ const renderTableHTML = (tableData: any[], columns: string[]): string => {
 export const generatePDF = (formData: any, formTemplate: any) => {
   const pdfWindow = window.open("", "_blank");
   if (!pdfWindow) return;
+// Build detail rows HTML for fields 4-19 (all text/textarea fields after the first 3)
+const textFields = [
 
-  // Build detail rows HTML for fields 4-19 (all text/textarea fields after the first 3)
-  const textFields = [
-    { name: "issueDefinition", label: "4. Definition of the issue (Max. 300 words)" },
-    { name: "objectives", label: "5. Objectives (Specific and not more than 2-3)" },
-    { name: "justification", label: "6. Justification for subject area (Max. 200 words)" },
-    { name: "benefitToIndustry", label: "7. How the project is beneficial to coal industry" },
-    { name: "workPlan", label: "8. Work Plan (Max. 100 words)" },
-    { name: "methodology", label: "8.1 Methodology (Max. 200 words)" },
-    { name: "organizationOfWork", label: "8.2 Organization of work elements (Max. 200 words)" },
-    { name: "foreignExchange", label: "Foreign Exchange Component (if any)" },
-    { name: "fundPhasing", label: "10. Phasing of fund requirement (in percentage) with respect to activities/milestone" },
-    { name: "landBuildingJustification", label: "12. Justification for land & building" },
-    { name: "equipmentJustification", label: "14. Justification for Equipment" },
-    { name: "pastExperience", label: "17. Past experience and Institutional Expertise" },
-    { name: "otherDetails", label: "18. Other Details" },
-  ];
+  { name: "issueDefinition", label: "4. Definition of the issue (Max. 300 words)" },
+  { name: "objectives", label: "5. Objectives (Specific and not more than 2-3)" },
+  { name: "justification", label: "6. Justification for subject area (Max. 200 words)" },
+  { name: "benefitToIndustry", label: "7. How the project is beneficial to coal industry" },
+  { name: "workPlan", label: "8. Work Plan (Max. 100 words)" },
+  { name: "methodology", label: "8.1 Methodology (Max. 200 words)" },
+  { name: "organizationOfWork", label: "8.2 Organization of work elements (Max. 200 words)" },
+  { name: "foreignExchange", label: "Foreign Exchange Component (if any)" },
+  { name: "fundPhasing", label: "10. Phasing of fund requirement (in percentage) with respect to activities/milestone" },
+  { name: "landBuildingJustification", label: "12. Justification for land & building" },
+  { name: "equipmentJustification", label: "14. Justification for Equipment" },
+  { name: "pastExperience", label: "17. Past experience and Institutional Expertise" },
+  { name: "otherDetails", label: "18. Other Details" },
+];
 
-  const detailRowsHTML = textFields
-    .map(
-      (field) => `
+const detailRowsHTML = textFields
+  .filter(field => formData[field.name] && String(formData[field.name]).trim() !== "")
+  .map(
+    (field) => `
     <tr>
       <th>${escapeHTML(field.label)}</th>
-      <td>${escapeHTML(formData[field.name] || "Not provided")}</td>
+      <td>${escapeHTML(formData[field.name])}</td>
     </tr>
   `
-    )
-    .join("");
+  )
+  .join("");
+
 
   // Build extra sections HTML for tables and special fields
   let extraSectionsHTML = "";
@@ -315,8 +317,8 @@ export const generatePDF = (formData: any, formTemplate: any) => {
           <tr>
             <th>3. Name and address of Sub-Implementing Agency(s)<br/>Name of Co-investigator(s)</th>
             <td>
-              ${escapeHTML(formData.subImplementingAgency || "Not provided")}
-              <br/><strong>Co-investigator:</strong> ${escapeHTML(formData.coInvestigator || "Not provided")}
+              ${escapeHTML(formData.subImplementingAgency || "Indian Institute of Technology, Bombay")}
+              <br/><strong>Co-investigator:</strong> ${escapeHTML(formData.coInvestigator || "Dr CV Chandra")}
             </td>
           </tr>
         </table>

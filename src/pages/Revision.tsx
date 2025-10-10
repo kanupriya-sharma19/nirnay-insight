@@ -50,33 +50,9 @@ export default function RevisionPage() {
       comment:
         "Equipment cost for MWCNT functionalization apparatus appears overestimated. Please provide vendor quotations and justify the requirement.",
       severity: "high" as const,
-      requirement:
-        "Submit updated Form-IV with vendor quotations attached",
+      requirement: "Submit updated Form-IV with vendor quotations attached",
     },
-    {
-      section: "Literature Review",
-      comment:
-        "Recent publications (2023-2025) on similar methane detection systems are missing. Please update the literature review with at least 5 recent relevant papers.",
-      severity: "medium" as const,
-      requirement:
-        "Update Section 2 with recent publications and comparative analysis",
-    },
-    {
-      section: "Expected Outcomes",
-      comment:
-        "Quantifiable metrics for detection sensitivity and response time need to be specified. What are the target detection limits?",
-      severity: "medium" as const,
-      requirement:
-        "Add specific performance metrics in Section 6 of Form-I",
-    },
-    {
-      section: "Institutional Support",
-      comment:
-        "Form-IA endorsement is missing signature from the Head of Department. Please resubmit with proper authorization.",
-      severity: "high" as const,
-      requirement:
-        "Resubmit Form-IA with HOD signature and institutional stamp",
-    },
+  
   ];
 
   const handleCheckItem = (index: number) => {
@@ -104,9 +80,9 @@ export default function RevisionPage() {
                 Revision Required
               </h2>
               <p className="text-gray-700">
-                Your proposal has been reviewed and requires revisions before it can
-                be approved. Please address all the points mentioned below and
-                resubmit your proposal.
+                Your proposal has been reviewed and requires revisions before it
+                can be approved. Please address all the points mentioned below
+                and resubmit your proposal.
               </p>
             </div>
           </div>
@@ -135,7 +111,9 @@ export default function RevisionPage() {
                   <Calendar className="h-5 w-5 text-gray-500" />
                   <div>
                     <p className="text-sm text-gray-600">Submitted On</p>
-                    <p className="font-semibold">{proposalDetails.submittedDate}</p>
+                    <p className="font-semibold">
+                      {proposalDetails.submittedDate}
+                    </p>
                   </div>
                 </div>
 
@@ -151,7 +129,9 @@ export default function RevisionPage() {
                   <FileText className="h-5 w-5 text-gray-500" />
                   <div>
                     <p className="text-sm text-gray-600">Review Date</p>
-                    <p className="font-semibold">{proposalDetails.reviewDate}</p>
+                    <p className="font-semibold">
+                      {proposalDetails.reviewDate}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -184,7 +164,9 @@ export default function RevisionPage() {
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-3">
                         <Badge
-                          variant={item.severity === "high" ? "destructive" : "outline"}
+                          variant={
+                            item.severity === "high" ? "destructive" : "outline"
+                          }
                           className={
                             item.severity === "high"
                               ? "bg-red-100 text-red-800 border-red-200"
@@ -194,7 +176,9 @@ export default function RevisionPage() {
                           {item.severity === "high" ? (
                             <AlertTriangle className="h-3 w-3 mr-1" />
                           ) : null}
-                          {item.severity === "high" ? "High Priority" : "Medium Priority"}
+                          {item.severity === "high"
+                            ? "High Priority"
+                            : "Medium Priority"}
                         </Badge>
                         <span className="font-bold text-gray-900">
                           {item.section}
@@ -213,7 +197,9 @@ export default function RevisionPage() {
                           <p className="text-sm font-semibold text-gray-700 mb-1">
                             Required Action:
                           </p>
-                          <p className="text-sm text-gray-600">{item.requirement}</p>
+                          <p className="text-sm text-gray-600">
+                            {item.requirement}
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -233,7 +219,8 @@ export default function RevisionPage() {
                   <>
                     <CheckCircle2 className="h-6 w-6 text-green-600" />
                     <p className="text-green-700 font-semibold">
-                      All items reviewed. You can now proceed to update your proposal.
+                      All items reviewed. You can now proceed to update your
+                      proposal.
                     </p>
                   </>
                 ) : (
@@ -245,11 +232,13 @@ export default function RevisionPage() {
                   </>
                 )}
               </div>
-
               <Button
                 size="lg"
                 className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg"
-                onClick={() => navigate("/update-form")}
+                onClick={() => {
+                  navigate("/update-form");
+                  window.scrollTo(0, 0);
+                }}
                 disabled={!allChecked}
               >
                 Proceed to Update Form

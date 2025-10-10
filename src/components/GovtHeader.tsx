@@ -96,6 +96,50 @@ export const GovtHeader = ({
             <button className="text-xs hover-text-secondary transition hidden md:inline">
               Screen Reader
             </button>
+            {/* Add Language Toggle */}
+            <button
+              className="text-xs hover-text-secondary transition hidden md:inline"
+              onClick={async () => {
+                const targetLang =
+                  localStorage.getItem("lang") === "hi" ? "en" : "hi";
+                localStorage.setItem("lang", targetLang);
+
+                const elements = document.querySelectorAll(
+                  "body *:not(script):not(style)"
+                );
+                for (const el of Array.from(elements)) {
+                  const node = el.childNodes;
+                  for (const n of Array.from(node)) {
+                    if (
+                      n.nodeType === Node.TEXT_NODE &&
+                      n.textContent?.trim()
+                    ) {
+                      try {
+                        const res = await fetch(
+                          "https://translate.astian.org/translate",
+                          {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                              q: n.textContent,
+                              source: "auto",
+                              target: targetLang,
+                              format: "text",
+                            }),
+                          }
+                        );
+                        const data = await res.json();
+                        n.textContent = data.translatedText;
+                      } catch (err) {
+                        console.error("Translation failed", err);
+                      }
+                    }
+                  }
+                }
+              }}
+            >
+              {localStorage.getItem("lang") === "hi" ? "English" : "हिन्दी"}
+            </button>
           </div>
         </div>
       </div>
@@ -129,24 +173,44 @@ export const GovtHeader = ({
               >
                 Home
               </a>
-              <a
-                href="/NACCER"
-                className="text-foreground hover:text-accent transition font-medium"
-              >
-                Dashboard
-              </a>
-              <a
-                href="/analytics"
-                className="text-foreground hover:text-accent transition font-medium"
-              >
-                Analytics
-              </a>
-              <a
-                href="#"
-                className="text-foreground hover:text-accent transition font-medium"
-              >
-                Help
-              </a>
+
+              {userName === "Dr. Ghanshyam Tiwari" ? (
+                <>
+                  <a
+                    href="#"
+                    className="text-foreground hover:text-accent transition font-medium"
+                  >
+                    Forms
+                  </a>
+                  <a
+                    href="#"
+                    className="text-foreground hover:text-accent transition font-medium"
+                  >
+                    Help
+                  </a>
+                </>
+              ) : (
+                <>
+                  <a
+                    href="/"
+                    className="text-foreground hover:text-accent transition font-medium"
+                  >
+                    Proposals
+                  </a>
+                  <a
+                    href="/analytics"
+                    className="text-foreground hover:text-accent transition font-medium"
+                  >
+                    Forms
+                  </a>
+                  <a
+                    href="#"
+                    className="text-foreground hover:text-accent transition font-medium"
+                  >
+                    Help
+                  </a>
+                </>
+              )}
             </nav>
 
             {/* User Section */}
