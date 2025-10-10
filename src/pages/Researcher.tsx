@@ -194,7 +194,6 @@ export default function ResearcherPage() {
         <Card className="border-2 mb-8">
           <CardHeader>
             <CardTitle className="text-2xl">My Proposals</CardTitle>
-            <CardDescription>Current projects under implementation</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -257,8 +256,7 @@ export default function ResearcherPage() {
         {/* Other Forms (non-clickable) */}
         <Card className="border-2 mb-12">
           <CardHeader>
-            <CardTitle>Other Forms</CardTitle>
-            <CardDescription>Project-related documentation</CardDescription>
+            <CardTitle>All proposal related forms</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-2 max-h-96 overflow-y-auto">
