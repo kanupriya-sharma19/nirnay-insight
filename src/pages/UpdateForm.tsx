@@ -37,7 +37,8 @@ import { generatePDF } from "@/lib/pdfGenerator";
 
 const revisionFormTemplate = {
   title: "Project Proposal Revision (Form - I)",
-  description: "R&D project proposal revision for coal sector research and development",
+  description:
+    "R&D project proposal revision for coal sector research and development",
 };
 
 const calculateCompletion = (formData: any, requiredFields: string[]) => {
@@ -86,10 +87,7 @@ export default function UpdateFormPage() {
     quotations: false,
   });
 
-  const requiredFields = [
-    "methodology",
-    "proposedOutlay",
-  ];
+  const requiredFields = ["methodology", "proposedOutlay"];
 
   const completionPercentage = calculateCompletion(formData, requiredFields);
 
@@ -125,14 +123,9 @@ export default function UpdateFormPage() {
       return;
     }
 
-    if (!uploads.formIA || !uploads.formIV || !uploads.quotations) {
-      toast.error("Please upload all required documents");
-      return;
-    }
-
     generatePDF(formData, revisionFormTemplate);
-    navigate('/researcher');
-      window.scrollTo(0, 0);
+    navigate("/researcher");
+    window.scrollTo(0, 0);
   };
 
   const thrustAreas = [
@@ -156,13 +149,26 @@ export default function UpdateFormPage() {
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       <GovtHeader />
-
+      {/* Sticky Progress Bar */}
+      <div className="sticky top-0 z-50 bg-white border-b border-primary/20 shadow-sm">
+        <div className="container mx-auto px-4 py-2">
+          <div className="flex justify-between items-center text-sm mb-1">
+            <span className="font-medium">Form Completion</span>
+            <span className="text-primary font-semibold">
+              {completionPercentage}%
+            </span>
+          </div>
+          <Progress value={completionPercentage} className="h-2" />
+        </div>
+      </div>
       <main className="flex-1 container mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
             <FileText className="h-8 w-8 text-primary" />
-            <h1 className="text-3xl font-bold text-gray-900">Update Proposal</h1>
+            <h1 className="text-3xl font-bold text-gray-900">
+              Update Proposal
+            </h1>
           </div>
           <p className="text-gray-600">
             Form-I: Project Proposal (Revision Submission)
@@ -195,58 +201,41 @@ export default function UpdateFormPage() {
         <Card className="border-2 mb-8">
           <CardHeader className="bg-gray-50">
             <CardTitle>Basic Information</CardTitle>
-            <CardDescription>Project details and investigator information</CardDescription>
+            <CardDescription>
+              Project details and investigator information
+            </CardDescription>
           </CardHeader>
           <CardContent className="pt-6">
             <div className="space-y-6">
               <div>
-                <Label htmlFor="projectTitle" className="text-base font-semibold">
+                <Label
+                  htmlFor="projectTitle"
+                  className="text-base font-semibold"
+                >
                   Project Title *
                 </Label>
                 <Input
                   id="projectTitle"
                   value={formData.projectTitle}
-                  onChange={(e) => handleInputChange("projectTitle", e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange("projectTitle", e.target.value)
+                  }
                   className="mt-2"
                 />
               </div>
-
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <Label htmlFor="principalInvestigator" className="text-base font-semibold">
-                    Principal Investigator *
-                  </Label>
-                  <Input
-                    id="principalInvestigator"
-                    value={formData.principalInvestigator}
-                    onChange={(e) =>
-                      handleInputChange("principalInvestigator", e.target.value)
-                    }
-                    className="mt-2"
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="institution" className="text-base font-semibold">
-                    Institution *
-                  </Label>
-                  <Input
-                    id="institution"
-                    value={formData.institution}
-                    onChange={(e) => handleInputChange("institution", e.target.value)}
-                    className="mt-2"
-                  />
-                </div>
-              </div>
-
               <div className="grid md:grid-cols-3 gap-6">
                 <div>
-                  <Label htmlFor="thrustArea" className="text-base font-semibold">
+                  <Label
+                    htmlFor="thrustArea"
+                    className="text-base font-semibold"
+                  >
                     Thrust Area *
                   </Label>
                   <Select
                     value={formData.thrustArea}
-                    onValueChange={(value) => handleInputChange("thrustArea", value)}
+                    onValueChange={(value) =>
+                      handleInputChange("thrustArea", value)
+                    }
                   >
                     <SelectTrigger className="mt-2">
                       <SelectValue />
@@ -269,19 +258,26 @@ export default function UpdateFormPage() {
                     id="duration"
                     type="number"
                     value={formData.duration}
-                    onChange={(e) => handleInputChange("duration", e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("duration", e.target.value)
+                    }
                     className="mt-2"
                   />
                 </div>
 
                 <div>
-                  <Label htmlFor="totalBudget" className="text-base font-semibold">
+                  <Label
+                    htmlFor="totalBudget"
+                    className="text-base font-semibold"
+                  >
                     Total Budget (₹) *
                   </Label>
                   <Input
                     id="totalBudget"
                     value={formData.totalBudget}
-                    onChange={(e) => handleInputChange("totalBudget", e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("totalBudget", e.target.value)
+                    }
                     className="mt-2"
                   />
                 </div>
@@ -302,8 +298,9 @@ export default function UpdateFormPage() {
                   </Badge>
                 </CardTitle>
                 <CardDescription className="mt-2">
-                  Add detailed technical specifications including voltage ranges, electrode
-                  materials, and deposition time parameters (Max. 200 words)
+                  Add detailed technical specifications including voltage
+                  ranges, electrode materials, and deposition time parameters
+                  (Max. 200 words)
                 </CardDescription>
               </div>
             </div>
@@ -319,7 +316,6 @@ export default function UpdateFormPage() {
           </CardContent>
         </Card>
 
-       
         {/* Proposed Outlay Table */}
         <Card className="border-2 border-warning mb-8">
           <CardHeader className="bg-warning/5">
@@ -340,7 +336,13 @@ export default function UpdateFormPage() {
               field={{
                 name: "proposedOutlay",
                 label: "Proposed Outlay",
-                columns: ["Item", "1st Year", "2nd Year", "3rd Year", "Total Cost"],
+                columns: [
+                  "Item",
+                  "1st Year",
+                  "2nd Year",
+                  "3rd Year",
+                  "Total Cost",
+                ],
               }}
               value={formData.proposedOutlay || []}
               onChange={(value) => handleInputChange("proposedOutlay", value)}
@@ -348,7 +350,6 @@ export default function UpdateFormPage() {
           </CardContent>
         </Card>
 
-  
         {/* Progress and Actions */}
         <div className="space-y-6 mb-8">
           <Card className="border-2">
@@ -356,7 +357,9 @@ export default function UpdateFormPage() {
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="font-medium">Form Completion</span>
-                  <span className="text-primary font-semibold">{completionPercentage}%</span>
+                  <span className="text-primary font-semibold">
+                    {completionPercentage}%
+                  </span>
                 </div>
                 <Progress value={completionPercentage} className="h-3" />
               </div>

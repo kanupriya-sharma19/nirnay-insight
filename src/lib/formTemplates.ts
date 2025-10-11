@@ -25,13 +25,13 @@ export const formTemplates = {
         name: "subImplementingAgency",
         label: "3. Name and Address of Sub-Implementing Agency(s)",
         type: "textarea",
-        required: false,
+        required: true,
       },
       {
         name: "coInvestigator",
         label: "Name of Co-Investigator(s)",
         type: "text",
-        required: false,
+        required: true,
       },
       {
         name: "issueDefinition",
@@ -79,7 +79,7 @@ export const formTemplates = {
         name: "timeSchedule",
         label: "8.3 Time Schedule of Activities and Milestones (Attach Bar/Pert Chart)",
         type: "file",
-        required: false,
+        required: true,
       },
       {
         name: "proposedOutlay",
@@ -92,7 +92,7 @@ export const formTemplates = {
         name: "foreignExchange",
         label: "Foreign Exchange Component (if any)",
         type: "textarea",
-        required: false,
+        required: true,
       },
       {
         name: "fundPhasing",
@@ -105,13 +105,13 @@ export const formTemplates = {
         label: "11. Outlay for Land & Building (₹ in Lakhs)",
         type: "table",
         columns: ["Item", "Plinth Area", "Type of Building", "Estimated Cost"],
-        required: false,
+        required: true,
       },
       {
         name: "landBuildingJustification",
         label: "12. Justification for Land & Building",
         type: "textarea",
-        required: false,
+        required: true,
       },
       {
         name: "equipmentOutlay",
@@ -151,7 +151,7 @@ export const formTemplates = {
         name: "curriculumVitae",
         label: "16. Curriculum Vitae of Project Proponents",
         type: "file",
-        required: false,
+        required: true,
       },
       {
         name: "pastExperience",
@@ -169,7 +169,7 @@ export const formTemplates = {
         name: "videoLink",
         label: "19. Video Pitch (Add a YouTube video link for your 3-minute presentation)",
         type: "text",
-        required: false,
+        required: true,
       },
     ],
   },
@@ -201,7 +201,7 @@ export const formTemplates = {
         type: "date",
         required: true,
       },
-      { name: "remarks", label: "Remarks", type: "textarea", required: false },
+      { name: "remarks", label: "Remarks", type: "textarea", required: true },
     ],
   },
 };

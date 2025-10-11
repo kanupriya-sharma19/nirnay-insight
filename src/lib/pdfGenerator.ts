@@ -58,33 +58,61 @@ const renderTableHTML = (tableData: any[], columns: string[]): string => {
 export const generatePDF = (formData: any, formTemplate: any) => {
   const pdfWindow = window.open("", "_blank");
   if (!pdfWindow) return;
-// Build detail rows HTML for fields 4-19 (all text/textarea fields after the first 3)
-const textFields = [
 
-  { name: "issueDefinition", label: "4. Definition of the issue (Max. 300 words)" },
-  { name: "objectives", label: "5. Objectives (Specific and not more than 2-3)" },
-  { name: "justification", label: "6. Justification for subject area (Max. 200 words)" },
-  { name: "benefitToIndustry", label: "7. How the project is beneficial to coal industry" },
-  { name: "workPlan", label: "8. Work Plan (Max. 100 words)" },
-  { name: "methodology", label: "8.1 Methodology (Max. 200 words)" },
-  { name: "organizationOfWork", label: "8.2 Organization of work elements (Max. 200 words)" },
-  { name: "foreignExchange", label: "Foreign Exchange Component (if any)" },
-  { name: "fundPhasing", label: "10. Phasing of fund requirement (in percentage) with respect to activities/milestone" },
-  { name: "landBuildingJustification", label: "12. Justification for land & building" },
-  { name: "equipmentJustification", label: "14. Justification for Equipment" },
-  { name: "pastExperience", label: "17. Past experience and Institutional Expertise" },
-  { name: "otherDetails", label: "18. Other Details" },
-];
+  // Build detail rows HTML for fields 4-19 (all text/textarea fields after the first 3)
+  const textFields = [
+    {
+      name: "issueDefinition",
+      label: "4. Definition of the issue (Max. 300 words)",
+    },
+    {
+      name: "objectives",
+      label: "5. Objectives (Specific and not more than 2-3)",
+    },
+    {
+      name: "justification",
+      label: "6. Justification for subject area (Max. 200 words)",
+    },
+    {
+      name: "benefitToIndustry",
+      label: "7. How the project is beneficial to coal industry",
+    },
+    { name: "workPlan", label: "8. Work Plan (Max. 100 words)" },
+    { name: "methodology", label: "8.1 Methodology (Max. 200 words)" },
+    {
+      name: "organizationOfWork",
+      label: "8.2 Organization of work elements (Max. 200 words)",
+    },
+    { name: "foreignExchange", label: "Foreign Exchange Component (if any)" },
+    {
+      name: "fundPhasing",
+      label:
+        "10. Phasing of fund requirement (in percentage) with respect to activities/milestone",
+    },
+    {
+      name: "landBuildingJustification",
+      label: "12. Justification for land & building",
+    },
+    {
+      name: "equipmentJustification",
+      label: "14. Justification for Equipment",
+    },
+    {
+      name: "pastExperience",
+      label: "17. Past experience and Institutional Expertise",
+    },
+    { name: "otherDetails", label: "18. Other Details" },
+  ];
 
 const detailRowsHTML = textFields
-  .filter(field => formData[field.name] && String(formData[field.name]).trim() !== "")
+  .filter((field) => formData[field.name] && formData[field.name].trim() !== "")
   .map(
     (field) => `
-    <tr>
-      <th>${escapeHTML(field.label)}</th>
-      <td>${escapeHTML(formData[field.name])}</td>
-    </tr>
-  `
+      <tr>
+        <th>${escapeHTML(field.label)}</th>
+        <td>${escapeHTML(formData[field.name])}</td>
+      </tr>
+    `
   )
   .join("");
 
@@ -100,7 +128,9 @@ const detailRowsHTML = textFields
         <table class="form-table">
           <tr>
             <td style="text-align: center; padding: 15px; font-style: italic; color: #666;">
-              Attachment provided: ${escapeHTML(formData.timeSchedule.name || "Document attached")}
+              Attachment provided: ${escapeHTML(
+                formData.timeSchedule.name || "Document attached"
+              )}
             </td>
           </tr>
         </table>
@@ -124,7 +154,13 @@ const detailRowsHTML = textFields
             </tr>
           </thead>
           <tbody>
-            ${renderTableHTML(formData.proposedOutlay, ["Item", "1st Year", "2nd Year", "3rd Year", "Total Cost"])}
+            ${renderTableHTML(formData.proposedOutlay, [
+              "Item",
+              "1st Year",
+              "2nd Year",
+              "3rd Year",
+              "Total Cost",
+            ])}
           </tbody>
         </table>
       </div>
@@ -146,7 +182,12 @@ const detailRowsHTML = textFields
             </tr>
           </thead>
           <tbody>
-            ${renderTableHTML(formData.landBuildingOutlay, ["Item", "Plinth Area", "Type of Building", "Estimated Cost"])}
+            ${renderTableHTML(formData.landBuildingOutlay, [
+              "Item",
+              "Plinth Area",
+              "Type of Building",
+              "Estimated Cost",
+            ])}
           </tbody>
         </table>
       </div>
@@ -223,7 +264,9 @@ const detailRowsHTML = textFields
         <table class="form-table">
           <tr>
             <td style="text-align: center; padding: 15px; font-style: italic; color: #666;">
-              Attachment provided: ${escapeHTML(formData.curriculumVitae.name || "Document attached")}
+              Attachment provided: ${escapeHTML(
+                formData.curriculumVitae.name || "Document attached"
+              )}
             </td>
           </tr>
         </table>
@@ -289,7 +332,12 @@ const detailRowsHTML = textFields
         .signature-section { margin-top: 40px; border-top: 1px solid #ddd; padding-top: 20px; }
         .signature-line { width: 300px; border-bottom: 1px solid #333; margin: 40px 0 5px 0; }
         .footer { text-align: center; margin-top: 30px; font-size: 10px; color: #666; }
-        @media print { body { margin: 0; } .section { page-break-inside: avoid; } }
+     @media print {
+  body { margin: 0; * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
+}
+  .section { page-break-before: auto; page-break-after: auto; }
+}
+
       </style>
     </head>
     <body>
@@ -311,14 +359,18 @@ const detailRowsHTML = textFields
             <th>2. Name and address of principal Implementing Agency(s)<br/>Name of Project Leader/Coordinator/Principle Investigator</th>
             <td>
               ${escapeHTML(formData.implementingAgency || "Not provided")}
-              <br/><strong>Project Leader:</strong> ${escapeHTML(formData.projectLeader || "Not provided")}
+              <br/><strong>Project Leader:</strong> ${escapeHTML(
+                formData.projectLeader || "Not provided"
+              )}
             </td>
           </tr>
           <tr>
             <th>3. Name and address of Sub-Implementing Agency(s)<br/>Name of Co-investigator(s)</th>
             <td>
               ${escapeHTML(formData.subImplementingAgency || "Indian Institute of Technology, Bombay")}
-              <br/><strong>Co-investigator:</strong> ${escapeHTML(formData.coInvestigator || "Dr CV Chandra")}
+              <br/><strong>Co-investigator:</strong> ${escapeHTML(
+                formData.coInvestigator || "Dr CV Chandra"
+              )}
             </td>
           </tr>
         </table>
@@ -356,14 +408,15 @@ const detailRowsHTML = textFields
           <div class="logo-item"><img src="/final.png" alt="Digital India" /></div>
           <div class="logo-item"><img src="/cmpdi.png" alt="CMPDI" /></div>
           <div class="logo-item">
-            <img src="/Emblem_final.svg" alt="Emblem" />
-            <p class="logo-text">Our logo</p>
+            <img src="/logo.png" />
           </div>
         </div>
       </div>
 
       <div class="footer">
-        <p>Generated on: ${new Date().toLocaleString()} | Form ID: ${escapeHTML(formTemplate.title)}</p>
+        <p>Generated on: ${new Date().toLocaleString()} | Form ID: ${escapeHTML(
+    formTemplate.title
+  )}</p>
       </div>
     </body>
     </html>

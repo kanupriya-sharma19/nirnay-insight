@@ -83,17 +83,14 @@ const TableField = ({ field, value = [], onChange }: any) => {
             {rows.map((row: any, rowIndex: number) => (
               <tr key={rowIndex} className="hover:bg-muted/50">
                 {field.columns.map((column: string, colIndex: number) => (
-                  <td
-                    key={colIndex}
-                    className="border border-border px-4 py-2"
-                  >
+                  <td key={colIndex} className="border border-border px-4 py-2">
                     <Input
                       type="text"
                       value={row[column] || ""}
                       onChange={(e) =>
                         updateCell(rowIndex, column, e.target.value)
                       }
-                      placeholder={`Enter ${column}`}
+                      placeholder={`${column}`}
                       className="border-0 focus-visible:ring-1"
                     />
                   </td>
@@ -127,30 +124,37 @@ const TableField = ({ field, value = [], onChange }: any) => {
     </div>
   );
 };
-
 const calculateCompletion = (formData: any, fields: any[]) => {
-  if (!fields.length) return 0;
+  const requiredFields = fields.filter((f) => f.required);
+  if (requiredFields.length === 0) return 100;
 
-  const filledFields = fields.filter((field) => {
+  let filled = 0;
+
+  requiredFields.forEach((field) => {
     const value = formData[field.name];
-    if (field.required) {
-      if (field.type === "table") {
-        return (
-          value &&
-          value.length > 0 &&
-          value.some((row: any) =>
-            Object.values(row).some(
-              (cell) => cell && cell.toString().trim() !== ""
-            )
-          )
-        );
-      }
-      return value !== undefined && value !== null && value !== "";
-    }
-    return true;
-  }).length;
 
-  return Math.round((filledFields / fields.length) * 100);
+    if (field.type === "table") {
+      if (
+        value &&
+        value.length > 0 &&
+        value.some((row: any) =>
+          Object.values(row).some(
+            (cell) => cell && cell.toString().trim() !== ""
+          )
+        )
+      ) {
+        filled++;
+      }
+    } else if (
+      value !== undefined &&
+      value !== null &&
+      value.toString().trim() !== ""
+    ) {
+      filled++;
+    }
+  });
+
+  return Math.round((filled / requiredFields.length) * 100);
 };
 
 export default function FormSubmission() {
@@ -160,12 +164,13 @@ export default function FormSubmission() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const formTemplate = formTemplates[formType as keyof typeof formTemplates];
-  const completionPercentage = formTemplate ? calculateCompletion(
-    formData,
-    formTemplate.fields
-  ) : 0;
+  const completionPercentage = formTemplate
+    ? calculateCompletion(formData, formTemplate.fields)
+    : 0;
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
@@ -180,8 +185,8 @@ export default function FormSubmission() {
     setIsSubmitting(true);
     generatePDF(formData, formTemplate);
     setIsSubmitting(false);
-    navigate('/researcher');
-      window.scrollTo(0, 0);
+    navigate("/researcher");
+    window.scrollTo(0, 0);
   };
 
   const handleViewPDF = () => {
@@ -199,19 +204,42 @@ export default function FormSubmission() {
   return (
     <div className="min-h-screen w-full bg-background">
       <GovtHeader />
+      <div className="sticky top-0 z-50 bg-card border-b border-primary/20 shadow-sm">
+        <div className="container mx-auto px-4 py-2">
+          <div className="flex justify-between items-center text-sm mb-1">
+            <span className="font-medium">Form Completion</span>
+            <span className="text-primary font-semibold">
+              {completionPercentage}%
+            </span>
+          </div>
+          <Progress value={completionPercentage} className="h-2" />
+        </div>
+      </div>
       <div className="container mx-auto px-4 py-8">
         <Card className="w-full shadow-lg border-2 border-primary/20">
           <CardHeader className="bg-primary/5 border-b border-primary/10">
-            <CardTitle className="text-2xl text-primary">{formTemplate.title}</CardTitle>
-            <CardDescription className="text-base">{formTemplate.description}</CardDescription>
+            <CardTitle className="text-2xl text-primary">
+              {formTemplate.title}
+            </CardTitle>
+            <CardDescription className="text-base">
+              {formTemplate.description}
+            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6 p-6 bg-card">
             <form onSubmit={handleSubmit} className="space-y-6">
               {formTemplate.fields.map((field: any) => (
-                <div key={field.name} className="space-y-2 p-4 bg-muted/30 rounded-lg">
-                  <Label htmlFor={field.name} className="text-base font-semibold">
+                <div
+                  key={field.name}
+                  className="space-y-2 p-4 bg-muted/30 rounded-lg"
+                >
+                  <Label
+                    htmlFor={field.name}
+                    className="text-base font-semibold"
+                  >
                     {field.label}
-                    {field.required && <span className="text-destructive ml-1">*</span>}
+                    {field.required && (
+                      <span className="text-destructive ml-1">*</span>
+                    )}
                   </Label>
                   {field.type === "text" ? (
                     <Input
@@ -219,7 +247,7 @@ export default function FormSubmission() {
                       name={field.name}
                       value={formData[field.name] || ""}
                       onChange={handleInputChange}
-                      placeholder={`Enter ${field.label}`}
+                      placeholder={`${field.label}`}
                       required={field.required}
                     />
                   ) : field.type === "number" ? (
@@ -229,7 +257,7 @@ export default function FormSubmission() {
                       type="number"
                       value={formData[field.name] || ""}
                       onChange={handleInputChange}
-                      placeholder={`Enter ${field.label}`}
+                      placeholder={`${field.label}`}
                       required={field.required}
                     />
                   ) : field.type === "date" ? (
@@ -247,7 +275,7 @@ export default function FormSubmission() {
                       name={field.name}
                       value={formData[field.name] || ""}
                       onChange={handleInputChange}
-                      placeholder={`Enter ${field.label}`}
+                      placeholder={`${field.label}`}
                       rows={4}
                       required={field.required}
                     />
@@ -290,26 +318,26 @@ export default function FormSubmission() {
                       required={field.required}
                     />
                   ) : (
-                    <div className="text-destructive">Unsupported field type</div>
+                    <div className="text-destructive">
+                      Unsupported field type
+                    </div>
                   )}
                 </div>
               ))}
-              
+
               <div className="space-y-4 pt-4">
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
                     <span className="font-medium">Form Completion</span>
-                    <span className="text-primary font-semibold">{completionPercentage}%</span>
+                    <span className="text-primary font-semibold">
+                      {completionPercentage}%
+                    </span>
                   </div>
                   <Progress value={completionPercentage} className="h-3" />
                 </div>
-                
+
                 <div className="flex gap-4 pt-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="flex-1"
-                  >
+                  <Button type="button" variant="outline" className="flex-1">
                     <Save className="mr-2 h-4 w-4" />
                     Save Draft
                   </Button>

@@ -80,7 +80,7 @@ export const TableField = ({ field, value = [], onChange }: TableFieldProps) => 
                       onChange={(e) =>
                         updateCell(rowIndex, column, e.target.value)
                       }
-                      placeholder={`Enter ${column}`}
+                      placeholder={`${column}`}
                       className="border-0 focus-visible:ring-1"
                     />
                   </td>

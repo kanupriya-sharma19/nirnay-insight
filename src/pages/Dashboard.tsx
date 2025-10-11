@@ -6,9 +6,11 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
+
 import {
   FileText,
-  Upload,
+  Upload,Filter,
   Clock,
   CheckCircle,
   AlertCircle,
@@ -23,8 +25,23 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, Radar } from "recharts";
 
 // Upgraded Dashboard component
+import { Shield, Recycle, Zap, Factory, Search, Lightbulb } from "lucide-react"; // make sure to import used icons
+
+const thrustAreas = {
+  "Productivity Improvement": { icon: Shield, color: "bg-indigo-500" },
+  "Safety & Environment": { icon: Shield, color: "bg-red-500" },
+  "Waste to Wealth": { icon: Recycle, color: "bg-green-500" },
+  "Clean Coal Technologies": { icon: Zap, color: "bg-teal-500" },
+  "Coal Beneficiation": { icon: Factory, color: "bg-blue-500" },
+  "Exploration": { icon: Search, color: "bg-amber-500" },
+  "Innovation & Indigenization": { icon: Lightbulb, color: "bg-purple-500" },
+};
+
 export default function Dashboard() {
   const navigate = useNavigate();
+const getThrustColor = (area: string) => thrustAreas[area]?.color || "bg-primary";
+const getThrustIcon = (area: string) => thrustAreas[area]?.icon || FileText;
+
 
   // sample proposals extended with new fields
   const proposals = [
@@ -220,44 +237,39 @@ export default function Dashboard() {
   const [selectedAction, setSelectedAction] = useState<string>("");
   const [justification, setJustification] = useState("");
 
-  const getStatusBadge = (status: string) => {
-    const styles: Record<string, string> = {
-      "Under Review": "status-review",
-      Approved: "status-approved",
-      Rejected: "status-rejected",
-    };
-    return styles[status] || "status-pending";
+  
+
+const getStatusBadge = (status: string) => {
+  const styles: Record<string, string> = {
+    "Under Review": "bg-yellow-400 text-black",
+    Approved: "bg-green-500 text-white",
+    Rejected: "bg-red-500 text-white",
+  };
+  return styles[status] || "bg-gray-400 text-white";
+};
+
+
+ const renderStatusSummary = () => {
+  const counts = {
+    Approved: proposals.filter((p) => p.status === "Approved").length,
+    "Under Review": proposals.filter((p) => p.status === "Under Review").length,
+    Rejected: proposals.filter((p) => p.status === "Rejected").length,
   };
 
-  const getThrustColor = (area: string) => {
-    const colors: Record<string, string> = {
-      Productivity: "bg-indigo-500",
-      "Safety & Health": "bg-red-500",
-      "Waste to Wealth": "bg-cyan-500",
-      Innovation: "bg-royal",
-      "Clean Coal": "bg-teal-500",
-      Exploration: "bg-blue-500",
-    };
-    return colors[area] || "bg-primary";
-  };
+  return (
+    <div className="flex flex-wrap gap-3 mb-6">
+      {Object.entries(counts).map(([status, count]) => (
+        <Badge
+          key={status}
+          className={`px-4 py-2 text-sm ${getStatusBadge(status)}`}
+        >
+          {status}: {count}
+        </Badge>
+      ))}
+    </div>
+  );
+};
 
-  const renderStatusSummary = () => {
-    const counts = {
-      Approved: proposals.filter((p) => p.status === "Approved").length,
-      "Under Review": proposals.filter((p) => p.status === "Under Review").length,
-      Rejected: proposals.filter((p) => p.status === "Rejected").length,
-    };
-
-    return (
-      <div className="flex flex-wrap gap-3 mb-6">
-        {Object.entries(counts).map(([status, count]) => (
-          <Badge key={status} className={`px-4 py-2 text-sm ${getStatusBadge(status)}`}>
-            {status}: {count}
-          </Badge>
-        ))}
-      </div>
-    );
-  };
 
   const filteredProposals = useMemo(() => {
     const now = new Date();
@@ -368,38 +380,52 @@ export default function Dashboard() {
         {renderStatusSummary()}
 
         {/* Filter Dropdowns */}
-        <div className="flex flex-wrap items-center gap-4 mb-8">
-          <Select
-            onValueChange={(val: string) => {
-              setFilterType(val);
-              setFilterValue("All");
-            }}
-            value={filterType}
-          >
-            <SelectTrigger className="w-48">
-              <SelectValue placeholder="Select Filter Type" />
-            </SelectTrigger>
-            <SelectContent>
-              {Object.keys(filterOptions).map((key) => (
-                <SelectItem key={key} value={key}>
-                  {key}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+       <div className="bg-white rounded-lg shadow-sm border p-6 mb-6">
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="flex-1">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <Input
+                  placeholder="Search proposals by title or submitter..."
+                  className="pl-10"
+                />
+              </div>
+            </div>
 
-          <Select onValueChange={setFilterValue} value={filterValue}>
-            <SelectTrigger className="w-56">
-              <SelectValue placeholder="Select Value" />
-            </SelectTrigger>
-            <SelectContent>
-              {filterOptions[filterType].map((val) => (
-                <SelectItem key={val} value={val}>
-                  {val}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+            <Select
+              onValueChange={(val: string) => {
+                setFilterType(val);
+                setFilterValue("All");
+              }}
+              value={filterType}
+            >
+              <SelectTrigger className="w-full md:w-48">
+                <Filter className="h-4 w-4 mr-2" />
+                <SelectValue placeholder="Select Filter Type" />
+              </SelectTrigger>
+              <SelectContent>
+                {Object.keys(filterOptions).map((key) => (
+                  <SelectItem key={key} value={key}>
+                    {key}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <Select onValueChange={setFilterValue} value={filterValue}>
+              <SelectTrigger className="w-full md:w-56">
+                <Filter className="h-4 w-4 mr-2" />
+                <SelectValue placeholder="Select Value" />
+              </SelectTrigger>
+              <SelectContent>
+                {filterOptions[filterType].map((val) => (
+                  <SelectItem key={val} value={val}>
+                    {val}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </div>
 
         {/* Proposals List */}
@@ -410,8 +436,10 @@ export default function Dashboard() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {filteredProposals.length === 0 ? (
-                <p className="text-muted-foreground text-center py-4">No proposals match the selected filter.</p>
+      {filteredProposals.length === 0 ? (
+                <p className="text-muted-foreground text-center py-4">
+                  No proposals match the selected filter.
+                </p>
               ) : (
                 filteredProposals.map((proposal) => (
                   <div
@@ -426,15 +454,33 @@ export default function Dashboard() {
                           </div>
                           <div className="flex-1">
                             <div className="flex items-center gap-2 mb-1">
-                              <h3 className="font-bold text-lg text-primary">{proposal.title}</h3>
+                              <h3 className="font-bold text-lg text-primary">
+                                {proposal.title}
+                              </h3>
                             </div>
 
-                            <p className="text-sm text-muted-foreground mb-1">• {proposal.instituteName}</p>
+                            <p className="text-sm text-muted-foreground mb-1">
+                              • {proposal.instituteName}
+                            </p>
 
                             <div className="flex flex-wrap gap-2 mb-3">
-                              <Badge className={`govt-badge ${getThrustColor(proposal.thrustArea)} text-white`}>{proposal.thrustArea}</Badge>
-                              <Badge className={`govt-badge ${getStatusBadge(proposal.status)}`}>{proposal.status}</Badge>
-                              <Badge className="govt-badge bg-primary text-white">Score: {proposal.evaluationScore.toFixed(1)}/10</Badge>
+                              <Badge
+                                className={`govt-badge ${getThrustColor(
+                                  proposal.thrustArea
+                                )} text-white`}
+                              >
+                                {proposal.thrustArea}
+                              </Badge>
+                              <Badge
+                                className={`govt-badge ${getStatusBadge(
+                                  proposal.status
+                                )}`}
+                              >
+                                {proposal.status}
+                              </Badge>
+                              <Badge className="govt-badge bg-primary text-white">
+                                Score: {proposal.evaluationScore.toFixed(1)}/10
+                              </Badge>
                             </div>
 
                             <div className="flex items-center gap-4 text-sm text-muted-foreground">
@@ -446,13 +492,22 @@ export default function Dashboard() {
                         </div>
 
                         <div className="flex items-center gap-2 mt-2">
-                          <span className="text-sm text-muted-foreground">Evaluation Score:</span>
-                          <span className="font-semibold text-primary">{proposal.evaluationScore.toFixed(1)} / 10</span>
+                          <span className="text-sm text-muted-foreground">
+                            Evaluation Score:
+                          </span>
+                          <span className="font-semibold text-primary">
+                            {proposal.evaluationScore.toFixed(1)} / 10
+                          </span>
                         </div>
                       </div>
 
                       <div className="flex lg:flex-col gap-2 w-full lg:w-auto border-t lg:border-t-0 pt-4 lg:pt-0 ">
-                        <Button variant="outline" size="lg" className="bg-slate-800 text-white hover:bg-slate-500 shadow-lg transition" onClick={() => openDetails(proposal)}>
+                        <Button
+                          variant="outline"
+                          size="lg"
+                          className="bg-slate-800 text-white hover:bg-slate-500 shadow-lg transition"
+                          onClick={() => openDetails(proposal)}
+                        >
                           View Details
                         </Button>
                       </div>
@@ -460,6 +515,8 @@ export default function Dashboard() {
                   </div>
                 ))
               )}
+
+              
             </div>
           </CardContent>
         </Card>

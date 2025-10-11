@@ -123,8 +123,8 @@ export default function Login() {
         {/* Content */}
         <div className="relative z-10 flex flex-col items-center justify-center w-full p-12 text-white">
           <div className="mb-8">
-            <div className="bg-gray-800/40 backdrop-blur-sm p-6 rounded-2xl shadow-lg border border-gray-700/50">
-              <Shield className="h-24 w-24 text-white" />
+            <div className="bg-white backdrop-blur-sm p-4 rounded-2xl shadow-lg border border-gray-700/50">
+          <img src="/logo.png" alt="Logo" className="h-32  object-contain" />
             </div>
           </div>
           <h1 className="text-5xl font-bold mb-4 text-center text-white">

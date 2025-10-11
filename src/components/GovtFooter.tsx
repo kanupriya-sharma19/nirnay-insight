@@ -4,22 +4,21 @@ export const GovtFooter = () => {
       {/* Government Logos */}
       <div className="border-t-2 border-saffron bg-white">
         <div className="container mx-auto px-4 py-2">
-          <div className="flex flex-wrap items-center justify-center gap-8">
-            <div className="flex flex-col items-center gap-1">
-              <img src="/Emblem_final.svg" alt="Emblem" className="h-14" />
-            </div>
+       <div className="flex flex-wrap items-center justify-center gap-12">
+  <div className="flex flex-col items-center">
+    <img src="/Emblem_final.svg" alt="Emblem" className="h-16 object-contain" />
+  </div>
+  <div className="flex flex-col items-center">
+    <img src="/final.png" alt="Digital India" className="h-16 object-contain" />
+  </div>
+  <div className="flex flex-col items-center">
+    <img src="/cmpdi.png" alt="MyGov" className="h-16 object-contain" />
+  </div>
+  <div className="flex flex-col items-center">
+    <img src="/logo.png" alt="Logo" className="h-16 object-contain" />
+  </div>
+</div>
 
-            <div className="flex flex-col items-center gap-1">
-              <img src="/final.png" alt="Digital India" className="h-14" />
-            </div>
-            <div className="flex flex-col items-center gap-1">
-              <img src="/cmpdi.png" alt="MyGov" className="h-12" />
-            </div>
-            <div className="flex flex-col items-center gap-1">
-              <img src="/Emblem_final.svg" alt="Emblem" className="h-8" />
-              <span className="text-xs text-muted-foreground">Our logo</span>
-            </div>
-          </div>
         </div>
       </div>
 
