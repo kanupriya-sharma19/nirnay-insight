@@ -115,7 +115,7 @@ export default function ApexPage() {
       financialBreakdown: { requested: 30_00_000, estimatedROIpercent: 20, previousCost: 25_00_000 },
       subtopics: ["IoT sensors", "Energy optimization"],
       aiInsights: "High innovation and strong cost-benefit. Recommend fast-track.",
-      naccerSelectionReason: "Selected by NACCER due to exceptional technical merit (9.8/10 score) and strong potential for immediate industry implementation. The proposal demonstrates clear cost-benefit analysis with 20% ROI and addresses critical environmental sustainability goals in mining operations. The IoT-based approach aligns with national digitization initiatives and shows scalable deployment potential across multiple mining sites.",
+      naccerSelectionReason: "Selected by NACCER due to exceptional technical merit (9.8/10 score) and strong potential for immediate industry implementation. The proposal demonstrates clear cost-benefit analysis with 20% ROI and addresses critical environmental sustainability goals in mining operations. The IoT-based approach aligns with national digitization initiatives and shows scalable deployment potential across multiple mining sites. The proposed solution is highly beneficial for the coal industry, offering improved operational efficiency, safety, and cost optimization.",
     },
     {
       id: "II-2024-003",

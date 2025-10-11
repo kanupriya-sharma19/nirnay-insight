@@ -14,7 +14,7 @@ const LoadingAnimation = () => {
         alignItems: "center", // center vertically
       }}
     >
-      <div style={{ width: 200, height: 200 }}>
+      <div style={{ width: 450, height: 450 }}>
         <Lottie animationData={animationData} loop={true} />
       </div>
     </div>

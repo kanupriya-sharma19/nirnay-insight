@@ -105,26 +105,6 @@ export default function Dashboard() {
   // sample proposals extended with new fields
   const proposals = [
     {
-      id: "II-2024-001",
-      title: "AI-based Coal Quality Assessment System",
-      thrustArea: "Innovation & Indigenization",
-      status: "Under Review",
-      submittedDate: "2025-01-15",
-      evaluationScore: 6.0,
-      progress: 60,
-      reviewer: "Dr. Kumar",
-      instituteName: "IIT Dhanbad",
-      pdfLink: "/static/proposals/PRO-2024-001.pdf",
-      financialBreakdown: {
-        requested: 50_00_000,
-        estimatedROIpercent: 12,
-        previousCost: 40_00_000,
-      },
-      subtopics: ["Sensor calibration", "Data pipeline", "Model validation"],
-      aiInsights:
-        "Technical feasibility is good; scale-up cost needs attention.",
-    },
-    {
       id: "CC-2024-002",
       title: "Sustainable Mining Practices using IoT",
       thrustArea: "Clean Coal Technologies",
@@ -142,8 +122,29 @@ export default function Dashboard() {
       },
       subtopics: ["IoT sensors", "Energy optimization"],
       aiInsights:
-        "High innovation and strong cost-benefit. Recommend fast-track.",
+        "Technical feasibility is good; scale-up cost needs attention. The proposed solution is highly beneficial for the coal industry, offering improved operational efficiency, safety, and cost optimization.",
     },
+    {
+      id: "II-2024-001",
+      title: "AI-based Coal Quality Assessment System",
+      thrustArea: "Innovation & Indigenization",
+      status: "Under Review",
+      submittedDate: "2025-01-15",
+      evaluationScore: 8.0,
+      progress: 60,
+      reviewer: "Dr. Kumar",
+      instituteName: "IIT Dhanbad",
+      pdfLink: "/static/proposals/PRO-2024-001.pdf",
+      financialBreakdown: {
+        requested: 50_00_000,
+        estimatedROIpercent: 12,
+        previousCost: 40_00_000,
+      },
+      subtopics: ["Sensor calibration", "Data pipeline", "Model validation"],
+      aiInsights:
+        "Technical feasibility is good; scale-up cost needs attention. The proposed solution is highly beneficial for the coal industry, offering improved operational efficiency, safety, and cost optimization.",
+    },
+    
     {
       id: "SE-2023-045",
       title: "Worker Safety Enhancement through ML",
@@ -592,52 +593,21 @@ export default function Dashboard() {
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
             <div>
               <h1 className="text-3xl font-bold mb-2">
-                Welcome back, Dr. Kumar!
+                Welcome back, Dr. Tiwari!
               </h1>
               <p className="text-primary-foreground/90 mb-4">
-                Track your proposals and manage your R&D projects efficiently
+                Track your proposals and manage R&D projects efficiently
               </p>
             </div>
+            <Button
+              size="lg"
+              className="bg-white text-blue-700 hover:bg-blue-50 shadow-lg"
+            >
+              <Upload className="mr-2 h-5 w-5" />
+              Upload Research Proposal
+            </Button>
 
             {renderStatusSummary()}
-          </div>
-        </div>
-
-        {/* Status Summary */}
- <div className="bg-white rounded-lg shadow-sm border p-6 mb-6 mt-4">
-          <h3 className="text-lg font-semibold mb-3 text-gray-800">
-            Upload Research Files
-          </h3>
-          <p className="text-sm text-muted-foreground mb-4">
-            Upload related project zip files for AI evaluation.
-          </p>
-
-          <div className="flex flex-col md:flex-row items-center gap-4">
-            <input
-              type="file"
-              multiple
-              accept=".zip,.rar,.7z"
-              // @ts-ignore - webkitdirectory is non-standard but supported by browsers
-              webkitdirectory=""
-              // @ts-ignore
-              directory=""
-              className="border border-gray-300 rounded-lg p-2 w-full md:w-auto file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-slate-800 file:text-white hover:file:bg-slate-600"
-              onChange={(e) => {
-                const files = Array.from(e.target.files || []);
-                if (files.length > 0) {
-                  alert(
-                    `Uploaded ${files.length} file(s): ${files
-                      .map((f) => f.name)
-                      .join(", ")}`
-                  );
-                }
-              }}
-            />
-
-            <p className="text-xs text-gray-500">
-              Supports ZIP, RAR, and 7Z formats. Folder upload supported in
-              Chrome.
-            </p>
           </div>
         </div>
         {/* Filter Dropdowns */}
@@ -1181,20 +1151,12 @@ export default function Dashboard() {
                       <div className="space-y-1 max-h-72 overflow-y-auto pr-2">
                         {tableOfContents.map((section, idx) => (
                           <div key={idx} className="space-y-1">
-                            <button
-                              onClick={() =>
-                                alert(
-                                  `Opening PDF at page ${section.page} (placeholder)`
-                                )
-                              }
+                             <button
+                              onClick={() => window.open(`https://drive.google.com/file/d/1YL_wqSUwGTMOTe5ye4SrIssluGJmsedu/view#page=${section.page}`, '_blank')}
                               className="w-full text-left px-3 py-2 text-sm hover:bg-primary/10 rounded-md transition-colors flex items-center justify-between group border border-transparent hover:border-primary/30"
                             >
-                              <span className="font-medium group-hover:text-primary text-gray-800">
-                                {section.title}
-                              </span>
-                              <span className="text-xs text-muted-foreground bg-primary/5 px-2 py-0.5 rounded">
-                                p.{section.page}
-                              </span>
+                              <span className="font-medium group-hover:text-primary text-gray-800">{section.title}</span>
+                              <span className="text-xs text-muted-foreground bg-primary/5 px-2 py-0.5 rounded">p.{section.page}</span>
                             </button>
                             {section.subsections && (
                               <div className="ml-4 space-y-1 border-l-2 border-primary/20 pl-2">
@@ -1330,13 +1292,17 @@ export default function Dashboard() {
                       AI Suggestion
                     </Button>
 
-                    <a
-                      href={selectedProposal.pdfLink}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      <Button variant="outline">View PDF</Button>
-                    </a>
+                  
+                                      <Button
+                                        variant="outline"
+                                        onClick={() => {
+                                          const pdfUrl = "https://drive.google.com/file/d/1YL_wqSUwGTMOTe5ye4SrIssluGJmsedu/preview";
+                                          window.open(pdfUrl, '_blank', 'width=1000,height=800');
+                                        }}
+                                      >
+                                        <FileText className="h-4 w-4 mr-2" />
+                                        View Full Proposal PDF
+                                      </Button>
                   </div>
 
                   {/* Justification Section */}
@@ -1455,6 +1421,7 @@ export default function Dashboard() {
             </DialogFooter>
           </DialogContent>
         </Dialog>
+       
       </main>
 
       <GovtFooter />
