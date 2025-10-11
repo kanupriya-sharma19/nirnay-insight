@@ -1161,21 +1161,13 @@ export default function Dashboard() {
                             {section.subsections && (
                               <div className="ml-4 space-y-1 border-l-2 border-primary/20 pl-2">
                                 {section.subsections.map((sub, subIdx) => (
-                                  <button
+                                    <button
                                     key={subIdx}
-                                    onClick={() =>
-                                      alert(
-                                        `Opening PDF at page ${sub.page} (placeholder)`
-                                      )
-                                    }
+                                    onClick={() => window.open(`https://drive.google.com/file/d/1YL_wqSUwGTMOTe5ye4SrIssluGJmsedu/view#page=${sub.page}`, '_blank')}
                                     className="w-full text-left px-2 py-1.5 text-xs hover:bg-primary/5 rounded-md transition-colors flex items-center justify-between group"
                                   >
-                                    <span className="group-hover:text-primary text-gray-700">
-                                      {sub.title}
-                                    </span>
-                                    <span className="text-xs text-muted-foreground">
-                                      p.{sub.page}
-                                    </span>
+                                    <span className="group-hover:text-primary text-gray-700">{sub.title}</span>
+                                    <span className="text-xs text-muted-foreground">p.{sub.page}</span>
                                   </button>
                                 ))}
                               </div>
