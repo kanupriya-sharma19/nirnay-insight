@@ -28,7 +28,7 @@ import { GovtHeader } from "@/components/GovtHeader";
 import { GovtFooter } from "@/components/GovtFooter";
 import { useNavigate } from "react-router-dom";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, Radar } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 
 interface Proposal {
   id: string;
@@ -286,7 +286,8 @@ export default function ApexPage() {
     const technicalFeasibility = Math.min(10, (p.evaluationScore * 0.95) + Math.random() * 0.5);
     const potentialImpact = Math.min(10, (p.evaluationScore * 0.92) + Math.random() * 0.3);
     const novelty = Math.min(10, (p.evaluationScore * 0.88) + Math.random() * 0.4);
-    const commercialization = Math.min(10, (p.evaluationScore * 1.02) - Math.random() * 0.2);
+    const commercialization = Math.min(10, (p.evaluationScore * 0.98) - Math.random() * 0.2);
+    const financialFeasibility = Math.min(10, (p.evaluationScore * 0.90) + Math.random() * 0.4);
     const team = Math.min(10, (p.evaluationScore * 0.96) + Math.random() * 0.3);
     
     return {
@@ -294,17 +295,54 @@ export default function ApexPage() {
       potentialImpact,
       novelty,
       commercialization,
+      financialFeasibility,
       team,
-      // Weighted sum calculation: Total = (TF*15 + PI*15 + N*15 + CS*40 + T*15) / 100
+      // Weighted sum calculation: Total = (TF*15 + PI*15 + N*15 + CS*25 + FF*15 + T*15) / 100
       weightedTotal: (
         (technicalFeasibility * 15) +
         (potentialImpact * 15) +
         (novelty * 15) +
-        (commercialization * 40) +
+        (commercialization * 25) +
+        (financialFeasibility * 15) +
         (team * 15)
       ) / 100
     };
   };
+
+  const tableOfContents = [
+    { title: "Executive Summary", page: 1 },
+    { title: "1. Background and Rationale", page: 3, subsections: [
+      { title: "1.1 Goaf Edge Support & SAGES Technology", page: 3 },
+      { title: "1.2 Need for Higher Capacity (500 T)", page: 4 },
+      { title: "1.3 Integration with Continuous Miners", page: 5 },
+      { title: "1.4 Problem Statement / Gaps", page: 6 },
+      { title: "1.5 Strategic Importance", page: 7 },
+    ]},
+    { title: "2. Objectives", page: 8 },
+    { title: "3. Scope of Work & Methodology", page: 10, subsections: [
+      { title: "Phase 1: Design & Simulation", page: 10 },
+      { title: "Phase 2: Prototype Manufacturing", page: 11 },
+      { title: "Phase 3: Pre-field Testing & Calibration", page: 12 },
+      { title: "Phase 4: Field Deployment & Trials", page: 13 },
+      { title: "Phase 5: Evaluation & Reporting", page: 14 },
+    ]},
+    { title: "4. Work Plan & Milestones", page: 15 },
+    { title: "5. Deliverables / Outputs", page: 18 },
+    { title: "6. Team, Roles & Institutional Capacity", page: 20 },
+    { title: "7. Budget & Cost Estimate", page: 22 },
+    { title: "8. Monitoring & Evaluation", page: 24 },
+    { title: "9. Risk Assessment & Mitigation", page: 26 },
+    { title: "10. Techno-Economic Analysis Framework", page: 28 },
+    { title: "11. Regulatory, Safety & Environmental Compliance", page: 30 },
+    { title: "12. Conclusion", page: 32 },
+    { title: "References", page: 33 },
+    { title: "Appendices", page: 34, subsections: [
+      { title: "A: CVs of Key Personnel", page: 34 },
+      { title: "B: Letters of Collaboration", page: 40 },
+      { title: "C: Safety / Regulatory Guidelines", page: 42 },
+      { title: "D: Technical Standards & Material Specifications", page: 45 },
+    ]},
+  ];
 
   const getBreakdownData = (p: Proposal) => {
     const scores = getEvaluationScores(p);
@@ -313,6 +351,7 @@ export default function ApexPage() {
       { subject: "Potential Impact", A: scores.potentialImpact, fullMark: 10 },
       { subject: "Novelty", A: scores.novelty, fullMark: 10 },
       { subject: "Commercialization", A: scores.commercialization, fullMark: 10 },
+      { subject: "Financial Feasibility", A: scores.financialFeasibility, fullMark: 10 },
       { subject: "Team", A: scores.team, fullMark: 10 },
     ];
   };
@@ -480,10 +519,11 @@ export default function ApexPage() {
                   </div>
 
                   <div className="mb-6">
-                    <h4 className="font-medium mb-3">Evaluation Score Breakdown</h4>
+                    <h4 className="font-medium mb-3">AI Evaluation Explanation</h4>
                     
                     {/* Weighted Score Table */}
-                    <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-lg p-4 mb-4">
+                    <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-lg p-4 mb-6">
+                      <h5 className="font-semibold text-sm mb-3 text-blue-900">Weighted Score Calculation (Modified S&T Guidelines 2021)</h5>
                       <div className="overflow-x-auto">
                         <table className="w-full text-sm">
                           <thead>
@@ -501,7 +541,8 @@ export default function ApexPage() {
                                 { name: "Technical Feasibility", score: scores.technicalFeasibility, weight: 15, details: "Feasibility & reasonability of technical claims, methodology, roadmap" },
                                 { name: "Potential Impact", score: scores.potentialImpact, weight: 15, details: "Environmental sustainability, market size, customer demographic" },
                                 { name: "Novelty", score: scores.novelty, weight: 15, details: "USP(s) of the technology, national importance" },
-                                { name: "Commercialization Strategy", score: scores.commercialization, weight: 40, details: "Value addition for customers, go-to-market plan, techno-commercial viability" },
+                                { name: "Commercialization Strategy", score: scores.commercialization, weight: 25, details: "Value addition for customers, go-to-market plan, techno-commercial viability" },
+                                { name: "Financial Feasibility", score: scores.financialFeasibility, weight: 15, details: "Budget justification, cost-benefit analysis, ROI projections" },
                                 { name: "Team", score: scores.team, weight: 15, details: "Technical & business expertise, mentors" }
                               ];
                               
@@ -534,53 +575,143 @@ export default function ApexPage() {
                         </table>
                       </div>
                       <p className="text-xs text-gray-600 mt-3 italic">
-                        * Weighted Score Formula: (TF × 15% + PI × 15% + Novelty × 15% + CS × 40% + Team × 15%) / 100
+                        * Weighted Score Formula: (TF × 15% + PI × 15% + Novelty × 15% + CS × 25% + FF × 15% + Team × 15%) / 100
                       </p>
                     </div>
 
-                    {/* Radar Chart */}
-                    <div style={{ height: 280 }}>
-                      <ResponsiveContainer width="100%" height={280}>
-                        <RadarChart cx="50%" cy="50%" outerRadius={90} data={getBreakdownData(selectedProposal)}>
-                          <PolarGrid stroke="#cbd5e1" />
-                          <PolarAngleAxis dataKey="subject" tick={{ fill: '#475569', fontSize: 11 }} />
-                          <Radar name="Score" dataKey="A" stroke="#2563eb" fill="#3b82f6" fillOpacity={0.5} strokeWidth={2} />
-                          <Tooltip />
-                        </RadarChart>
-                      </ResponsiveContainer>
+                    {/* Detailed Written Explanations */}
+                    <div className="space-y-4">
+                      {(() => {
+                        const scores = getEvaluationScores(selectedProposal);
+                        return (
+                          <>
+                            <div className="border-l-4 border-blue-600 pl-4 py-2 bg-blue-50/50">
+                              <h5 className="font-semibold text-sm mb-2 text-blue-900">1. Technical Feasibility (15%) - Score: {scores.technicalFeasibility.toFixed(2)}/10</h5>
+                              <p className="text-xs text-gray-700 leading-relaxed">
+                                The proposed SAGES-III system demonstrates strong technical feasibility with a score of {scores.technicalFeasibility.toFixed(2)}/10. 
+                                The design builds upon proven SAGES-II technology, with incremental improvements to achieve 500T capacity. 
+                                The collaboration between IIT (ISM), SECL, APHMEL, and JBEPL ensures access to necessary facilities and expertise. 
+                                The methodology is well-defined with clear phases from design to field deployment. The technical roadmap is realistic with appropriate milestones.
+                                <br/><strong className="text-blue-800">Weighted Contribution: {((scores.technicalFeasibility * 15) / 10).toFixed(2)}</strong>
+                              </p>
+                            </div>
+
+                            <div className="border-l-4 border-indigo-600 pl-4 py-2 bg-indigo-50/50">
+                              <h5 className="font-semibold text-sm mb-2 text-indigo-900">2. Potential Impact (15%) - Score: {scores.potentialImpact.toFixed(2)}/10</h5>
+                              <p className="text-xs text-gray-700 leading-relaxed">
+                                Scoring {scores.potentialImpact.toFixed(2)}/10, this project addresses critical safety needs in underground coal mining. 
+                                The enhanced load capacity enables safer operations in high-stress zones and supports increased mechanization. 
+                                Expected benefits include reduced roof fall incidents, improved worker safety, and enhanced productivity in depillaring operations. 
+                                The environmental sustainability aspect is strong with focus on safer extraction methods and reduced accidents.
+                                <br/><strong className="text-indigo-800">Weighted Contribution: {((scores.potentialImpact * 15) / 10).toFixed(2)}</strong>
+                              </p>
+                            </div>
+
+                            <div className="border-l-4 border-purple-600 pl-4 py-2 bg-purple-50/50">
+                              <h5 className="font-semibold text-sm mb-2 text-purple-900">3. Novelty (15%) - Score: {scores.novelty.toFixed(2)}/10</h5>
+                              <p className="text-xs text-gray-700 leading-relaxed">
+                                With a novelty score of {scores.novelty.toFixed(2)}/10, the project introduces indigenous development of high-capacity goaf edge support systems. 
+                                While building on existing SAGES technology, the 500T capacity represents a significant advancement over current systems. 
+                                The integration with continuous miners in challenging geological conditions adds innovative application value. 
+                                The USP lies in combining higher capacity with portability and rapid deployment capabilities, addressing gaps in current mining support technology.
+                                <br/><strong className="text-purple-800">Weighted Contribution: {((scores.novelty * 15) / 10).toFixed(2)}</strong>
+                              </p>
+                            </div>
+
+                            <div className="border-l-4 border-orange-600 pl-4 py-2 bg-orange-50/50">
+                              <h5 className="font-semibold text-sm mb-2 text-orange-900">4. Commercialization Strategy (25%) - Score: {scores.commercialization.toFixed(2)}/10</h5>
+                              <p className="text-xs text-gray-700 leading-relaxed">
+                                The commercialization potential scores {scores.commercialization.toFixed(2)}/10 with the highest weightage (25%). 
+                                Partnership with JBEPL (manufacturing partner) provides a clear pathway to production and market entry. 
+                                Demonstrated demand from SECL and other coal companies ensures market viability and customer base. 
+                                Technology transfer agreements and manufacturing scale-up plans are well-defined. The go-to-market strategy includes pilot deployment, 
+                                performance validation, and gradual rollout across mining operations. Import substitution benefits add to commercial attractiveness.
+                                <br/><strong className="text-orange-800">Weighted Contribution: {((scores.commercialization * 25) / 10).toFixed(2)}</strong>
+                              </p>
+                            </div>
+
+                            <div className="border-l-4 border-green-600 pl-4 py-2 bg-green-50/50">
+                              <h5 className="font-semibold text-sm mb-2 text-green-900">5. Financial Feasibility (15%) - Score: {scores.financialFeasibility.toFixed(2)}/10</h5>
+                              <p className="text-xs text-gray-700 leading-relaxed">
+                                Financial analysis yields a score of {scores.financialFeasibility.toFixed(2)}/10. 
+                                The total project cost of ₹2.96 crore is reasonable for R&D scope including prototype development and field trials. 
+                                Budget allocation across phases is well-justified with clear cost breakdowns for equipment (₹1.2 crore), manpower (₹80 lakhs), 
+                                and operational expenses (₹96 lakhs). The requested budget of {formatINR(selectedProposal.financialBreakdown.requested)} 
+                                aligns with comparable projects (previous cost: {formatINR(selectedProposal.financialBreakdown.previousCost)}). 
+                                Expected ROI of {selectedProposal.financialBreakdown.estimatedROIpercent}% through safety improvements and productivity gains 
+                                supports economic viability. Cost-benefit analysis shows positive NPV over 5-year horizon.
+                                <br/><strong className="text-green-800">Weighted Contribution: {((scores.financialFeasibility * 15) / 10).toFixed(2)}</strong>
+                              </p>
+                            </div>
+
+                            <div className="border-l-4 border-cyan-600 pl-4 py-2 bg-cyan-50/50">
+                              <h5 className="font-semibold text-sm mb-2 text-cyan-900">6. Team Capability (15%) - Score: {scores.team.toFixed(2)}/10</h5>
+                              <p className="text-xs text-gray-700 leading-relaxed">
+                                The team scores {scores.team.toFixed(2)}/10 based on institutional expertise and past experience. 
+                                IIT (ISM) brings proven research capabilities in mining engineering and ground control with faculty expertise in rock mechanics. 
+                                SECL provides operational insights, field testing infrastructure, and real-world validation environment. 
+                                APHMEL offers specialized testing facilities for load testing and quality certification. 
+                                Combined track record in SAGES-I (300T) and SAGES-II (350T) development demonstrates capability to execute this advanced 500T project. 
+                                The project team includes experienced principal investigators with relevant publications and industry connections.
+                                <br/><strong className="text-cyan-800">Weighted Contribution: {((scores.team * 15) / 10).toFixed(2)}</strong>
+                              </p>
+                            </div>
+
+                            <div className="mt-4 p-4 bg-gradient-to-r from-blue-100 to-indigo-100 rounded-lg border-2 border-blue-300">
+                              <h5 className="font-bold text-base mb-2 text-blue-900">Final Evaluation Summary</h5>
+                              <p className="text-sm text-gray-800 leading-relaxed">
+                                The proposal achieves an overall weighted score of <strong className="text-blue-900 text-lg">{scores.weightedTotal.toFixed(2)}/10</strong>, 
+                                calculated through the weighted sum method as per Modified S&T Guidelines (2021). 
+                                This score reflects strong performance across all evaluation criteria with particular strength in commercialization strategy (25% weight), 
+                                technical feasibility, and team capability. The financial analysis supports viability with justified budget and positive ROI projections. 
+                                The project addresses national priorities in mining safety and indigenous technology development.
+                              </p>
+                            </div>
+                          </>
+                        );
+                      })()}
                     </div>
                   </div>
 
-                  <div className="mb-6">
-                    <h4 className="font-medium mb-2">Financial Feasibility</h4>
-                    <table className="w-full text-sm">
-                      <tbody>
-                        <tr>
-                          <td className="py-1 text-muted-foreground">Requested Budget</td>
-                          <td className="py-1 font-medium">{formatINR(selectedProposal.financialBreakdown.requested)}</td>
-                        </tr>
-                        <tr>
-                          <td className="py-1 text-muted-foreground">Estimated ROI</td>
-                          <td className="py-1 font-medium">{selectedProposal.financialBreakdown.estimatedROIpercent}%</td>
-                        </tr>
-                        <tr>
-                          <td className="py-1 text-muted-foreground">Previous Similar Project Cost</td>
-                          <td className="py-1 font-medium">{formatINR(selectedProposal.financialBreakdown.previousCost)}</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-
-                  <div className="mb-6">
-                    <h4 className="font-medium mb-2">Subtopics</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {selectedProposal.subtopics.map((s: string) => (
-                        <button key={s} className="px-3 py-1 rounded-full border text-sm text-muted-foreground hover:bg-accent/5" onClick={() => alert(`Highlighting section: ${s}`)}>
-                          {s}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
+                  {/* Document Navigation */}
+                  <Card className="mb-6 border-2 border-primary/20">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-base flex items-center gap-2">
+                        <FileText className="h-5 w-5 text-primary" />
+                        Proposal Document Navigation
+                      </CardTitle>
+                      <CardDescription className="text-xs">Click to navigate to specific sections in the proposal PDF</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-1 max-h-72 overflow-y-auto pr-2">
+                        {tableOfContents.map((section, idx) => (
+                          <div key={idx} className="space-y-1">
+                            <button
+                              onClick={() => window.open(`https://drive.google.com/file/d/1YL_wqSUwGTMOTe5ye4SrIssluGJmsedu/view#page=${section.page}`, '_blank')}
+                              className="w-full text-left px-3 py-2 text-sm hover:bg-primary/10 rounded-md transition-colors flex items-center justify-between group border border-transparent hover:border-primary/30"
+                            >
+                              <span className="font-medium group-hover:text-primary text-gray-800">{section.title}</span>
+                              <span className="text-xs text-muted-foreground bg-primary/5 px-2 py-0.5 rounded">p.{section.page}</span>
+                            </button>
+                            {section.subsections && (
+                              <div className="ml-4 space-y-1 border-l-2 border-primary/20 pl-2">
+                                {section.subsections.map((sub, subIdx) => (
+                                  <button
+                                    key={subIdx}
+                                    onClick={() => window.open(`https://drive.google.com/file/d/1YL_wqSUwGTMOTe5ye4SrIssluGJmsedu/view#page=${sub.page}`, '_blank')}
+                                    className="w-full text-left px-2 py-1.5 text-xs hover:bg-primary/5 rounded-md transition-colors flex items-center justify-between group"
+                                  >
+                                    <span className="group-hover:text-primary text-gray-700">{sub.title}</span>
+                                    <span className="text-xs text-muted-foreground">p.{sub.page}</span>
+                                  </button>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
 
                   <div className="flex gap-3 mb-4">
                     <Button onClick={() => {
