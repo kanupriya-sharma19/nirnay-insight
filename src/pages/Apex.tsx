@@ -449,7 +449,7 @@ const getStatusBadge = (status: string) => {
         {/* Proposals List */}
         <Card className="border-2">
           <CardHeader>
-            <CardTitle className="text-2xl">High-Scoring Proposals (Score ≥ 6.0)</CardTitle>
+            <CardTitle className="text-2xl">Proposal</CardTitle>
             <CardDescription>Review and make final decisions on approved proposals</CardDescription>
           </CardHeader>
           <CardContent>

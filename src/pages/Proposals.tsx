@@ -5,12 +5,17 @@ import { Calendar, User, Building2, Star, FileText } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import {GovtHeader} from "@/components/GovtHeader";
 import {GovtFooter} from "@/components/GovtFooter";
+import { useNavigate } from "react-router-dom";
+
+
 // Mock StatusBadge component
 const StatusBadge = ({ status }: { status: string }) => (
   <span className="px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
     {status}
   </span>
 );
+
+
 
 // // Mock GovtHeader component
 // const GovtHeader = () => (
@@ -119,24 +124,27 @@ export default function ProposalsPage() {
     setIsModalOpen(true);
   };
 
-  const handleEvaluate = async (proposalId: number) => {
-    setIsEvaluating(true);
-    setEvaluationResult(null);
-    
-    // Simulate AI evaluation with 7 second delay
-    await new Promise(resolve => setTimeout(resolve, 7000));
-    
-    // This will be replaced with actual evaluation result from your model
-    const mockResult = "EVALUATION_RESULT_PLACEHOLDER";
-    setEvaluationResult(mockResult);
-    setIsEvaluating(false);
-  };
+  
+  const navigate = useNavigate();
+
+  const handleEvaluate = async (proposalId: number, proposalData: Proposal) => {
+  setIsEvaluating(true);
+  setEvaluationResult(null);
+
+  await new Promise((resolve) => setTimeout(resolve, 7000));
+
+  const mockResult = "EVALUATION_RESULT_PLACEHOLDER";
+  setEvaluationResult(mockResult);
+  setIsEvaluating(false);
+
+  navigate(`/evaluate/${proposalId}`, { state: { proposal: proposalData } });
+};
 
   const getDaysAgo = (dateSubmitted: string) => {
     const submitted = new Date(dateSubmitted);
     const now = new Date();
     const diffTime = Math.abs(now.getTime() - submitted.getTime());
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    const diffDays = Math.ceil(diffTime / (100 * 1000 * 60 * 60 * 24));
     return diffDays;
   };
 
@@ -202,7 +210,7 @@ export default function ProposalsPage() {
                       
                       {proposal.needsEvaluation && (
                         <Button 
-                          onClick={() => handleEvaluate(proposal.id)}
+                          onClick={() => handleEvaluate(proposal.id , proposal)}
                           className="w-full bg-slate-800 text-white hover:bg-slate-500 shadow-lg transition"
                         >
                           <Star className="h-4 w-4 mr-2" />
@@ -280,7 +288,7 @@ export default function ProposalsPage() {
                   
                   {!isEvaluating && !evaluationResult && (
                     <Button 
-                      onClick={() => handleEvaluate(selectedProposal.id)}
+                      onClick={() => handleEvaluate(selectedProposal.id , selectedProposal)}
                       variant="outline"
                       className="w-full bg-slate-800 text-white hover:bg-slate-500 shadow-lg transition"
                     >
@@ -313,7 +321,7 @@ export default function ProposalsPage() {
                       <Button 
                         onClick={() => {
                           setEvaluationResult(null);
-                          handleEvaluate(selectedProposal.id);
+                          handleEvaluate(selectedProposal.id , selectedProposal);
                         }}
                         variant="outline"
                         className="w-full bg-slate-800 text-white hover:bg-slate-500 shadow-lg transition"
