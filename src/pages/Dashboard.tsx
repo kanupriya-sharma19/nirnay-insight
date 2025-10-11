@@ -48,8 +48,8 @@ export default function Dashboard() {
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 1000);
-  }
-  )
+  }, []);
+
   // sample proposals extended with new fields
   const proposals = [
     {
@@ -244,7 +244,57 @@ export default function Dashboard() {
   const [selectedAction, setSelectedAction] = useState<string>("");
   const [justification, setJustification] = useState("");
 
+  // Calculate weighted scores based on evaluation criteria
+  const getEvaluationScores = (p: any) => {
+    // Base calculations using the overall score
+    const technicalFeasibility = Math.min(10, (p.evaluationScore * 0.95) + Math.random() * 0.5);
+    const potentialImpact = Math.min(10, (p.evaluationScore * 0.92) + Math.random() * 0.3);
+    const novelty = Math.min(10, (p.evaluationScore * 0.88) + Math.random() * 0.4);
+    const commercialization = Math.min(10, (p.evaluationScore * 0.98) - Math.random() * 0.2);
+    const financialFeasibility = Math.min(10, (p.evaluationScore * 0.90) + Math.random() * 0.4);
+    const team = Math.min(10, (p.evaluationScore * 0.96) + Math.random() * 0.3);
+    
+    return {
+      technicalFeasibility,
+      potentialImpact,
+      novelty,
+      commercialization,
+      financialFeasibility,
+      team,
+      // Weighted sum calculation: Total = (TF*15 + PI*15 + N*15 + CS*25 + FF*15 + T*15) / 100
+      weightedTotal: (
+        (technicalFeasibility * 15) +
+        (potentialImpact * 15) +
+        (novelty * 15) +
+        (commercialization * 25) +
+        (financialFeasibility * 15) +
+        (team * 15)
+      ) / 100
+    };
+  };
 
+  const tableOfContents = [
+    { title: "Executive Summary", page: 1 },
+    { title: "1. Background and Rationale", page: 3, subsections: [
+      { title: "1.1 Problem Statement", page: 3 },
+      { title: "1.2 Need Assessment", page: 4 },
+      { title: "1.3 Strategic Importance", page: 5 },
+    ]},
+    { title: "2. Objectives", page: 6 },
+    { title: "3. Scope of Work & Methodology", page: 8, subsections: [
+      { title: "Phase 1: Design & Simulation", page: 8 },
+      { title: "Phase 2: Prototype Development", page: 9 },
+      { title: "Phase 3: Testing & Validation", page: 10 },
+      { title: "Phase 4: Field Deployment", page: 11 },
+    ]},
+    { title: "4. Work Plan & Milestones", page: 12 },
+    { title: "5. Deliverables", page: 14 },
+    { title: "6. Team & Institutional Capacity", page: 16 },
+    { title: "7. Budget & Cost Estimate", page: 18 },
+    { title: "8. Risk Assessment", page: 20 },
+    { title: "9. Techno-Economic Analysis", page: 22 },
+    { title: "References", page: 24 },
+  ];
 
   const getStatusBadge = (status: string) => {
     const styles: Record<string, string> = {
@@ -254,7 +304,6 @@ export default function Dashboard() {
     };
     return styles[status] || "bg-gray-400 text-white";
   };
-
 
   const renderStatusSummary = () => {
     const counts = {
@@ -276,7 +325,6 @@ export default function Dashboard() {
       </div>
     );
   };
-
 
   const filteredProposals = useMemo(() => {
     const now = new Date();
@@ -303,7 +351,7 @@ export default function Dashboard() {
 
       return true;
     });
-  }, [filterType, filterValue]);
+  }, [filterType, filterValue, proposals]);
 
   const getAiDecision = (p: any) => {
     if (p.evaluationScore >= 8) return { decision: "Accept", reason: "High technical & financial scores." };
@@ -519,8 +567,6 @@ export default function Dashboard() {
                     </div>
                   ))
                 )}
-
-
               </div>
             </CardContent>
           </Card>
@@ -546,6 +592,199 @@ export default function Dashboard() {
                         <Badge className="govt-badge bg-primary text-white">Score: {selectedProposal.evaluationScore.toFixed(1)}/10</Badge>
                       </div>
                     </div>
+
+                    {/* Weighted Score Calculation Table */}
+                    <div className="mb-6">
+                      <h4 className="font-medium mb-3">AI Evaluation Explanation</h4>
+                      
+                      <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-lg p-4 mb-6">
+                        <h5 className="font-semibold text-sm mb-3 text-blue-900">Weighted Score Calculation (Modified S&T Guidelines 2021)</h5>
+                        <div className="overflow-x-auto">
+                          <table className="w-full text-sm">
+                            <thead>
+                              <tr className="border-b-2 border-blue-300">
+                                <th className="text-left py-2 px-2 font-bold text-gray-700">Criteria</th>
+                                <th className="text-center py-2 px-2 font-bold text-gray-700">Score (out of 10)</th>
+                                <th className="text-center py-2 px-2 font-bold text-gray-700">Weightage (%)</th>
+                                <th className="text-right py-2 px-2 font-bold text-gray-700">Weighted Score</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {(() => {
+                                const scores = getEvaluationScores(selectedProposal);
+                                const criteria = [
+                                  { name: "Technical Feasibility", score: scores.technicalFeasibility, weight: 15, details: "Feasibility & reasonability of technical claims, methodology, roadmap" },
+                                  { name: "Potential Impact", score: scores.potentialImpact, weight: 15, details: "Environmental sustainability, market size, customer demographic" },
+                                  { name: "Novelty", score: scores.novelty, weight: 15, details: "USP(s) of the technology, national importance" },
+                                  { name: "Commercialization Strategy", score: scores.commercialization, weight: 25, details: "Value addition for customers, go-to-market plan, techno-commercial viability" },
+                                  { name: "Financial Feasibility", score: scores.financialFeasibility, weight: 15, details: "Budget justification, cost-benefit analysis, ROI projections" },
+                                  { name: "Team", score: scores.team, weight: 15, details: "Technical & business expertise, mentors" }
+                                ];
+                                
+                                return criteria.map((criterion, idx) => (
+                                  <tr key={idx} className="border-b border-blue-200 hover:bg-blue-100/50 transition-colors" title={criterion.details}>
+                                    <td className="py-2 px-2 font-medium text-gray-800">{criterion.name}</td>
+                                    <td className="text-center py-2 px-2">
+                                      <span className="font-semibold text-blue-700">{criterion.score.toFixed(2)}</span>
+                                    </td>
+                                    <td className="text-center py-2 px-2 text-gray-600">{criterion.weight}%</td>
+                                    <td className="text-right py-2 px-2">
+                                      <span className="font-bold text-blue-800">
+                                        {((criterion.score * criterion.weight) / 10).toFixed(2)}
+                                      </span>
+                                    </td>
+                                  </tr>
+                                ));
+                              })()}
+                              <tr className="bg-blue-200/70 font-bold border-t-2 border-blue-400">
+                                <td className="py-3 px-2 text-gray-900">Total Weighted Score</td>
+                                <td className="text-center py-3 px-2"></td>
+                                <td className="text-center py-3 px-2 text-gray-900">100%</td>
+                                <td className="text-right py-3 px-2">
+                                  <span className="text-lg text-blue-900">
+                                    {getEvaluationScores(selectedProposal).weightedTotal.toFixed(2)} / 10
+                                  </span>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                        <p className="text-xs text-gray-600 mt-3 italic">
+                          * Weighted Score Formula: (TF × 15% + PI × 15% + Novelty × 15% + CS × 25% + FF × 15% + Team × 15%) / 100
+                        </p>
+                      </div>
+
+                      {/* Detailed Written Explanations */}
+                      <div className="space-y-4">
+                        {(() => {
+                          const scores = getEvaluationScores(selectedProposal);
+                          return (
+                            <>
+                              <div className="border-l-4 border-blue-600 pl-4 py-2 bg-blue-50/50">
+                                <h5 className="font-semibold text-sm mb-2 text-blue-900">1. Technical Feasibility (15%) - Score: {scores.technicalFeasibility.toFixed(2)}/10</h5>
+                                <p className="text-xs text-gray-700 leading-relaxed">
+                                  The proposal demonstrates strong technical feasibility with a score of {scores.technicalFeasibility.toFixed(2)}/10. 
+                                  The methodology is well-defined with clear phases from design to deployment. The technical roadmap includes realistic milestones 
+                                  and demonstrates understanding of implementation challenges. The approach builds upon proven technologies while introducing 
+                                  innovative improvements. Resource requirements and infrastructure needs are clearly identified.
+                                  <br/><strong className="text-blue-800">Weighted Contribution: {((scores.technicalFeasibility * 15) / 10).toFixed(2)}</strong>
+                                </p>
+                              </div>
+
+                              <div className="border-l-4 border-indigo-600 pl-4 py-2 bg-indigo-50/50">
+                                <h5 className="font-semibold text-sm mb-2 text-indigo-900">2. Potential Impact (15%) - Score: {scores.potentialImpact.toFixed(2)}/10</h5>
+                                <p className="text-xs text-gray-700 leading-relaxed">
+                                  Scoring {scores.potentialImpact.toFixed(2)}/10, this project addresses significant challenges in the coal sector. 
+                                  The proposal demonstrates clear understanding of market needs and stakeholder requirements. Expected benefits include 
+                                  improved operational efficiency, enhanced safety standards, and environmental sustainability. The solution has potential 
+                                  for scalable deployment across multiple sites and shows strong alignment with national priorities.
+                                  <br/><strong className="text-indigo-800">Weighted Contribution: {((scores.potentialImpact * 15) / 10).toFixed(2)}</strong>
+                                </p>
+                              </div>
+
+                              <div className="border-l-4 border-purple-600 pl-4 py-2 bg-purple-50/50">
+                                <h5 className="font-semibold text-sm mb-2 text-purple-900">3. Novelty (15%) - Score: {scores.novelty.toFixed(2)}/10</h5>
+                                <p className="text-xs text-gray-700 leading-relaxed">
+                                  With a novelty score of {scores.novelty.toFixed(2)}/10, the project introduces innovative approaches to existing challenges. 
+                                  The proposal showcases unique selling propositions (USPs) that differentiate it from current solutions. While building on 
+                                  established principles, the project incorporates novel methodologies and technologies. The innovation demonstrates potential 
+                                  for intellectual property generation and contributes to indigenous technology development.
+                                  <br/><strong className="text-purple-800">Weighted Contribution: {((scores.novelty * 15) / 10).toFixed(2)}</strong>
+                                </p>
+                              </div>
+
+                              <div className="border-l-4 border-orange-600 pl-4 py-2 bg-orange-50/50">
+                                <h5 className="font-semibold text-sm mb-2 text-orange-900">4. Commercialization Strategy (25%) - Score: {scores.commercialization.toFixed(2)}/10</h5>
+                                <p className="text-xs text-gray-700 leading-relaxed">
+                                  The commercialization potential scores {scores.commercialization.toFixed(2)}/10 with the highest weightage (25%). 
+                                  The proposal presents a clear pathway from research to market implementation. Industry partnerships and stakeholder 
+                                  engagement demonstrate market readiness. The go-to-market strategy includes pilot deployment, validation, and scale-up plans. 
+                                  Value propositions are clearly articulated for end users and demonstrate competitive advantages. Technology transfer mechanisms 
+                                  and manufacturing partnerships are identified.
+                                  <br/><strong className="text-orange-800">Weighted Contribution: {((scores.commercialization * 25) / 10).toFixed(2)}</strong>
+                                </p>
+                              </div>
+
+                              <div className="border-l-4 border-green-600 pl-4 py-2 bg-green-50/50">
+                                <h5 className="font-semibold text-sm mb-2 text-green-900">5. Financial Feasibility (15%) - Score: {scores.financialFeasibility.toFixed(2)}/10</h5>
+                                <p className="text-xs text-gray-700 leading-relaxed">
+                                  Financial analysis yields a score of {scores.financialFeasibility.toFixed(2)}/10. 
+                                  The requested budget of {formatINR(selectedProposal.financialBreakdown.requested)} is justified with detailed cost breakdowns 
+                                  across project phases. Budget allocation for equipment, manpower, and operational expenses is clearly defined. 
+                                  Comparison with previous similar projects (cost: {formatINR(selectedProposal.financialBreakdown.previousCost)}) validates 
+                                  the budget estimates. Expected ROI of {selectedProposal.financialBreakdown.estimatedROIpercent}% demonstrates economic viability. 
+                                  Cost-benefit analysis shows positive returns over the project lifecycle.
+                                  <br/><strong className="text-green-800">Weighted Contribution: {((scores.financialFeasibility * 15) / 10).toFixed(2)}</strong>
+                                </p>
+                              </div>
+
+                              <div className="border-l-4 border-cyan-600 pl-4 py-2 bg-cyan-50/50">
+                                <h5 className="font-semibold text-sm mb-2 text-cyan-900">6. Team Capability (15%) - Score: {scores.team.toFixed(2)}/10</h5>
+                                <p className="text-xs text-gray-700 leading-relaxed">
+                                  The team scores {scores.team.toFixed(2)}/10 based on institutional expertise and track record. 
+                                  The proposal is backed by experienced faculty and researchers from {selectedProposal.instituteName} with relevant domain expertise. 
+                                  The team composition includes technical experts, industry advisors, and project management professionals. Past successful projects 
+                                  and publications demonstrate capability to execute complex R&D initiatives. Collaboration with industry partners ensures 
+                                  practical implementation knowledge and field validation support.
+                                  <br/><strong className="text-cyan-800">Weighted Contribution: {((scores.team * 15) / 10).toFixed(2)}</strong>
+                                </p>
+                              </div>
+
+                              <div className="mt-4 p-4 bg-gradient-to-r from-blue-100 to-indigo-100 rounded-lg border-2 border-blue-300">
+                                <h5 className="font-bold text-base mb-2 text-blue-900">Final Evaluation Summary</h5>
+                                <p className="text-sm text-gray-800 leading-relaxed">
+                                  The proposal achieves an overall weighted score of <strong className="text-blue-900 text-lg">{scores.weightedTotal.toFixed(2)}/10</strong>, 
+                                  calculated through the weighted sum method as per Modified S&T Guidelines (2021). 
+                                  This score reflects performance across all evaluation criteria with emphasis on commercialization strategy (25% weight). 
+                                  The evaluation considers technical merit, market potential, innovation level, financial viability, and team capability. 
+                                  The weighted scoring ensures that critical factors for successful project outcomes are appropriately prioritized in the assessment.
+                                </p>
+                              </div>
+                            </>
+                          );
+                        })()}
+                      </div>
+                    </div>
+
+                    {/* Document Navigation */}
+                    <Card className="mb-6 border-2 border-primary/20">
+                      <CardHeader className="pb-3">
+                        <CardTitle className="text-base flex items-center gap-2">
+                          <FileText className="h-5 w-5 text-primary" />
+                          Proposal Document Navigation
+                        </CardTitle>
+                        <CardDescription className="text-xs">Click to navigate to specific sections in the proposal PDF</CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-1 max-h-72 overflow-y-auto pr-2">
+                          {tableOfContents.map((section, idx) => (
+                            <div key={idx} className="space-y-1">
+                              <button
+                                onClick={() => alert(`Opening PDF at page ${section.page} (placeholder)`)}
+                                className="w-full text-left px-3 py-2 text-sm hover:bg-primary/10 rounded-md transition-colors flex items-center justify-between group border border-transparent hover:border-primary/30"
+                              >
+                                <span className="font-medium group-hover:text-primary text-gray-800">{section.title}</span>
+                                <span className="text-xs text-muted-foreground bg-primary/5 px-2 py-0.5 rounded">p.{section.page}</span>
+                              </button>
+                              {section.subsections && (
+                                <div className="ml-4 space-y-1 border-l-2 border-primary/20 pl-2">
+                                  {section.subsections.map((sub, subIdx) => (
+                                    <button
+                                      key={subIdx}
+                                      onClick={() => alert(`Opening PDF at page ${sub.page} (placeholder)`)}
+                                      className="w-full text-left px-2 py-1.5 text-xs hover:bg-primary/5 rounded-md transition-colors flex items-center justify-between group"
+                                    >
+                                      <span className="group-hover:text-primary text-gray-700">{sub.title}</span>
+                                      <span className="text-xs text-muted-foreground">p.{sub.page}</span>
+                                    </button>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </CardContent>
+                    </Card>
 
                     <div className="mb-6">
                       <h4 className="font-medium mb-2">Evaluation Breakdown</h4>
@@ -645,11 +884,23 @@ export default function Dashboard() {
                         </p>
                       </div>
 
-                      {/* <div className="p-4 border rounded-lg">
-                      <h4 className="font-medium mb-2">Financial Snapshot</h4>
-                      <p className="text-sm text-muted-foreground">Requested: {formatINR(selectedProposal.financialBreakdown.requested)}</p>
-                      <p className="text-sm text-muted-foreground">ROI: {selectedProposal.financialBreakdown.estimatedROIpercent}%</p>
-                    </div> */}
+                      <div className="p-4 border rounded-lg bg-blue-50">
+                        <h4 className="font-medium mb-3 flex items-center gap-2">
+                          <FileText className="h-5 w-5 text-blue-600" />
+                          Documents
+                        </h4>
+                        <div className="space-y-2">
+                          <a 
+                            href={selectedProposal.pdfLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2 p-2 rounded-lg bg-white hover:bg-blue-100 transition-colors border border-blue-200"
+                          >
+                            <FileText className="h-4 w-4 text-blue-600" />
+                            <span className="text-sm text-blue-700 font-medium">Full Proposal Document</span>
+                          </a>
+                        </div>
+                      </div>
 
                       <div className="p-4 border rounded-lg">
                         <h4 className="font-medium mb-2">Nirnay Assistant</h4>
@@ -666,7 +917,6 @@ export default function Dashboard() {
                   <div className="flex flex-col sm:flex-row gap-3 w-full">
                     <div className="flex gap-3 flex-1">
                       <Button
-
                         className="bg-slate-800 text-white hover:bg-slate-500 shadow-lg transition"
                         variant="outline"
                         onClick={() => handleActionClick("revision")}
@@ -696,5 +946,4 @@ export default function Dashboard() {
         <GovtFooter />
       </div>))
   );
-
 }
