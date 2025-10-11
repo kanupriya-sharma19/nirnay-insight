@@ -65,39 +65,40 @@ export default function ResearcherPage() {
     },
   ];
 
-  const thrustAreas = {
-    "Productivity Improvement": {
-      icon: Shield,
-      color: "bg-indigo-500",
-    },
-    "Safety & Environment": {
-      icon: Shield,
-      color: "bg-red-500",
-    },
-    "Waste to Wealth": {
-      icon: Recycle,
-      color: "bg-green-500",
-    },
-    "Clean Coal Technologies": {
-      icon: Zap,
-      color: "bg-teal-500",
-    },
-    "Coal Beneficiation": {
-      icon: Factory,
-      color: "bg-blue-500",
-    },
-    "Exploration": {
-      icon: Search,
-      color: "bg-amber-500",
-    },
-    "Innovation & Indigenization": {
-      icon: Lightbulb,
-      color: "bg-purple-500",
-    },
-  };
+const thrustAreas = {
+  "Productivity Improvement": {
+    icon: Shield,
+    color: "bg-indigo-100 text-indigo-800 border border-indigo-300",
+  },
+  "Safety & Environment": {
+    icon: Shield,
+    color: "bg-red-100 text-red-800 border border-red-300",
+  },
+  "Waste to Wealth": {
+    icon: Recycle,
+    color: "bg-green-100 text-green-800 border border-green-300",
+  },
+  "Clean Coal Technologies": {
+    icon: Zap,
+    color: "bg-teal-100 text-teal-800 border border-teal-300",
+  },
+  "Coal Beneficiation": {
+    icon: Factory,
+    color: "bg-blue-100 text-blue-800 border border-blue-300",
+  },
+  Exploration: {
+    icon: Search,
+    color: "bg-amber-100 text-amber-800 border border-amber-300",
+  },
+  "Innovation & Indigenization": {
+    icon: Lightbulb,
+    color: "bg-purple-100 text-purple-800 border border-purple-300",
+  },
+};
+
 
   const getThrustColor = (area: keyof typeof thrustAreas) =>
-    thrustAreas[area]?.color || "bg-primary";
+    thrustAreas[area]?.color;
 
   const getThrustIcon = (area: keyof typeof thrustAreas) =>
     thrustAreas[area]?.icon || FileText;
@@ -223,7 +224,7 @@ export default function ResearcherPage() {
                           <div className="flex-1">
                             <h3 className="font-bold text-lg text-gray-900">{proposal.title}</h3>
                             <div className="flex flex-wrap gap-2 mt-2">
-                              <Badge className={`${getThrustColor(proposal.thrustArea)} text-white`}>
+                              <Badge className={`${getThrustColor(proposal.thrustArea)}`}>
                                 {proposal.thrustArea}
                               </Badge>
                               <Badge className={getStatusBadge(proposal.status)}>

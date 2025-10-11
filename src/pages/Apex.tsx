@@ -35,14 +35,36 @@ import ChatbotPopup from "./ChatbotPopup";
 
 
 const thrustAreas = {
-  "Productivity Improvement": { icon: Shield, color: "bg-indigo-500" },
-  "Safety & Environment": { icon: Shield, color: "bg-red-500" },
-  "Waste to Wealth": { icon: Recycle, color: "bg-green-500" },
-  "Clean Coal Technologies": { icon: Zap, color: "bg-teal-500" },
-  "Coal Beneficiation": { icon: Factory, color: "bg-blue-500" },
-  "Exploration": { icon: Search, color: "bg-amber-500" },
-  "Innovation & Indigenization": { icon: Lightbulb, color: "bg-purple-500" },
+  "Productivity Improvement": {
+    icon: Shield,
+    color: "bg-indigo-100 text-indigo-800 border border-indigo-300",
+  },
+  "Safety & Environment": {
+    icon: Shield,
+    color: "bg-red-100 text-red-800 border border-red-300",
+  },
+  "Waste to Wealth": {
+    icon: Recycle,
+    color: "bg-green-100 text-green-800 border border-green-300",
+  },
+  "Clean Coal Technologies": {
+    icon: Zap,
+    color: "bg-teal-100 text-teal-800 border border-teal-300",
+  },
+  "Coal Beneficiation": {
+    icon: Factory,
+    color: "bg-blue-100 text-blue-800 border border-blue-300",
+  },
+  Exploration: {
+    icon: Search,
+    color: "bg-amber-100 text-amber-800 border border-amber-300",
+  },
+  "Innovation & Indigenization": {
+    icon: Lightbulb,
+    color: "bg-purple-100 text-purple-800 border border-purple-300",
+  },
 };
+
 
 
 interface Proposal {
@@ -170,6 +192,7 @@ export default function ApexPage() {
   const [showJustification, setShowJustification] = useState(false);
   const [selectedAction, setSelectedAction] = useState<string>("");
   const [justification, setJustification] = useState("");
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
   const filterOptions = {
     Status: ["All", "Approved", "Under Review", "Rejected"],
@@ -232,33 +255,45 @@ export default function ApexPage() {
       setProposals(parsedProposals);
     }
   }, []);
+
   // Filter proposals using Dashboard-style filters
   const filteredProposals = useMemo(() => {
-    const now = new Date();
-    return proposals.filter((p) => {
-      if (filterValue === "All") return true;
-
-      if (filterType === "Status") return p.status === filterValue;
-      if (filterType === "Thrust Area") return p.thrustArea === filterValue;
-
-      if (filterType === "Submit Date") {
-        const submitted = new Date(p.submittedDate);
-        const diffDays = (now.getTime() - submitted.getTime()) / (1000 * 3600 * 24);
-        if (filterValue === "Last 7 Days") return diffDays <= 7;
-        if (filterValue === "Last 30 Days") return diffDays <= 30;
-        if (filterValue === "Older") return diffDays > 30;
-      }
-
-      if (filterType === "Evaluation Score") {
-        const score = p.evaluationScore;
-        if (filterValue === "≥ 8") return score >= 8;
-        if (filterValue === "5–7") return score >= 5 && score < 8;
-        if (filterValue === "Below 5") return score < 5;
-      }
-
-      return true;
-    });
-  }, [filterType, filterValue]);
+      const now = new Date();
+      return proposals.filter((p) => {
+        // --- Search Filter ---
+        if (searchQuery.trim()) {
+          const query = searchQuery.toLowerCase();
+          const matchesSearch =
+            p.title.toLowerCase().includes(query) ||
+            p.instituteName.toLowerCase().includes(query);
+          if (!matchesSearch) return false;
+        }
+  
+        // --- Dropdown Filters ---
+        if (filterValue === "All") return true;
+  
+        if (filterType === "Status") return p.status === filterValue;
+        if (filterType === "Thrust Area") return p.thrustArea === filterValue;
+  
+        if (filterType === "Submit Date") {
+          const submitted = new Date(p.submittedDate);
+          const diffDays =
+            (now.getTime() - submitted.getTime()) / (1000 * 3600 * 24);
+          if (filterValue === "Last 7 Days") return diffDays <= 7;
+          if (filterValue === "Last 30 Days") return diffDays <= 30;
+          if (filterValue === "Older") return diffDays > 30;
+        }
+  
+        if (filterType === "Evaluation Score") {
+          const score = p.evaluationScore;
+          if (filterValue === "≥ 8") return score >= 8;
+          if (filterValue === "5–7") return score >= 5 && score < 8;
+          if (filterValue === "Below 5") return score < 5;
+        }
+  
+        return true; // Default to include
+      });
+    }, [filterType, filterValue, searchQuery]);
 
   const openDetails = (p: Proposal) => {
     setSelectedProposal(p);
@@ -411,7 +446,7 @@ export default function ApexPage() {
         </div>
 
         {/* Status Summary */}
-        {renderStatusSummary()}
+        {/* {renderStatusSummary()} */}
 
         {/* Filter Dropdowns */}
         <div className="bg-white rounded-lg shadow-sm border p-6 mb-6">
@@ -491,7 +526,7 @@ export default function ApexPage() {
                             <p className="text-sm text-muted-foreground mb-1">• {proposal.id} • {proposal.instituteName}</p>
 
                             <div className="flex flex-wrap gap-2 mb-3">
-                              <Badge className={`govt-badge ${getThrustColor(proposal.thrustArea)} text-white`}>{proposal.thrustArea}</Badge>
+                              <Badge className={`govt-badge ${getThrustColor(proposal.thrustArea)}`}>{proposal.thrustArea}</Badge>
                               <Badge className={`govt-badge ${getStatusBadge(proposal.status)}`}>{proposal.status}</Badge>
                               <Badge className="govt-badge bg-primary text-white">Score: {proposal.evaluationScore.toFixed(1)}/10</Badge>
                             </div>
