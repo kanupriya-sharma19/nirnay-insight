@@ -13,6 +13,7 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
+import ChatbotPopup from "@/pages/ChatbotPopup";
 
 import {
   FileText,
@@ -348,6 +349,8 @@ export default function Dashboard() {
   const [showJustification, setShowJustification] = useState(false);
   const [selectedAction, setSelectedAction] = useState<string>("");
   const [justification, setJustification] = useState("");
+    const [showChatbot, setShowChatbot] = useState(false);
+    const [aiResponse, setAiResponse] = useState<{ decision: string; reason: string } | null>(null);
 
   // Calculate weighted scores based on evaluation criteria
   const getEvaluationScores = (p: any) => {
@@ -588,6 +591,12 @@ export default function Dashboard() {
       />
 
       <main className="flex-1 container mx-auto px-4 py-8">
+         {showChatbot && (
+  <ChatbotPopup
+    isChatOpen={showChatbot}
+    onClose={() => setShowChatbot(false)}
+  />
+)}
         {/* Welcome Banner */}
         <div className="gradient-primary rounded-2xl p-8 mb-8 text-primary-foreground shadow-glow">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
@@ -1313,18 +1322,26 @@ export default function Dashboard() {
                       .
                     </p>
                   </div>
+                      
+                        {/* {showChatbot && (
+                                <ChatbotPopup
+                                  isChatOpen={showChatbot}
+                                  onClose={() => setShowChatbot(false)}
+                                />
+                              )} */}
 
                   <div className="flex gap-3 mb-4">
-                    <Button
+                     <Button
                       onClick={() => {
                         const ai = getAiDecision(selectedProposal);
-                        alert(
-                          `AI Suggestion: ${ai.decision}\nReason: ${ai.reason}`
-                        );
+                        setAiResponse(ai);
+                        setShowChatbot(true);
+
                       }}
                     >
                       AI Suggestion
                     </Button>
+                    
 
                     <Button
                       variant="outline"
