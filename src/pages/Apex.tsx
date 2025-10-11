@@ -31,6 +31,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { Shield, Recycle, Zap, Factory, Lightbulb } from "lucide-react"; // make sure to import used icons
 import LoadingAnimation from "@/components/animation/Loader";
+import ChatbotPopup from "./ChatbotPopup";
 
 
 const thrustAreas = {
@@ -65,14 +66,16 @@ export default function ApexPage() {
   const navigate = useNavigate();
   const getThrustColor = (area: string) => thrustAreas[area]?.color || "bg-primary";
   const getThrustIcon = (area: string) => thrustAreas[area]?.icon || FileText;
+  const [showChatbot, setShowChatbot] = useState(false);
+  const [aiResponse, setAiResponse] = useState<{ decision: string; reason: string } | null>(null);
 
-    const [isLoading, setIsLoading] = useState(true);
-    useEffect(() => {
-      const timer = setTimeout(() => {
-        setIsLoading(false);
-      }, 1000);
-    }
-    )
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+  }
+  )
 
   // Only approved proposals with evaluation scores above 6
   const initialProposals: Proposal[] = [
@@ -184,36 +187,36 @@ export default function ApexPage() {
     "Submit Date": ["All", "Last 7 Days", "Last 30 Days", "Older"],
   } as const;
 
- 
-  const renderStatusSummary = () => {
-   const counts = {
-     Approved: proposals.filter((p) => p.status === "Approved").length,
-     "Under Review": proposals.filter((p) => p.status === "Under Review").length,
-     Rejected: proposals.filter((p) => p.status === "Rejected").length,
-   };
- 
-   return (
-     <div className="flex flex-wrap gap-3 mb-6">
-       {Object.entries(counts).map(([status, count]) => (
-         <Badge
-           key={status}
-           className={`px-8 py-4 text-sm ${getStatusBadge(status)}`}
-         >
-           {status}: {count}
-         </Badge>
-       ))}
-     </div>
-   );
- };
 
-const getStatusBadge = (status: string) => {
-  const styles: Record<string, string> = {
-    "Under Review": "bg-yellow-300 text-black",
-    Approved: "bg-green-500 text-white",
-    Rejected: "bg-red-500 text-white",
+  const renderStatusSummary = () => {
+    const counts = {
+      Approved: proposals.filter((p) => p.status === "Approved").length,
+      "Under Review": proposals.filter((p) => p.status === "Under Review").length,
+      Rejected: proposals.filter((p) => p.status === "Rejected").length,
+    };
+
+    return (
+      <div className="flex flex-wrap gap-3 mb-6">
+        {Object.entries(counts).map(([status, count]) => (
+          <Badge
+            key={status}
+            className={`px-8 py-4 text-sm ${getStatusBadge(status)}`}
+          >
+            {status}: {count}
+          </Badge>
+        ))}
+      </div>
+    );
   };
-  return styles[status] || "bg-gray-400 text-white";
-};
+
+  const getStatusBadge = (status: string) => {
+    const styles: Record<string, string> = {
+      "Under Review": "bg-yellow-300 text-black",
+      Approved: "bg-green-500 text-white",
+      Rejected: "bg-red-500 text-white",
+    };
+    return styles[status] || "bg-gray-400 text-white";
+  };
 
   const formatINR = (n: number) => {
     return `₹${(n / 100000).toFixed(2)}L`;
@@ -283,7 +286,7 @@ const getStatusBadge = (status: string) => {
       alert("Please provide a justification for your decision.");
       return;
     }
-    
+
     let message = "";
     if (selectedAction === "revision") {
       message = `Decision: Request Revision\nJustification: ${justification}\n\nThe proposer will be notified to revise and resubmit.`;
@@ -292,7 +295,7 @@ const getStatusBadge = (status: string) => {
     } else if (selectedAction === "reject") {
       message = `Decision: Reject & Notify\nJustification: ${justification}\n\nOfficial rejection mail will be sent to proposer.`;
     }
-    
+
     alert(message);
     closeDetails();
   };
@@ -306,7 +309,7 @@ const getStatusBadge = (status: string) => {
     const commercialization = Math.min(10, (p.evaluationScore * 0.98) - Math.random() * 0.2);
     const financialFeasibility = Math.min(10, (p.evaluationScore * 0.90) + Math.random() * 0.4);
     const team = Math.min(10, (p.evaluationScore * 0.96) + Math.random() * 0.3);
-    
+
     return {
       technicalFeasibility,
       potentialImpact,
@@ -328,21 +331,25 @@ const getStatusBadge = (status: string) => {
 
   const tableOfContents = [
     { title: "Executive Summary", page: 1 },
-    { title: "1. Background and Rationale", page: 3, subsections: [
-      { title: "1.1 Goaf Edge Support & SAGES Technology", page: 3 },
-      { title: "1.2 Need for Higher Capacity (500 T)", page: 4 },
-      { title: "1.3 Integration with Continuous Miners", page: 5 },
-      { title: "1.4 Problem Statement / Gaps", page: 6 },
-      { title: "1.5 Strategic Importance", page: 7 },
-    ]},
+    {
+      title: "1. Background and Rationale", page: 3, subsections: [
+        { title: "1.1 Goaf Edge Support & SAGES Technology", page: 3 },
+        { title: "1.2 Need for Higher Capacity (500 T)", page: 4 },
+        { title: "1.3 Integration with Continuous Miners", page: 5 },
+        { title: "1.4 Problem Statement / Gaps", page: 6 },
+        { title: "1.5 Strategic Importance", page: 7 },
+      ]
+    },
     { title: "2. Objectives", page: 8 },
-    { title: "3. Scope of Work & Methodology", page: 10, subsections: [
-      { title: "Phase 1: Design & Simulation", page: 10 },
-      { title: "Phase 2: Prototype Manufacturing", page: 11 },
-      { title: "Phase 3: Pre-field Testing & Calibration", page: 12 },
-      { title: "Phase 4: Field Deployment & Trials", page: 13 },
-      { title: "Phase 5: Evaluation & Reporting", page: 14 },
-    ]},
+    {
+      title: "3. Scope of Work & Methodology", page: 10, subsections: [
+        { title: "Phase 1: Design & Simulation", page: 10 },
+        { title: "Phase 2: Prototype Manufacturing", page: 11 },
+        { title: "Phase 3: Pre-field Testing & Calibration", page: 12 },
+        { title: "Phase 4: Field Deployment & Trials", page: 13 },
+        { title: "Phase 5: Evaluation & Reporting", page: 14 },
+      ]
+    },
     { title: "4. Work Plan & Milestones", page: 15 },
     { title: "5. Deliverables / Outputs", page: 18 },
     { title: "6. Team, Roles & Institutional Capacity", page: 20 },
@@ -353,12 +360,14 @@ const getStatusBadge = (status: string) => {
     { title: "11. Regulatory, Safety & Environmental Compliance", page: 30 },
     { title: "12. Conclusion", page: 32 },
     { title: "References", page: 33 },
-    { title: "Appendices", page: 34, subsections: [
-      { title: "A: CVs of Key Personnel", page: 34 },
-      { title: "B: Letters of Collaboration", page: 40 },
-      { title: "C: Safety / Regulatory Guidelines", page: 42 },
-      { title: "D: Technical Standards & Material Specifications", page: 45 },
-    ]},
+    {
+      title: "Appendices", page: 34, subsections: [
+        { title: "A: CVs of Key Personnel", page: 34 },
+        { title: "B: Letters of Collaboration", page: 40 },
+        { title: "C: Safety / Regulatory Guidelines", page: 42 },
+        { title: "D: Technical Standards & Material Specifications", page: 45 },
+      ]
+    },
   ];
 
   const getBreakdownData = (p: Proposal) => {
@@ -380,11 +389,17 @@ const getStatusBadge = (status: string) => {
   };
 
 
-  return (isLoading?<LoadingAnimation/>:(
+  return (isLoading ? <LoadingAnimation /> : (
     <div className="min-h-screen flex flex-col">
       <GovtHeader showAuth userName="Dr. Priya Sharma" onLogout={() => navigate("/")} />
 
       <main className="flex-1 container mx-auto px-4 py-8">
+        {showChatbot && (
+        <ChatbotPopup
+          isChatOpen={showChatbot}
+          onClose={() => setShowChatbot(false)}
+        />
+      )}
         {/* Welcome Banner */}
         <div className="gradient-primary rounded-2xl p-8 mb-8 text-primary-foreground shadow-glow">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -399,7 +414,7 @@ const getStatusBadge = (status: string) => {
         {renderStatusSummary()}
 
         {/* Filter Dropdowns */}
-       <div className="bg-white rounded-lg shadow-sm border p-6 mb-6">
+        <div className="bg-white rounded-lg shadow-sm border p-6 mb-6">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1">
               <div className="relative">
@@ -465,9 +480,9 @@ const getStatusBadge = (status: string) => {
                     <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                       <div className="flex-1">
                         <div className="flex items-start gap-3 mb-3">
-                           <div className="p-2 bg-accent/10 rounded-lg">
-                           {React.createElement(getThrustIcon(proposal.thrustArea), { className: "h-5 w-5 text-accent" })}
-                                                   </div>
+                          <div className="p-2 bg-accent/10 rounded-lg">
+                            {React.createElement(getThrustIcon(proposal.thrustArea), { className: "h-5 w-5 text-accent" })}
+                          </div>
                           <div className="flex-1">
                             <div className="flex items-center gap-2 mb-1">
                               <h3 className="font-bold text-lg text-primary">{proposal.title}</h3>
@@ -537,7 +552,7 @@ const getStatusBadge = (status: string) => {
 
                   <div className="mb-6">
                     <h4 className="font-medium mb-3">AI Evaluation Explanation</h4>
-                    
+
                     {/* Weighted Score Table */}
                     <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-lg p-4 mb-6">
                       <h5 className="font-semibold text-sm mb-3 text-blue-900">Weighted Score Calculation (Modified S&T Guidelines 2021)</h5>
@@ -562,7 +577,7 @@ const getStatusBadge = (status: string) => {
                                 { name: "Financial Feasibility", score: scores.financialFeasibility, weight: 15, details: "Budget justification, cost-benefit analysis, ROI projections" },
                                 { name: "Team", score: scores.team, weight: 15, details: "Technical & business expertise, mentors" }
                               ];
-                              
+
                               return criteria.map((criterion, idx) => (
                                 <tr key={idx} className="border-b border-blue-200 hover:bg-blue-100/50 transition-colors" title={criterion.details}>
                                   <td className="py-2 px-2 font-medium text-gray-800">{criterion.name}</td>
@@ -605,82 +620,82 @@ const getStatusBadge = (status: string) => {
                             <div className="border-l-4 border-blue-600 pl-4 py-2 bg-blue-50/50">
                               <h5 className="font-semibold text-sm mb-2 text-blue-900">1. Technical Feasibility (15%) - Score: {scores.technicalFeasibility.toFixed(2)}/10</h5>
                               <p className="text-xs text-gray-700 leading-relaxed">
-                                The proposed SAGES-III system demonstrates strong technical feasibility with a score of {scores.technicalFeasibility.toFixed(2)}/10. 
-                                The design builds upon proven SAGES-II technology, with incremental improvements to achieve 500T capacity. 
-                                The collaboration between IIT (ISM), SECL, APHMEL, and JBEPL ensures access to necessary facilities and expertise. 
+                                The proposed SAGES-III system demonstrates strong technical feasibility with a score of {scores.technicalFeasibility.toFixed(2)}/10.
+                                The design builds upon proven SAGES-II technology, with incremental improvements to achieve 500T capacity.
+                                The collaboration between IIT (ISM), SECL, APHMEL, and JBEPL ensures access to necessary facilities and expertise.
                                 The methodology is well-defined with clear phases from design to field deployment. The technical roadmap is realistic with appropriate milestones.
-                                <br/><strong className="text-blue-800">Weighted Contribution: {((scores.technicalFeasibility * 15) / 10).toFixed(2)}</strong>
+                                <br /><strong className="text-blue-800">Weighted Contribution: {((scores.technicalFeasibility * 15) / 10).toFixed(2)}</strong>
                               </p>
                             </div>
 
                             <div className="border-l-4 border-indigo-600 pl-4 py-2 bg-indigo-50/50">
                               <h5 className="font-semibold text-sm mb-2 text-indigo-900">2. Potential Impact (15%) - Score: {scores.potentialImpact.toFixed(2)}/10</h5>
                               <p className="text-xs text-gray-700 leading-relaxed">
-                                Scoring {scores.potentialImpact.toFixed(2)}/10, this project addresses critical safety needs in underground coal mining. 
-                                The enhanced load capacity enables safer operations in high-stress zones and supports increased mechanization. 
-                                Expected benefits include reduced roof fall incidents, improved worker safety, and enhanced productivity in depillaring operations. 
+                                Scoring {scores.potentialImpact.toFixed(2)}/10, this project addresses critical safety needs in underground coal mining.
+                                The enhanced load capacity enables safer operations in high-stress zones and supports increased mechanization.
+                                Expected benefits include reduced roof fall incidents, improved worker safety, and enhanced productivity in depillaring operations.
                                 The environmental sustainability aspect is strong with focus on safer extraction methods and reduced accidents.
-                                <br/><strong className="text-indigo-800">Weighted Contribution: {((scores.potentialImpact * 15) / 10).toFixed(2)}</strong>
+                                <br /><strong className="text-indigo-800">Weighted Contribution: {((scores.potentialImpact * 15) / 10).toFixed(2)}</strong>
                               </p>
                             </div>
 
                             <div className="border-l-4 border-purple-600 pl-4 py-2 bg-purple-50/50">
                               <h5 className="font-semibold text-sm mb-2 text-purple-900">3. Novelty (15%) - Score: {scores.novelty.toFixed(2)}/10</h5>
                               <p className="text-xs text-gray-700 leading-relaxed">
-                                With a novelty score of {scores.novelty.toFixed(2)}/10, the project introduces indigenous development of high-capacity goaf edge support systems. 
-                                While building on existing SAGES technology, the 500T capacity represents a significant advancement over current systems. 
-                                The integration with continuous miners in challenging geological conditions adds innovative application value. 
+                                With a novelty score of {scores.novelty.toFixed(2)}/10, the project introduces indigenous development of high-capacity goaf edge support systems.
+                                While building on existing SAGES technology, the 500T capacity represents a significant advancement over current systems.
+                                The integration with continuous miners in challenging geological conditions adds innovative application value.
                                 The USP lies in combining higher capacity with portability and rapid deployment capabilities, addressing gaps in current mining support technology.
-                                <br/><strong className="text-purple-800">Weighted Contribution: {((scores.novelty * 15) / 10).toFixed(2)}</strong>
+                                <br /><strong className="text-purple-800">Weighted Contribution: {((scores.novelty * 15) / 10).toFixed(2)}</strong>
                               </p>
                             </div>
 
                             <div className="border-l-4 border-orange-600 pl-4 py-2 bg-orange-50/50">
                               <h5 className="font-semibold text-sm mb-2 text-orange-900">4. Commercialization Strategy (25%) - Score: {scores.commercialization.toFixed(2)}/10</h5>
                               <p className="text-xs text-gray-700 leading-relaxed">
-                                The commercialization potential scores {scores.commercialization.toFixed(2)}/10 with the highest weightage (25%). 
-                                Partnership with JBEPL (manufacturing partner) provides a clear pathway to production and market entry. 
-                                Demonstrated demand from SECL and other coal companies ensures market viability and customer base. 
-                                Technology transfer agreements and manufacturing scale-up plans are well-defined. The go-to-market strategy includes pilot deployment, 
+                                The commercialization potential scores {scores.commercialization.toFixed(2)}/10 with the highest weightage (25%).
+                                Partnership with JBEPL (manufacturing partner) provides a clear pathway to production and market entry.
+                                Demonstrated demand from SECL and other coal companies ensures market viability and customer base.
+                                Technology transfer agreements and manufacturing scale-up plans are well-defined. The go-to-market strategy includes pilot deployment,
                                 performance validation, and gradual rollout across mining operations. Import substitution benefits add to commercial attractiveness.
-                                <br/><strong className="text-orange-800">Weighted Contribution: {((scores.commercialization * 25) / 10).toFixed(2)}</strong>
+                                <br /><strong className="text-orange-800">Weighted Contribution: {((scores.commercialization * 25) / 10).toFixed(2)}</strong>
                               </p>
                             </div>
 
                             <div className="border-l-4 border-green-600 pl-4 py-2 bg-green-50/50">
                               <h5 className="font-semibold text-sm mb-2 text-green-900">5. Financial Feasibility (15%) - Score: {scores.financialFeasibility.toFixed(2)}/10</h5>
                               <p className="text-xs text-gray-700 leading-relaxed">
-                                Financial analysis yields a score of {scores.financialFeasibility.toFixed(2)}/10. 
-                                The total project cost of ₹2.96 crore is reasonable for R&D scope including prototype development and field trials. 
-                                Budget allocation across phases is well-justified with clear cost breakdowns for equipment (₹1.2 crore), manpower (₹80 lakhs), 
-                                and operational expenses (₹96 lakhs). The requested budget of {formatINR(selectedProposal.financialBreakdown.requested)} 
-                                aligns with comparable projects (previous cost: {formatINR(selectedProposal.financialBreakdown.previousCost)}). 
-                                Expected ROI of {selectedProposal.financialBreakdown.estimatedROIpercent}% through safety improvements and productivity gains 
+                                Financial analysis yields a score of {scores.financialFeasibility.toFixed(2)}/10.
+                                The total project cost of ₹2.96 crore is reasonable for R&D scope including prototype development and field trials.
+                                Budget allocation across phases is well-justified with clear cost breakdowns for equipment (₹1.2 crore), manpower (₹80 lakhs),
+                                and operational expenses (₹96 lakhs). The requested budget of {formatINR(selectedProposal.financialBreakdown.requested)}
+                                aligns with comparable projects (previous cost: {formatINR(selectedProposal.financialBreakdown.previousCost)}).
+                                Expected ROI of {selectedProposal.financialBreakdown.estimatedROIpercent}% through safety improvements and productivity gains
                                 supports economic viability. Cost-benefit analysis shows positive NPV over 5-year horizon.
-                                <br/><strong className="text-green-800">Weighted Contribution: {((scores.financialFeasibility * 15) / 10).toFixed(2)}</strong>
+                                <br /><strong className="text-green-800">Weighted Contribution: {((scores.financialFeasibility * 15) / 10).toFixed(2)}</strong>
                               </p>
                             </div>
 
                             <div className="border-l-4 border-cyan-600 pl-4 py-2 bg-cyan-50/50">
                               <h5 className="font-semibold text-sm mb-2 text-cyan-900">6. Team Capability (15%) - Score: {scores.team.toFixed(2)}/10</h5>
                               <p className="text-xs text-gray-700 leading-relaxed">
-                                The team scores {scores.team.toFixed(2)}/10 based on institutional expertise and past experience. 
-                                IIT (ISM) brings proven research capabilities in mining engineering and ground control with faculty expertise in rock mechanics. 
-                                SECL provides operational insights, field testing infrastructure, and real-world validation environment. 
-                                APHMEL offers specialized testing facilities for load testing and quality certification. 
-                                Combined track record in SAGES-I (300T) and SAGES-II (350T) development demonstrates capability to execute this advanced 500T project. 
+                                The team scores {scores.team.toFixed(2)}/10 based on institutional expertise and past experience.
+                                IIT (ISM) brings proven research capabilities in mining engineering and ground control with faculty expertise in rock mechanics.
+                                SECL provides operational insights, field testing infrastructure, and real-world validation environment.
+                                APHMEL offers specialized testing facilities for load testing and quality certification.
+                                Combined track record in SAGES-I (300T) and SAGES-II (350T) development demonstrates capability to execute this advanced 500T project.
                                 The project team includes experienced principal investigators with relevant publications and industry connections.
-                                <br/><strong className="text-cyan-800">Weighted Contribution: {((scores.team * 15) / 10).toFixed(2)}</strong>
+                                <br /><strong className="text-cyan-800">Weighted Contribution: {((scores.team * 15) / 10).toFixed(2)}</strong>
                               </p>
                             </div>
 
                             <div className="mt-4 p-4 bg-gradient-to-r from-blue-100 to-indigo-100 rounded-lg border-2 border-blue-300">
                               <h5 className="font-bold text-base mb-2 text-blue-900">Final Evaluation Summary</h5>
                               <p className="text-sm text-gray-800 leading-relaxed">
-                                The proposal achieves an overall weighted score of <strong className="text-blue-900 text-lg">{scores.weightedTotal.toFixed(2)}/10</strong>, 
-                                calculated through the weighted sum method as per Modified S&T Guidelines (2021). 
-                                This score reflects strong performance across all evaluation criteria with particular strength in commercialization strategy (25% weight), 
-                                technical feasibility, and team capability. The financial analysis supports viability with justified budget and positive ROI projections. 
+                                The proposal achieves an overall weighted score of <strong className="text-blue-900 text-lg">{scores.weightedTotal.toFixed(2)}/10</strong>,
+                                calculated through the weighted sum method as per Modified S&T Guidelines (2021).
+                                This score reflects strong performance across all evaluation criteria with particular strength in commercialization strategy (25% weight),
+                                technical feasibility, and team capability. The financial analysis supports viability with justified budget and positive ROI projections.
                                 The project addresses national priorities in mining safety and indigenous technology development.
                               </p>
                             </div>
@@ -731,12 +746,17 @@ const getStatusBadge = (status: string) => {
                   </Card>
 
                   <div className="flex gap-3 mb-4">
-                    <Button onClick={() => {
-                      const ai = getAiDecision(selectedProposal);
-                      alert(`AI Suggestion: ${ai.decision}\nReason: ${ai.reason}`);
-                    }}>AI Suggestion</Button>
+                    <Button
+                      onClick={() => {
+                        const ai = getAiDecision(selectedProposal);
+                        setAiResponse(ai);
+                        setShowChatbot(true);
+                      }}
+                    >
+                      AI Suggestion
+                    </Button>
 
-                    <Button 
+                    <Button
                       variant="outline"
                       onClick={() => {
                         const pdfUrl = "https://drive.google.com/file/d/1YL_wqSUwGTMOTe5ye4SrIssluGJmsedu/preview";
@@ -792,7 +812,7 @@ const getStatusBadge = (status: string) => {
                         Documents
                       </h4>
                       <div className="space-y-2">
-                        <a 
+                        <a
                           href="https://drive.google.com/file/d/1YL_wqSUwGTMOTe5ye4SrIssluGJmsedu/view?usp=sharing"
                           target="_blank"
                           rel="noopener noreferrer"
@@ -844,6 +864,8 @@ const getStatusBadge = (status: string) => {
           </DialogContent>
         </Dialog>
       </main>
+
+      
 
       <GovtFooter />
     </div>)
