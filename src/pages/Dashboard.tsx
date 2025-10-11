@@ -1366,7 +1366,7 @@ export default function Dashboard() {
                       </div>
                     </div>
 
-                    <div className="p-4 border rounded-lg">
+                    {/* <div className="p-4 border rounded-lg">
                       <h4 className="font-medium mb-2">Nirnay Assistant</h4>
                       <p className="text-sm text-muted-foreground mb-2">
                         Ask quick questions about this proposal.
@@ -1378,7 +1378,7 @@ export default function Dashboard() {
                       >
                         Ask AI
                       </Button>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </div>
