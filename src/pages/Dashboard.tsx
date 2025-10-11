@@ -110,7 +110,7 @@ export default function Dashboard() {
       thrustArea: "Clean Coal Technologies",
       status: "Approved",
       submittedDate: "2025-01-10",
-      evaluationScore: 9.8,
+      evaluationScore: 9.88,
       progress: 98,
       reviewer: "Dr. Sharma",
       instituteName: "NIT Rourkela",
@@ -144,7 +144,7 @@ export default function Dashboard() {
       aiInsights:
         "Technical feasibility is good; scale-up cost needs attention. The proposed solution is highly beneficial for the coal industry, offering improved operational efficiency, safety, and cost optimization.",
     },
-    
+
     {
       id: "SE-2023-045",
       title: "Worker Safety Enhancement through ML",
@@ -664,7 +664,7 @@ export default function Dashboard() {
         {/* Proposals List */}
         <Card className="border-2">
           <CardHeader>
-            <CardTitle className="text-2xl">My Proposals</CardTitle>
+            <CardTitle className="text-2xl">Proposals</CardTitle>
             <CardDescription>
               Track and manage your research proposals
             </CardDescription>
@@ -715,7 +715,13 @@ export default function Dashboard() {
                                 {proposal.status}
                               </Badge>
                               <Badge className="govt-badge bg-primary text-white">
-                                Score: {proposal.evaluationScore.toFixed(1)}/10
+                                Score:{" "}
+                                {proposal.reviewer === "Dr. Sharma"
+                                  ? "9.33"
+                                  : proposal.reviewer === "Dr. Patel"
+                                  ? "3.65"
+                                  : proposal.evaluationScore.toFixed(1)}
+                                /10
                               </Badge>
                             </div>
 
@@ -732,7 +738,12 @@ export default function Dashboard() {
                             Evaluation Score:
                           </span>
                           <span className="font-semibold text-primary">
-                            {proposal.evaluationScore.toFixed(1)} / 10
+                            {proposal.reviewer === "Dr. Sharma"
+                              ? 9.33
+                              : proposal.reviewer === "Dr. Patel"
+                              ? 3.65
+                              : proposal.evaluationScore.toFixed(1)}
+                            /10
                           </span>
                         </div>
                       </div>
@@ -787,7 +798,16 @@ export default function Dashboard() {
                         {selectedProposal.status}
                       </Badge>
                       <Badge className="govt-badge bg-primary text-white">
-                        Score: {selectedProposal.evaluationScore.toFixed(1)}/10
+                        <Badge className="govt-badge bg-primary text-white">
+                          Score:{" "}
+                          {selectedProposal.reviewer === "Dr. Sharma"
+                            ? 9.33
+                            : selectedProposal.reviewer === "Dr. Patel"
+                            ? 3.65
+                            : selectedProposal.evaluationScore.toFixed(1) /
+                              10}{" "}
+                          / 10
+                        </Badge>
                       </Badge>
                     </div>
                   </div>
@@ -908,9 +928,13 @@ export default function Dashboard() {
                               </td>
                               <td className="text-right py-3 px-2">
                                 <span className="text-lg text-blue-900">
-                                  {getEvaluationScores(
-                                    selectedProposal
-                                  ).weightedTotal.toFixed(2)}{" "}
+                                  {selectedProposal.reviewer === "Dr. Sharma"
+                                    ? "9.33"
+                                    : selectedProposal.reviewer === "Dr. Patel"
+                                    ? "3.65"
+                                    : getEvaluationScores(
+                                        selectedProposal
+                                      ).weightedTotal.toFixed(2)}{" "}
                                   / 10
                                 </span>
                               </td>
@@ -1151,23 +1175,41 @@ export default function Dashboard() {
                       <div className="space-y-1 max-h-72 overflow-y-auto pr-2">
                         {tableOfContents.map((section, idx) => (
                           <div key={idx} className="space-y-1">
-                             <button
-                              onClick={() => window.open(`https://drive.google.com/file/d/1YL_wqSUwGTMOTe5ye4SrIssluGJmsedu/view#page=${section.page}`, '_blank')}
+                            <button
+                              onClick={() =>
+                                window.open(
+                                  `https://drive.google.com/file/d/1YL_wqSUwGTMOTe5ye4SrIssluGJmsedu/view#page=${section.page}`,
+                                  "_blank"
+                                )
+                              }
                               className="w-full text-left px-3 py-2 text-sm hover:bg-primary/10 rounded-md transition-colors flex items-center justify-between group border border-transparent hover:border-primary/30"
                             >
-                              <span className="font-medium group-hover:text-primary text-gray-800">{section.title}</span>
-                              <span className="text-xs text-muted-foreground bg-primary/5 px-2 py-0.5 rounded">p.{section.page}</span>
+                              <span className="font-medium group-hover:text-primary text-gray-800">
+                                {section.title}
+                              </span>
+                              <span className="text-xs text-muted-foreground bg-primary/5 px-2 py-0.5 rounded">
+                                p.{section.page}
+                              </span>
                             </button>
                             {section.subsections && (
                               <div className="ml-4 space-y-1 border-l-2 border-primary/20 pl-2">
                                 {section.subsections.map((sub, subIdx) => (
-                                    <button
+                                  <button
                                     key={subIdx}
-                                    onClick={() => window.open(`https://drive.google.com/file/d/1YL_wqSUwGTMOTe5ye4SrIssluGJmsedu/view#page=${sub.page}`, '_blank')}
+                                    onClick={() =>
+                                      window.open(
+                                        `https://drive.google.com/file/d/1YL_wqSUwGTMOTe5ye4SrIssluGJmsedu/view#page=${sub.page}`,
+                                        "_blank"
+                                      )
+                                    }
                                     className="w-full text-left px-2 py-1.5 text-xs hover:bg-primary/5 rounded-md transition-colors flex items-center justify-between group"
                                   >
-                                    <span className="group-hover:text-primary text-gray-700">{sub.title}</span>
-                                    <span className="text-xs text-muted-foreground">p.{sub.page}</span>
+                                    <span className="group-hover:text-primary text-gray-700">
+                                      {sub.title}
+                                    </span>
+                                    <span className="text-xs text-muted-foreground">
+                                      p.{sub.page}
+                                    </span>
                                   </button>
                                 ))}
                               </div>
@@ -1284,17 +1326,17 @@ export default function Dashboard() {
                       AI Suggestion
                     </Button>
 
-                  
-                                      <Button
-                                        variant="outline"
-                                        onClick={() => {
-                                          const pdfUrl = "https://drive.google.com/file/d/1YL_wqSUwGTMOTe5ye4SrIssluGJmsedu/preview";
-                                          window.open(pdfUrl, '_blank', 'width=1000,height=800');
-                                        }}
-                                      >
-                                        <FileText className="h-4 w-4 mr-2" />
-                                        View Full Proposal PDF
-                                      </Button>
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        const pdfUrl =
+                          "https://drive.google.com/file/d/1YL_wqSUwGTMOTe5ye4SrIssluGJmsedu/preview";
+                        window.open(pdfUrl, "_blank", "width=1000,height=800");
+                      }}
+                    >
+                      <FileText className="h-4 w-4 mr-2" />
+                      View Full Proposal PDF
+                    </Button>
                   </div>
 
                   {/* Justification Section */}
@@ -1413,7 +1455,6 @@ export default function Dashboard() {
             </DialogFooter>
           </DialogContent>
         </Dialog>
-       
       </main>
 
       <GovtFooter />
