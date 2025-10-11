@@ -164,6 +164,12 @@ export const GovtHeader = ({
               {userName === "Dr. Ghanshyam Tiwari" ? (
                 <>
                   <a
+                    href="/proposals"
+                    className="text-foreground hover:text-accent transition font-medium"
+                  >
+                    Proposals
+                  </a>
+                  <a
                     href="#"
                     className="text-foreground hover:text-accent transition font-medium"
                   >
@@ -263,6 +269,12 @@ export const GovtHeader = ({
                   className="text-foreground hover:text-accent transition font-medium py-2"
                 >
                   Dashboard
+                </a>
+                <a
+                  href="/proposals"
+                  className="text-foreground hover:text-accent transition font-medium py-2"
+                >
+                  Proposals
                 </a>
                 <a
                   href="/analytics"
