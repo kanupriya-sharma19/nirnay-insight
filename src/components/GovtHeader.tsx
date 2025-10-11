@@ -41,37 +41,53 @@ export const GovtHeader = ({
   const navigate = useNavigate();
   // Notifications based on role/user
   const notifications: Notification[] =
-    userName === "Dr. Rajesh Kumar"
-      ? [
-          {
-            title: "Development and Field Trial of 500 T Capacity SAGES-III",
-            message: "Your proposal has been approved by SSRC",
-            time: "2 hours ago",
-            type: "approved",
-          },
-          {
-            title: "Electrostatic deposition and functionalization of MWCNTs",
-            message: "Revision required — reviewer requested changes",
-            time: "1 day ago",
-            type: "revision",
-          },
-        ]
-      : userName === "Dr. Priya Sharma"
-      ? [
-          {
-            title: "New High-Priority Proposal Received",
-            message: "WW-2024-011: Advanced Coal Waste Recycling Technology - Score: 8.7/10",
-            time: "30 minutes ago",
-            type: "approved",
-          },
-          {
-            title: "Quarterly Review Meeting",
-            message: "Apex Committee meeting scheduled for next week",
-            time: "2 hours ago",
-            type: "revision",
-          },
-        ]
-      : [];
+  userName === "Dr. Rajesh Kumar"
+    ? [
+        {
+          title: "Development and Field Trial of 500 T Capacity SAGES-III",
+          message: "Your proposal has been approved by SSRC",
+          time: "2 hours ago",
+          type: "approved",
+        },
+        {
+          title: "Electrostatic deposition and functionalization of MWCNTs",
+          message: "Revision required — reviewer requested changes",
+          time: "1 day ago",
+          type: "revision",
+        },
+      ]
+    : userName === "Dr. Priya Sharma"
+    ? [
+        {
+          title: "New High-Priority Proposal Received",
+          message:
+            "WW-2024-011: Advanced Coal Waste Recycling Technology - Score: 8.7/10",
+          time: "30 minutes ago",
+          type: "approved",
+        },
+        {
+          title: "Quarterly Review Meeting",
+          message: "Apex Committee meeting scheduled for next week",
+          time: "2 hours ago",
+          type: "revision",
+        },
+      ]
+    : [
+        {
+          title: "New Proposal Received",
+          message: "A new research proposal has been submitted for your review.",
+          time: "1 hour ago",
+          type: "approved",
+        },
+        {
+          title: "Revised Proposal Received",
+          message:
+            "A previously reviewed proposal has been revised and resubmitted.",
+          time: "3 hours ago",
+          type: "revision",
+        },
+      ];
+
 
   return (
     <>
@@ -111,50 +127,6 @@ export const GovtHeader = ({
             <button className="text-xs hover-text-secondary transition hidden md:inline">
               Screen Reader
             </button>
-            {/* Add Language Toggle */}
-            <button
-              className="text-xs hover-text-secondary transition hidden md:inline"
-              onClick={async () => {
-                const targetLang =
-                  localStorage.getItem("lang") === "hi" ? "en" : "hi";
-                localStorage.setItem("lang", targetLang);
-
-                const elements = document.querySelectorAll(
-                  "body *:not(script):not(style)"
-                );
-                for (const el of Array.from(elements)) {
-                  const node = el.childNodes;
-                  for (const n of Array.from(node)) {
-                    if (
-                      n.nodeType === Node.TEXT_NODE &&
-                      n.textContent?.trim()
-                    ) {
-                      try {
-                        const res = await fetch(
-                          "https://translate.astian.org/translate",
-                          {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({
-                              q: n.textContent,
-                              source: "auto",
-                              target: targetLang,
-                              format: "text",
-                            }),
-                          }
-                        );
-                        const data = await res.json();
-                        n.textContent = data.translatedText;
-                      } catch (err) {
-                        console.error("Translation failed", err);
-                      }
-                    }
-                  }
-                }
-              }}
-            >
-              {localStorage.getItem("lang") === "hi" ? "English" : "हिन्दी"}
-            </button>
           </div>
         </div>
       </div>
@@ -167,7 +139,7 @@ export const GovtHeader = ({
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-3">
                 <div className="bg-gradient-primary p-3 rounded-xl shadow-glow">
-                  <Shield className="h-8 w-8 text-primary-foreground" />
+          <img src="/logo.png" alt="Logo" className="h-8  object-contain" />
                 </div>
                 <div>
                   <h1 className="text-2xl font-bold text-primary">

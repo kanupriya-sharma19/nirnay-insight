@@ -241,7 +241,7 @@ const getThrustIcon = (area: string) => thrustAreas[area]?.icon || FileText;
 
 const getStatusBadge = (status: string) => {
   const styles: Record<string, string> = {
-    "Under Review": "bg-yellow-400 text-black",
+    "Under Review": "bg-yellow-300 text-black",
     Approved: "bg-green-500 text-white",
     Rejected: "bg-red-500 text-white",
   };
@@ -261,7 +261,7 @@ const getStatusBadge = (status: string) => {
       {Object.entries(counts).map(([status, count]) => (
         <Badge
           key={status}
-          className={`px-4 py-2 text-sm ${getStatusBadge(status)}`}
+          className={`px-8 py-4 text-sm ${getStatusBadge(status)}`}
         >
           {status}: {count}
         </Badge>
@@ -370,7 +370,7 @@ const getStatusBadge = (status: string) => {
         <div className="gradient-primary rounded-2xl p-8 mb-8 text-primary-foreground shadow-glow">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
-              <h1 className="text-3xl font-bold mb-2">Welcome back, Dr. Kumar! 👋</h1>
+              <h1 className="text-3xl font-bold mb-2">Welcome back, Dr. Kumar!</h1>
               <p className="text-primary-foreground/90">Track your proposals and manage your R&D projects efficiently</p>
             </div>
           </div>
@@ -450,7 +450,7 @@ const getStatusBadge = (status: string) => {
                       <div className="flex-1">
                         <div className="flex items-start gap-3 mb-3">
                           <div className="p-2 bg-accent/10 rounded-lg">
-                            <FileText className="h-5 w-5 text-accent" />
+  {React.createElement(getThrustIcon(proposal.thrustArea), { className: "h-5 w-5 text-accent" })}
                           </div>
                           <div className="flex-1">
                             <div className="flex items-center gap-2 mb-1">

@@ -1,4 +1,4 @@
-
+import React from "react";
 import { useState, useEffect, useMemo } from "react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -29,6 +29,19 @@ import { GovtFooter } from "@/components/GovtFooter";
 import { useNavigate } from "react-router-dom";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import { Shield, Recycle, Zap, Factory, Lightbulb } from "lucide-react"; // make sure to import used icons
+
+
+const thrustAreas = {
+  "Productivity Improvement": { icon: Shield, color: "bg-indigo-500" },
+  "Safety & Environment": { icon: Shield, color: "bg-red-500" },
+  "Waste to Wealth": { icon: Recycle, color: "bg-green-500" },
+  "Clean Coal Technologies": { icon: Zap, color: "bg-teal-500" },
+  "Coal Beneficiation": { icon: Factory, color: "bg-blue-500" },
+  "Exploration": { icon: Search, color: "bg-amber-500" },
+  "Innovation & Indigenization": { icon: Lightbulb, color: "bg-purple-500" },
+};
+
 
 interface Proposal {
   id: string;
@@ -49,7 +62,8 @@ interface Proposal {
 
 export default function ApexPage() {
   const navigate = useNavigate();
-  
+  const getThrustColor = (area: string) => thrustAreas[area]?.color || "bg-primary";
+  const getThrustIcon = (area: string) => thrustAreas[area]?.icon || FileText;
   // Only approved proposals with evaluation scores above 6
   const initialProposals: Proposal[] = [
     {
@@ -160,48 +174,41 @@ export default function ApexPage() {
     "Submit Date": ["All", "Last 7 Days", "Last 30 Days", "Older"],
   } as const;
 
-  const getStatusBadge = (status: string) => {
-    const styles: Record<string, string> = {
-      "Under Review": "status-review",
-      Approved: "status-approved",
-      Rejected: "status-rejected",
-    };
-    return styles[status] || "status-pending";
-  };
+ 
+  const renderStatusSummary = () => {
+   const counts = {
+     Approved: proposals.filter((p) => p.status === "Approved").length,
+     "Under Review": proposals.filter((p) => p.status === "Under Review").length,
+     Rejected: proposals.filter((p) => p.status === "Rejected").length,
+   };
+ 
+   return (
+     <div className="flex flex-wrap gap-3 mb-6">
+       {Object.entries(counts).map(([status, count]) => (
+         <Badge
+           key={status}
+           className={`px-8 py-4 text-sm ${getStatusBadge(status)}`}
+         >
+           {status}: {count}
+         </Badge>
+       ))}
+     </div>
+   );
+ };
 
-  const getThrustColor = (area: string) => {
-    const colors: Record<string, string> = {
-      Productivity: "bg-indigo-500",
-      "Safety & Health": "bg-red-500",
-      "Waste to Wealth": "bg-cyan-500",
-      Innovation: "bg-royal",
-      "Clean Coal": "bg-teal-500",
-      Exploration: "bg-blue-500",
-    };
-    return colors[area] || "bg-primary";
+const getStatusBadge = (status: string) => {
+  const styles: Record<string, string> = {
+    "Under Review": "bg-yellow-300 text-black",
+    Approved: "bg-green-500 text-white",
+    Rejected: "bg-red-500 text-white",
   };
+  return styles[status] || "bg-gray-400 text-white";
+};
 
   const formatINR = (n: number) => {
     return `₹${(n / 100000).toFixed(2)}L`;
   };
 
-  const renderStatusSummary = () => {
-    const counts = {
-      Approved: proposals.filter((p) => p.status === "Approved").length,
-      "Under Review": proposals.filter((p) => p.status === "Under Review").length,
-      Rejected: proposals.filter((p) => p.status === "Rejected").length,
-    };
-
-    return (
-      <div className="flex flex-wrap gap-3 mb-6">
-        {Object.entries(counts).map(([status, count]) => (
-          <Badge key={status} className={`px-4 py-2 text-sm ${getStatusBadge(status)}`}>
-            {status}: {count}
-          </Badge>
-        ))}
-      </div>
-    );
-  };
 
   // Load data from localStorage on component mount
   // Load data from localStorage on component mount
@@ -448,9 +455,9 @@ export default function ApexPage() {
                     <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                       <div className="flex-1">
                         <div className="flex items-start gap-3 mb-3">
-                          <div className="p-2 bg-accent/10 rounded-lg">
-                            <FileText className="h-5 w-5 text-accent" />
-                          </div>
+                           <div className="p-2 bg-accent/10 rounded-lg">
+                           {React.createElement(getThrustIcon(proposal.thrustArea), { className: "h-5 w-5 text-accent" })}
+                                                   </div>
                           <div className="flex-1">
                             <div className="flex items-center gap-2 mb-1">
                               <h3 className="font-bold text-lg text-primary">{proposal.title}</h3>
