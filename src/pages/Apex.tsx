@@ -319,40 +319,53 @@ export default function ApexPage() {
         {renderStatusSummary()}
 
         {/* Filter Dropdowns */}
-        <div className="flex flex-wrap items-center gap-4 mb-8">
-          <Select
-            onValueChange={(val: string) => {
-              setFilterType(val);
-              setFilterValue("All");
-            }}
-            value={filterType}
-          >
-            <SelectTrigger className="w-48">
-              <SelectValue placeholder="Select Filter Type" />
-            </SelectTrigger>
-            <SelectContent>
-              {Object.keys(filterOptions).map((key) => (
-                <SelectItem key={key} value={key}>
-                  {key}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+       <div className="bg-white rounded-lg shadow-sm border p-6 mb-6">
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="flex-1">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <Input
+                  placeholder="Search proposals by title or submitter..."
+                  className="pl-10"
+                />
+              </div>
+            </div>
 
-          <Select onValueChange={setFilterValue} value={filterValue}>
-            <SelectTrigger className="w-56">
-              <SelectValue placeholder="Select Value" />
-            </SelectTrigger>
-            <SelectContent>
-              {filterOptions[filterType].map((val) => (
-                <SelectItem key={val} value={val}>
-                  {val}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+            <Select
+              onValueChange={(val: string) => {
+                setFilterType(val);
+                setFilterValue("All");
+              }}
+              value={filterType}
+            >
+              <SelectTrigger className="w-full md:w-48">
+                <Filter className="h-4 w-4 mr-2" />
+                <SelectValue placeholder="Select Filter Type" />
+              </SelectTrigger>
+              <SelectContent>
+                {Object.keys(filterOptions).map((key) => (
+                  <SelectItem key={key} value={key}>
+                    {key}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <Select onValueChange={setFilterValue} value={filterValue}>
+              <SelectTrigger className="w-full md:w-56">
+                <Filter className="h-4 w-4 mr-2" />
+                <SelectValue placeholder="Select Value" />
+              </SelectTrigger>
+              <SelectContent>
+                {filterOptions[filterType].map((val) => (
+                  <SelectItem key={val} value={val}>
+                    {val}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </div>
-
         {/* Proposals List */}
         <Card className="border-2">
           <CardHeader>

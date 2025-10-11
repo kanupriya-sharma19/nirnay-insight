@@ -363,7 +363,7 @@ const getStatusBadge = (status: string) => {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <GovtHeader showAuth userName="Dr. Rajesh Kumar" onLogout={() => navigate("/")} />
+      <GovtHeader showAuth userName="Dr. Ghanshyam Tiwari" onLogout={() => navigate("/")} />
 
       <main className="flex-1 container mx-auto px-4 py-8">
         {/* Welcome Banner */}
@@ -458,11 +458,7 @@ const getStatusBadge = (status: string) => {
                                 {proposal.title}
                               </h3>
                             </div>
-
-                            <p className="text-sm text-muted-foreground mb-1">
-                              • {proposal.instituteName}
-                            </p>
-
+                                                       <p className="text-sm text-muted-foreground mb-1">• {proposal.id} • {proposal.instituteName}</p>
                             <div className="flex flex-wrap gap-2 mb-3">
                               <Badge
                                 className={`govt-badge ${getThrustColor(
