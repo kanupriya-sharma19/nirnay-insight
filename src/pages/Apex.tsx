@@ -30,6 +30,7 @@ import { useNavigate } from "react-router-dom";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { Shield, Recycle, Zap, Factory, Lightbulb } from "lucide-react"; // make sure to import used icons
+import LoadingAnimation from "@/components/animation/Loader";
 
 
 const thrustAreas = {
@@ -64,6 +65,15 @@ export default function ApexPage() {
   const navigate = useNavigate();
   const getThrustColor = (area: string) => thrustAreas[area]?.color || "bg-primary";
   const getThrustIcon = (area: string) => thrustAreas[area]?.icon || FileText;
+
+    const [isLoading, setIsLoading] = useState(true);
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        setIsLoading(false);
+      }, 1000);
+    }
+    )
+
   // Only approved proposals with evaluation scores above 6
   const initialProposals: Proposal[] = [
     {
@@ -370,7 +380,7 @@ const getStatusBadge = (status: string) => {
   };
 
 
-  return (
+  return (isLoading?<LoadingAnimation/>:(
     <div className="min-h-screen flex flex-col">
       <GovtHeader showAuth userName="Dr. Priya Sharma" onLogout={() => navigate("/")} />
 
@@ -836,6 +846,6 @@ const getStatusBadge = (status: string) => {
       </main>
 
       <GovtFooter />
-    </div>
+    </div>)
   );
 }

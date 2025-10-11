@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { GovtHeader } from "@/components/GovtHeader";
 import { GovtFooter } from "@/components/GovtFooter";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 
 import {
   FileText,
-  Upload,Filter,
+  Upload, Filter,
   Clock,
   CheckCircle,
   AlertCircle,
@@ -26,6 +26,7 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, RadarChart, 
 
 // Upgraded Dashboard component
 import { Shield, Recycle, Zap, Factory, Search, Lightbulb } from "lucide-react"; // make sure to import used icons
+import LoadingAnimation from "@/components/animation/Loader";
 
 const thrustAreas = {
   "Productivity Improvement": { icon: Shield, color: "bg-indigo-500" },
@@ -39,10 +40,16 @@ const thrustAreas = {
 
 export default function Dashboard() {
   const navigate = useNavigate();
-const getThrustColor = (area: string) => thrustAreas[area]?.color || "bg-primary";
-const getThrustIcon = (area: string) => thrustAreas[area]?.icon || FileText;
+  const getThrustColor = (area: string) => thrustAreas[area]?.color || "bg-primary";
+  const getThrustIcon = (area: string) => thrustAreas[area]?.icon || FileText;
 
-
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+  }
+  )
   // sample proposals extended with new fields
   const proposals = [
     {
@@ -237,38 +244,38 @@ const getThrustIcon = (area: string) => thrustAreas[area]?.icon || FileText;
   const [selectedAction, setSelectedAction] = useState<string>("");
   const [justification, setJustification] = useState("");
 
-  
-
-const getStatusBadge = (status: string) => {
-  const styles: Record<string, string> = {
-    "Under Review": "bg-yellow-300 text-black",
-    Approved: "bg-green-500 text-white",
-    Rejected: "bg-red-500 text-white",
-  };
-  return styles[status] || "bg-gray-400 text-white";
-};
 
 
- const renderStatusSummary = () => {
-  const counts = {
-    Approved: proposals.filter((p) => p.status === "Approved").length,
-    "Under Review": proposals.filter((p) => p.status === "Under Review").length,
-    Rejected: proposals.filter((p) => p.status === "Rejected").length,
+  const getStatusBadge = (status: string) => {
+    const styles: Record<string, string> = {
+      "Under Review": "bg-yellow-300 text-black",
+      Approved: "bg-green-500 text-white",
+      Rejected: "bg-red-500 text-white",
+    };
+    return styles[status] || "bg-gray-400 text-white";
   };
 
-  return (
-    <div className="flex flex-wrap gap-3 mb-6">
-      {Object.entries(counts).map(([status, count]) => (
-        <Badge
-          key={status}
-          className={`px-8 py-4 text-sm ${getStatusBadge(status)}`}
-        >
-          {status}: {count}
-        </Badge>
-      ))}
-    </div>
-  );
-};
+
+  const renderStatusSummary = () => {
+    const counts = {
+      Approved: proposals.filter((p) => p.status === "Approved").length,
+      "Under Review": proposals.filter((p) => p.status === "Under Review").length,
+      Rejected: proposals.filter((p) => p.status === "Rejected").length,
+    };
+
+    return (
+      <div className="flex flex-wrap gap-3 mb-6">
+        {Object.entries(counts).map(([status, count]) => (
+          <Badge
+            key={status}
+            className={`px-8 py-4 text-sm ${getStatusBadge(status)}`}
+          >
+            {status}: {count}
+          </Badge>
+        ))}
+      </div>
+    );
+  };
 
 
   const filteredProposals = useMemo(() => {
@@ -330,7 +337,7 @@ const getStatusBadge = (status: string) => {
       alert("Please provide a justification for your decision.");
       return;
     }
-    
+
     let message = "";
     if (selectedAction === "revision") {
       message = `Decision: Request Revision\nJustification: ${justification}\n\nThe proposer will be notified to revise and resubmit.`;
@@ -339,7 +346,7 @@ const getStatusBadge = (status: string) => {
     } else if (selectedAction === "reject") {
       message = `Decision: Reject & Notify\nJustification: ${justification}\n\nOfficial rejection mail will be sent to proposer.`;
     }
-    
+
     alert(message);
     closeDetails();
   };
@@ -362,330 +369,332 @@ const getStatusBadge = (status: string) => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <GovtHeader showAuth userName="Dr. Ghanshyam Tiwari" onLogout={() => navigate("/")} />
+    (isLoading ? (<LoadingAnimation />) : (
+      <div className="min-h-screen flex flex-col">
+        <GovtHeader showAuth userName="Dr. Ghanshyam Tiwari" onLogout={() => navigate("/")} />
 
-      <main className="flex-1 container mx-auto px-4 py-8">
-        {/* Welcome Banner */}
-        <div className="gradient-primary rounded-2xl p-8 mb-8 text-primary-foreground shadow-glow">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <div>
-              <h1 className="text-3xl font-bold mb-2">Welcome back, Dr. Kumar!</h1>
-              <p className="text-primary-foreground/90">Track your proposals and manage your R&D projects efficiently</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Status Summary */}
-        {renderStatusSummary()}
-
-        {/* Filter Dropdowns */}
-       <div className="bg-white rounded-lg shadow-sm border p-6 mb-6">
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="flex-1">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                <Input
-                  placeholder="Search proposals by title or submitter..."
-                  className="pl-10"
-                />
+        <main className="flex-1 container mx-auto px-4 py-8">
+          {/* Welcome Banner */}
+          <div className="gradient-primary rounded-2xl p-8 mb-8 text-primary-foreground shadow-glow">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+              <div>
+                <h1 className="text-3xl font-bold mb-2">Welcome back, Dr. Kumar!</h1>
+                <p className="text-primary-foreground/90">Track your proposals and manage your R&D projects efficiently</p>
               </div>
             </div>
-
-            <Select
-              onValueChange={(val: string) => {
-                setFilterType(val);
-                setFilterValue("All");
-              }}
-              value={filterType}
-            >
-              <SelectTrigger className="w-full md:w-48">
-                <Filter className="h-4 w-4 mr-2" />
-                <SelectValue placeholder="Select Filter Type" />
-              </SelectTrigger>
-              <SelectContent>
-                {Object.keys(filterOptions).map((key) => (
-                  <SelectItem key={key} value={key}>
-                    {key}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-
-            <Select onValueChange={setFilterValue} value={filterValue}>
-              <SelectTrigger className="w-full md:w-56">
-                <Filter className="h-4 w-4 mr-2" />
-                <SelectValue placeholder="Select Value" />
-              </SelectTrigger>
-              <SelectContent>
-                {filterOptions[filterType].map((val) => (
-                  <SelectItem key={val} value={val}>
-                    {val}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
           </div>
-        </div>
 
-        {/* Proposals List */}
-        <Card className="border-2">
-          <CardHeader>
-            <CardTitle className="text-2xl">My Proposals</CardTitle>
-            <CardDescription>Track and manage your research proposals</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-      {filteredProposals.length === 0 ? (
-                <p className="text-muted-foreground text-center py-4">
-                  No proposals match the selected filter.
-                </p>
-              ) : (
-                filteredProposals.map((proposal) => (
-                  <div
-                    key={proposal.id}
-                    className="p-6 rounded-xl border-2 hover:border-accent transition-colors gradient-card"
-                  >
-                    <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-                      <div className="flex-1">
-                        <div className="flex items-start gap-3 mb-3">
-                          <div className="p-2 bg-accent/10 rounded-lg">
-  {React.createElement(getThrustIcon(proposal.thrustArea), { className: "h-5 w-5 text-accent" })}
-                          </div>
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-1">
-                              <h3 className="font-bold text-lg text-primary">
-                                {proposal.title}
-                              </h3>
-                            </div>
-                                                       <p className="text-sm text-muted-foreground mb-1">• {proposal.id} • {proposal.instituteName}</p>
-                            <div className="flex flex-wrap gap-2 mb-3">
-                              <Badge
-                                className={`govt-badge ${getThrustColor(
-                                  proposal.thrustArea
-                                )} text-white`}
-                              >
-                                {proposal.thrustArea}
-                              </Badge>
-                              <Badge
-                                className={`govt-badge ${getStatusBadge(
-                                  proposal.status
-                                )}`}
-                              >
-                                {proposal.status}
-                              </Badge>
-                              <Badge className="govt-badge bg-primary text-white">
-                                Score: {proposal.evaluationScore.toFixed(1)}/10
-                              </Badge>
-                            </div>
+          {/* Status Summary */}
+          {renderStatusSummary()}
 
-                            <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                              <span>Submitted: {proposal.submittedDate}</span>
-                              <span>•</span>
-                              <span>Reviewer: {proposal.reviewer}</span>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="flex items-center gap-2 mt-2">
-                          <span className="text-sm text-muted-foreground">
-                            Evaluation Score:
-                          </span>
-                          <span className="font-semibold text-primary">
-                            {proposal.evaluationScore.toFixed(1)} / 10
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="flex lg:flex-col gap-2 w-full lg:w-auto border-t lg:border-t-0 pt-4 lg:pt-0 ">
-                        <Button
-                          variant="outline"
-                          size="lg"
-                          className="bg-slate-800 text-white hover:bg-slate-500 shadow-lg transition"
-                          onClick={() => openDetails(proposal)}
-                        >
-                          View Details
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                ))
-              )}
-
-              
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Details Modal */}
-        <Dialog open={openDetail} onOpenChange={(o) => !o && closeDetails()}>
-          <DialogContent className="max-w-4xl max-h-[85vh] overflow-y-auto scroll-smooth">
-            <DialogHeader>
-              <DialogTitle>Proposal Details</DialogTitle>
-            </DialogHeader>
-
-            {selectedProposal && (
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="col-span-2">
-                  <h3 className="text-lg font-semibold mb-2">{selectedProposal.title}</h3>
-                  <p className="text-sm text-muted-foreground mb-4">{selectedProposal.id} • {selectedProposal.instituteName} • {selectedProposal.submittedDate}</p>
-
-                  <div className="mb-4">
-                    <h4 className="font-medium">AI Evaluation Summary</h4>
-                    <p className="text-sm text-muted-foreground mt-1">{selectedProposal.aiInsights}</p>
-                    <div className="mt-2 flex items-center gap-2">
-                      <Badge className={`govt-badge ${getStatusBadge(selectedProposal.status)}`}>{selectedProposal.status}</Badge>
-                      <Badge className="govt-badge bg-primary text-white">Score: {selectedProposal.evaluationScore.toFixed(1)}/10</Badge>
-                    </div>
-                  </div>
-
-                  <div className="mb-6">
-                    <h4 className="font-medium mb-2">Evaluation Breakdown</h4>
-                    <div style={{ height: 260 }}>
-                      <ResponsiveContainer width="100%" height={260}>
-                        <RadarChart cx="50%" cy="50%" outerRadius={80} data={getBreakdownData(selectedProposal)}>
-                          <PolarGrid />
-                          <PolarAngleAxis dataKey="subject" />
-                          <Radar name="Score" dataKey="A" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
-                        </RadarChart>
-                      </ResponsiveContainer>
-                    </div>
-                  </div>
-
-                  <div className="mb-6">
-                    <h4 className="font-medium mb-2">Financial Feasibility</h4>
-                    <table className="w-full text-sm">
-                      <tbody>
-                        <tr>
-                          <td className="py-1 text-muted-foreground">Requested Budget</td>
-                          <td className="py-1 font-medium">{formatINR(selectedProposal.financialBreakdown.requested)}</td>
-                        </tr>
-                        <tr>
-                          <td className="py-1 text-muted-foreground">Estimated ROI</td>
-                          <td className="py-1 font-medium">{selectedProposal.financialBreakdown.estimatedROIpercent}%</td>
-                        </tr>
-                        <tr>
-                          <td className="py-1 text-muted-foreground">Previous Similar Project Cost</td>
-                          <td className="py-1 font-medium">{formatINR(selectedProposal.financialBreakdown.previousCost)}</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-
-                  <div className="mb-6">
-                    <h4 className="font-medium mb-2">Subtopics</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {selectedProposal.subtopics.map((s: string) => (
-                        <button key={s} className="px-3 py-1 rounded-full border text-sm text-muted-foreground hover:bg-accent/5" onClick={() => alert(`Highlighting section: ${s}`)}>
-                          {s}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="mb-6">
-                    <h4 className="font-medium mb-2">Compare with Past Projects</h4>
-                    <p className="text-sm text-muted-foreground">Comparison (cost focus): This proposal requests {formatINR(selectedProposal.financialBreakdown.requested)} compared to a previous similar project which cost {formatINR(selectedProposal.financialBreakdown.previousCost)}.</p>
-                  </div>
-
-                  <div className="flex gap-3 mb-4">
-                    <Button onClick={() => {
-                      const ai = getAiDecision(selectedProposal);
-                      alert(`AI Suggestion: ${ai.decision}\nReason: ${ai.reason}`);
-                    }}>AI Suggestion</Button>
-
-                    <a href={selectedProposal.pdfLink} target="_blank" rel="noreferrer">
-                      <Button variant="outline">View PDF</Button>
-                    </a>
-                  </div>
-
-                  {/* Justification Section */}
-                  {showJustification && (
-                    <div className="mt-6 p-4 border-2 border-accent rounded-lg bg-accent/5">
-                      <h4 className="font-medium mb-2">Justify Your Decision</h4>
-                      <p className="text-sm text-muted-foreground mb-3">
-                        Please provide a detailed justification for your decision. This will be recorded and sent to the proposer.
-                      </p>
-                      <Textarea
-                        placeholder="Enter your justification here..."
-                        value={justification}
-                        onChange={(e) => setJustification(e.target.value)}
-                        className="min-h-[120px] mb-3"
-                      />
-                      <div className="flex gap-2 justify-end">
-                        <Button variant="outline" onClick={() => {
-                          setShowJustification(false);
-                          setSelectedAction("");
-                          setJustification("");
-                        }}>
-                          Cancel
-                        </Button>
-                        <Button onClick={handleSubmitDecision} className="bg-primary hover:bg-primary/90">
-                          Submit Decision
-                        </Button>
-                      </div>
-                    </div>
-                  )}
+          {/* Filter Dropdowns */}
+          <div className="bg-white rounded-lg shadow-sm border p-6 mb-6">
+            <div className="flex flex-col md:flex-row gap-4">
+              <div className="flex-1">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <Input
+                    placeholder="Search proposals by title or submitter..."
+                    className="pl-10"
+                  />
                 </div>
+              </div>
 
-                <div className="col-span-1">
-                  <div className="sticky top-6 space-y-4">
-                    <div className="p-4 border rounded-lg">
-                      <h4 className="font-medium mb-2">AI Evaluation</h4>
-                      <p className="text-sm text-muted-foreground mb-2">
-                        AI has analyzed this proposal based on technical merit, financial feasibility, and impact assessment.
-                      </p>
+              <Select
+                onValueChange={(val: string) => {
+                  setFilterType(val);
+                  setFilterValue("All");
+                }}
+                value={filterType}
+              >
+                <SelectTrigger className="w-full md:w-48">
+                  <Filter className="h-4 w-4 mr-2" />
+                  <SelectValue placeholder="Select Filter Type" />
+                </SelectTrigger>
+                <SelectContent>
+                  {Object.keys(filterOptions).map((key) => (
+                    <SelectItem key={key} value={key}>
+                      {key}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              <Select onValueChange={setFilterValue} value={filterValue}>
+                <SelectTrigger className="w-full md:w-56">
+                  <Filter className="h-4 w-4 mr-2" />
+                  <SelectValue placeholder="Select Value" />
+                </SelectTrigger>
+                <SelectContent>
+                  {filterOptions[filterType].map((val) => (
+                    <SelectItem key={val} value={val}>
+                      {val}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          {/* Proposals List */}
+          <Card className="border-2">
+            <CardHeader>
+              <CardTitle className="text-2xl">My Proposals</CardTitle>
+              <CardDescription>Track and manage your research proposals</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {filteredProposals.length === 0 ? (
+                  <p className="text-muted-foreground text-center py-4">
+                    No proposals match the selected filter.
+                  </p>
+                ) : (
+                  filteredProposals.map((proposal) => (
+                    <div
+                      key={proposal.id}
+                      className="p-6 rounded-xl border-2 hover:border-accent transition-colors gradient-card"
+                    >
+                      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                        <div className="flex-1">
+                          <div className="flex items-start gap-3 mb-3">
+                            <div className="p-2 bg-accent/10 rounded-lg">
+                              {React.createElement(getThrustIcon(proposal.thrustArea), { className: "h-5 w-5 text-accent" })}
+                            </div>
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2 mb-1">
+                                <h3 className="font-bold text-lg text-primary">
+                                  {proposal.title}
+                                </h3>
+                              </div>
+                              <p className="text-sm text-muted-foreground mb-1">• {proposal.id} • {proposal.instituteName}</p>
+                              <div className="flex flex-wrap gap-2 mb-3">
+                                <Badge
+                                  className={`govt-badge ${getThrustColor(
+                                    proposal.thrustArea
+                                  )} text-white`}
+                                >
+                                  {proposal.thrustArea}
+                                </Badge>
+                                <Badge
+                                  className={`govt-badge ${getStatusBadge(
+                                    proposal.status
+                                  )}`}
+                                >
+                                  {proposal.status}
+                                </Badge>
+                                <Badge className="govt-badge bg-primary text-white">
+                                  Score: {proposal.evaluationScore.toFixed(1)}/10
+                                </Badge>
+                              </div>
+
+                              <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                                <span>Submitted: {proposal.submittedDate}</span>
+                                <span>•</span>
+                                <span>Reviewer: {proposal.reviewer}</span>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-2 mt-2">
+                            <span className="text-sm text-muted-foreground">
+                              Evaluation Score:
+                            </span>
+                            <span className="font-semibold text-primary">
+                              {proposal.evaluationScore.toFixed(1)} / 10
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="flex lg:flex-col gap-2 w-full lg:w-auto border-t lg:border-t-0 pt-4 lg:pt-0 ">
+                          <Button
+                            variant="outline"
+                            size="lg"
+                            className="bg-slate-800 text-white hover:bg-slate-500 shadow-lg transition"
+                            onClick={() => openDetails(proposal)}
+                          >
+                            View Details
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                )}
+
+
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Details Modal */}
+          <Dialog open={openDetail} onOpenChange={(o) => !o && closeDetails()}>
+            <DialogContent className="max-w-4xl max-h-[85vh] overflow-y-auto scroll-smooth">
+              <DialogHeader>
+                <DialogTitle>Proposal Details</DialogTitle>
+              </DialogHeader>
+
+              {selectedProposal && (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="col-span-2">
+                    <h3 className="text-lg font-semibold mb-2">{selectedProposal.title}</h3>
+                    <p className="text-sm text-muted-foreground mb-4">{selectedProposal.id} • {selectedProposal.instituteName} • {selectedProposal.submittedDate}</p>
+
+                    <div className="mb-4">
+                      <h4 className="font-medium">AI Evaluation Summary</h4>
+                      <p className="text-sm text-muted-foreground mt-1">{selectedProposal.aiInsights}</p>
+                      <div className="mt-2 flex items-center gap-2">
+                        <Badge className={`govt-badge ${getStatusBadge(selectedProposal.status)}`}>{selectedProposal.status}</Badge>
+                        <Badge className="govt-badge bg-primary text-white">Score: {selectedProposal.evaluationScore.toFixed(1)}/10</Badge>
+                      </div>
                     </div>
 
-                    {/* <div className="p-4 border rounded-lg">
+                    <div className="mb-6">
+                      <h4 className="font-medium mb-2">Evaluation Breakdown</h4>
+                      <div style={{ height: 260 }}>
+                        <ResponsiveContainer width="100%" height={260}>
+                          <RadarChart cx="50%" cy="50%" outerRadius={80} data={getBreakdownData(selectedProposal)}>
+                            <PolarGrid />
+                            <PolarAngleAxis dataKey="subject" />
+                            <Radar name="Score" dataKey="A" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
+                          </RadarChart>
+                        </ResponsiveContainer>
+                      </div>
+                    </div>
+
+                    <div className="mb-6">
+                      <h4 className="font-medium mb-2">Financial Feasibility</h4>
+                      <table className="w-full text-sm">
+                        <tbody>
+                          <tr>
+                            <td className="py-1 text-muted-foreground">Requested Budget</td>
+                            <td className="py-1 font-medium">{formatINR(selectedProposal.financialBreakdown.requested)}</td>
+                          </tr>
+                          <tr>
+                            <td className="py-1 text-muted-foreground">Estimated ROI</td>
+                            <td className="py-1 font-medium">{selectedProposal.financialBreakdown.estimatedROIpercent}%</td>
+                          </tr>
+                          <tr>
+                            <td className="py-1 text-muted-foreground">Previous Similar Project Cost</td>
+                            <td className="py-1 font-medium">{formatINR(selectedProposal.financialBreakdown.previousCost)}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+
+                    <div className="mb-6">
+                      <h4 className="font-medium mb-2">Subtopics</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {selectedProposal.subtopics.map((s: string) => (
+                          <button key={s} className="px-3 py-1 rounded-full border text-sm text-muted-foreground hover:bg-accent/5" onClick={() => alert(`Highlighting section: ${s}`)}>
+                            {s}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="mb-6">
+                      <h4 className="font-medium mb-2">Compare with Past Projects</h4>
+                      <p className="text-sm text-muted-foreground">Comparison (cost focus): This proposal requests {formatINR(selectedProposal.financialBreakdown.requested)} compared to a previous similar project which cost {formatINR(selectedProposal.financialBreakdown.previousCost)}.</p>
+                    </div>
+
+                    <div className="flex gap-3 mb-4">
+                      <Button onClick={() => {
+                        const ai = getAiDecision(selectedProposal);
+                        alert(`AI Suggestion: ${ai.decision}\nReason: ${ai.reason}`);
+                      }}>AI Suggestion</Button>
+
+                      <a href={selectedProposal.pdfLink} target="_blank" rel="noreferrer">
+                        <Button variant="outline">View PDF</Button>
+                      </a>
+                    </div>
+
+                    {/* Justification Section */}
+                    {showJustification && (
+                      <div className="mt-6 p-4 border-2 border-accent rounded-lg bg-accent/5">
+                        <h4 className="font-medium mb-2">Justify Your Decision</h4>
+                        <p className="text-sm text-muted-foreground mb-3">
+                          Please provide a detailed justification for your decision. This will be recorded and sent to the proposer.
+                        </p>
+                        <Textarea
+                          placeholder="Enter your justification here..."
+                          value={justification}
+                          onChange={(e) => setJustification(e.target.value)}
+                          className="min-h-[120px] mb-3"
+                        />
+                        <div className="flex gap-2 justify-end">
+                          <Button variant="outline" onClick={() => {
+                            setShowJustification(false);
+                            setSelectedAction("");
+                            setJustification("");
+                          }}>
+                            Cancel
+                          </Button>
+                          <Button onClick={handleSubmitDecision} className="bg-primary hover:bg-primary/90">
+                            Submit Decision
+                          </Button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="col-span-1">
+                    <div className="sticky top-6 space-y-4">
+                      <div className="p-4 border rounded-lg">
+                        <h4 className="font-medium mb-2">AI Evaluation</h4>
+                        <p className="text-sm text-muted-foreground mb-2">
+                          AI has analyzed this proposal based on technical merit, financial feasibility, and impact assessment.
+                        </p>
+                      </div>
+
+                      {/* <div className="p-4 border rounded-lg">
                       <h4 className="font-medium mb-2">Financial Snapshot</h4>
                       <p className="text-sm text-muted-foreground">Requested: {formatINR(selectedProposal.financialBreakdown.requested)}</p>
                       <p className="text-sm text-muted-foreground">ROI: {selectedProposal.financialBreakdown.estimatedROIpercent}%</p>
                     </div> */}
 
-                    <div className="p-4 border rounded-lg">
-                      <h4 className="font-medium mb-2">Nirnay Assistant</h4>
-                      <p className="text-sm text-muted-foreground mb-2">Ask quick questions about this proposal.</p>
-                      <Button onClick={() => alert('Opening small chat UI (placeholder)')}>Ask AI</Button>
+                      <div className="p-4 border rounded-lg">
+                        <h4 className="font-medium mb-2">Nirnay Assistant</h4>
+                        <p className="text-sm text-muted-foreground mb-2">Ask quick questions about this proposal.</p>
+                        <Button onClick={() => alert('Opening small chat UI (placeholder)')}>Ask AI</Button>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            )}
-
-            <DialogFooter>
-              {!showJustification && (
-                <div className="flex flex-col sm:flex-row gap-3 w-full">
-                  <div className="flex gap-3 flex-1">
-                    <Button
-                     
-                      className="bg-slate-800 text-white hover:bg-slate-500 shadow-lg transition"
-                      variant="outline"
-                      onClick={() => handleActionClick("revision")}
-                    >
-                      Request Revision
-                    </Button>
-                    <Button
-                      className="bg-slate-800 text-white hover:bg-slate-700 shadow-lg transition"
-                      onClick={() => handleActionClick("accept")}
-                    >
-                      Accept & Forward
-                    </Button>
-                    <Button
-                      className="bg-slate-800 text-white hover:bg-slate-500 shadow-lg transition"
-                      onClick={() => handleActionClick("reject")}
-                    >
-                      Reject & Notify
-                    </Button>
-                  </div>
-                </div>
               )}
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
-      </main>
 
-      <GovtFooter />
-    </div>
+              <DialogFooter>
+                {!showJustification && (
+                  <div className="flex flex-col sm:flex-row gap-3 w-full">
+                    <div className="flex gap-3 flex-1">
+                      <Button
+
+                        className="bg-slate-800 text-white hover:bg-slate-500 shadow-lg transition"
+                        variant="outline"
+                        onClick={() => handleActionClick("revision")}
+                      >
+                        Request Revision
+                      </Button>
+                      <Button
+                        className="bg-slate-800 text-white hover:bg-slate-700 shadow-lg transition"
+                        onClick={() => handleActionClick("accept")}
+                      >
+                        Accept & Forward
+                      </Button>
+                      <Button
+                        className="bg-slate-800 text-white hover:bg-slate-500 shadow-lg transition"
+                        onClick={() => handleActionClick("reject")}
+                      >
+                        Reject & Notify
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        </main>
+
+        <GovtFooter />
+      </div>))
   );
+
 }

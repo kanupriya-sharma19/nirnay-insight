@@ -1,5 +1,5 @@
 // pages/Researcher.tsx
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GovtHeader } from "@/components/GovtHeader";
 import { GovtFooter } from "@/components/GovtFooter";
@@ -25,9 +25,18 @@ import {
   Search,
   Lightbulb,
 } from "lucide-react";
+import LoadingAnimation from "@/components/animation/Loader";
 
 export default function ResearcherPage() {
   const navigate = useNavigate();
+
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+  }
+  )
 
   const proposals = [
     {
@@ -147,6 +156,7 @@ export default function ResearcherPage() {
   };
 
   return (
+    isLoading?<LoadingAnimation/>:(
     <div className="min-h-screen flex flex-col bg-gray-50">
       <GovtHeader />
 
@@ -271,5 +281,6 @@ export default function ResearcherPage() {
 
       <GovtFooter />
     </div>
+    )
   );
 }
