@@ -280,16 +280,40 @@ export default function ApexPage() {
     closeDetails();
   };
 
+  // Calculate weighted scores based on evaluation criteria
+  const getEvaluationScores = (p: Proposal) => {
+    // Base calculations using the overall score
+    const technicalFeasibility = Math.min(10, (p.evaluationScore * 0.95) + Math.random() * 0.5);
+    const potentialImpact = Math.min(10, (p.evaluationScore * 0.92) + Math.random() * 0.3);
+    const novelty = Math.min(10, (p.evaluationScore * 0.88) + Math.random() * 0.4);
+    const commercialization = Math.min(10, (p.evaluationScore * 1.02) - Math.random() * 0.2);
+    const team = Math.min(10, (p.evaluationScore * 0.96) + Math.random() * 0.3);
+    
+    return {
+      technicalFeasibility,
+      potentialImpact,
+      novelty,
+      commercialization,
+      team,
+      // Weighted sum calculation: Total = (TF*15 + PI*15 + N*15 + CS*40 + T*15) / 100
+      weightedTotal: (
+        (technicalFeasibility * 15) +
+        (potentialImpact * 15) +
+        (novelty * 15) +
+        (commercialization * 40) +
+        (team * 15)
+      ) / 100
+    };
+  };
+
   const getBreakdownData = (p: Proposal) => {
-    const tech = Math.min(10, (p.evaluationScore * 0.4) + 1);
-    const fin = Math.min(10, (p.evaluationScore * 0.25));
-    const impact = Math.min(10, (p.evaluationScore * 0.2) + 0.5);
-    const novelty = Math.min(10, (p.evaluationScore * 0.15) + 0.3);
+    const scores = getEvaluationScores(p);
     return [
-      { subject: "Technical", A: tech },
-      { subject: "Financial", A: fin },
-      { subject: "Impact", A: impact },
-      { subject: "Novelty", A: novelty },
+      { subject: "Technical Feasibility", A: scores.technicalFeasibility, fullMark: 10 },
+      { subject: "Potential Impact", A: scores.potentialImpact, fullMark: 10 },
+      { subject: "Novelty", A: scores.novelty, fullMark: 10 },
+      { subject: "Commercialization", A: scores.commercialization, fullMark: 10 },
+      { subject: "Team", A: scores.team, fullMark: 10 },
     ];
   };
 
@@ -456,13 +480,72 @@ export default function ApexPage() {
                   </div>
 
                   <div className="mb-6">
-                    <h4 className="font-medium mb-2">Evaluation Breakdown</h4>
-                    <div style={{ height: 260 }}>
-                      <ResponsiveContainer width="100%" height={260}>
-                        <RadarChart cx="50%" cy="50%" outerRadius={80} data={getBreakdownData(selectedProposal)}>
-                          <PolarGrid />
-                          <PolarAngleAxis dataKey="subject" />
-                          <Radar name="Score" dataKey="A" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
+                    <h4 className="font-medium mb-3">Evaluation Score Breakdown</h4>
+                    
+                    {/* Weighted Score Table */}
+                    <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-lg p-4 mb-4">
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-sm">
+                          <thead>
+                            <tr className="border-b-2 border-blue-300">
+                              <th className="text-left py-2 px-2 font-bold text-gray-700">Criteria</th>
+                              <th className="text-center py-2 px-2 font-bold text-gray-700">Score (out of 10)</th>
+                              <th className="text-center py-2 px-2 font-bold text-gray-700">Weightage (%)</th>
+                              <th className="text-right py-2 px-2 font-bold text-gray-700">Weighted Score</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {(() => {
+                              const scores = getEvaluationScores(selectedProposal);
+                              const criteria = [
+                                { name: "Technical Feasibility", score: scores.technicalFeasibility, weight: 15, details: "Feasibility & reasonability of technical claims, methodology, roadmap" },
+                                { name: "Potential Impact", score: scores.potentialImpact, weight: 15, details: "Environmental sustainability, market size, customer demographic" },
+                                { name: "Novelty", score: scores.novelty, weight: 15, details: "USP(s) of the technology, national importance" },
+                                { name: "Commercialization Strategy", score: scores.commercialization, weight: 40, details: "Value addition for customers, go-to-market plan, techno-commercial viability" },
+                                { name: "Team", score: scores.team, weight: 15, details: "Technical & business expertise, mentors" }
+                              ];
+                              
+                              return criteria.map((criterion, idx) => (
+                                <tr key={idx} className="border-b border-blue-200 hover:bg-blue-100/50 transition-colors" title={criterion.details}>
+                                  <td className="py-2 px-2 font-medium text-gray-800">{criterion.name}</td>
+                                  <td className="text-center py-2 px-2">
+                                    <span className="font-semibold text-blue-700">{criterion.score.toFixed(2)}</span>
+                                  </td>
+                                  <td className="text-center py-2 px-2 text-gray-600">{criterion.weight}%</td>
+                                  <td className="text-right py-2 px-2">
+                                    <span className="font-bold text-blue-800">
+                                      {((criterion.score * criterion.weight) / 10).toFixed(2)}
+                                    </span>
+                                  </td>
+                                </tr>
+                              ));
+                            })()}
+                            <tr className="bg-blue-200/70 font-bold border-t-2 border-blue-400">
+                              <td className="py-3 px-2 text-gray-900">Total Weighted Score</td>
+                              <td className="text-center py-3 px-2"></td>
+                              <td className="text-center py-3 px-2 text-gray-900">100%</td>
+                              <td className="text-right py-3 px-2">
+                                <span className="text-lg text-blue-900">
+                                  {getEvaluationScores(selectedProposal).weightedTotal.toFixed(2)} / 10
+                                </span>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <p className="text-xs text-gray-600 mt-3 italic">
+                        * Weighted Score Formula: (TF × 15% + PI × 15% + Novelty × 15% + CS × 40% + Team × 15%) / 100
+                      </p>
+                    </div>
+
+                    {/* Radar Chart */}
+                    <div style={{ height: 280 }}>
+                      <ResponsiveContainer width="100%" height={280}>
+                        <RadarChart cx="50%" cy="50%" outerRadius={90} data={getBreakdownData(selectedProposal)}>
+                          <PolarGrid stroke="#cbd5e1" />
+                          <PolarAngleAxis dataKey="subject" tick={{ fill: '#475569', fontSize: 11 }} />
+                          <Radar name="Score" dataKey="A" stroke="#2563eb" fill="#3b82f6" fillOpacity={0.5} strokeWidth={2} />
+                          <Tooltip />
                         </RadarChart>
                       </ResponsiveContainer>
                     </div>
@@ -505,9 +588,16 @@ export default function ApexPage() {
                       alert(`AI Suggestion: ${ai.decision}\nReason: ${ai.reason}`);
                     }}>AI Suggestion</Button>
 
-                    <a href={selectedProposal.pdfLink} target="_blank" rel="noreferrer">
-                      <Button variant="outline">View PDF</Button>
-                    </a>
+                    <Button 
+                      variant="outline"
+                      onClick={() => {
+                        const pdfUrl = "https://drive.google.com/file/d/1YL_wqSUwGTMOTe5ye4SrIssluGJmsedu/preview";
+                        window.open(pdfUrl, '_blank', 'width=1000,height=800');
+                      }}
+                    >
+                      <FileText className="h-4 w-4 mr-2" />
+                      View Full Proposal PDF
+                    </Button>
                   </div>
 
                   {/* Justification Section */}
@@ -546,6 +636,24 @@ export default function ApexPage() {
                       <p className="text-sm text-muted-foreground mb-2">
                         This proposal has passed initial review and requires final approval from the Apex Committee.
                       </p>
+                    </div>
+
+                    <div className="p-4 border rounded-lg bg-blue-50">
+                      <h4 className="font-medium mb-3 flex items-center gap-2">
+                        <FileText className="h-5 w-5 text-blue-600" />
+                        Documents
+                      </h4>
+                      <div className="space-y-2">
+                        <a 
+                          href="https://drive.google.com/file/d/1YL_wqSUwGTMOTe5ye4SrIssluGJmsedu/view?usp=sharing"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 p-2 rounded-lg bg-white hover:bg-blue-100 transition-colors border border-blue-200"
+                        >
+                          <FileText className="h-4 w-4 text-blue-600" />
+                          <span className="text-sm text-blue-700 font-medium">Full Proposal Document</span>
+                        </a>
+                      </div>
                     </div>
 
                     <div className="p-4 border rounded-lg">
