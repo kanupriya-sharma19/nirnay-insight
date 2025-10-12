@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect , useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -9,12 +9,13 @@ import { Progress } from "@/components/ui/progress";
 import { Bot, FileText, MessageSquare, Save, Send, Shield } from "lucide-react";
 import { GovtHeader } from "@/components/GovtHeader";
 import { GovtFooter } from "@/components/GovtFooter";
-import LoadingAnimation from "@/components/animation/Loader";
+// import LoadingAnimation from "@/components/animation/Loader";
 import { toast } from "sonner";
 import ChatbotPopup from "@/pages/ChatbotPopup";
 import AISuggestedProposals from "./Suggestions";
 import AISummary from "./AISummary";
 import AnimatedScoreCard from "./AnimatedScorecard";
+import EvaluationLoader from "@/components/animation/EvaluationLoader";
 
 interface EvaluationScores {
   technicalFeasibility: number;
@@ -83,9 +84,11 @@ export default function NirnayEvaluation() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
-  const [isExplanationLoading, setIsExplanationLoading] = useState(true);
+  // const [isEvaluationLoading, setIsEvaluationLoading] = useState(false);
   const [showChatbot, setShowChatbot] = useState(false);
   const [evaluationNotes, setEvaluationNotes] = useState("");
+  const [isVisible, setIsVisible] = useState(false);
+  const evaluationRef = useRef(null);
 
   // Mock proposal data
   const proposalData: ProposalData = {
@@ -102,12 +105,12 @@ export default function NirnayEvaluation() {
 
   // Generate evaluation scores
   const getEvaluationScores = (): EvaluationScores => {
-    const technicalFeasibility = 9.2;
-    const potentialImpact = 8.8;
-    const novelty = 8.5;
-    const commercialization = 9.0;
-    const financialFeasibility = 8.6;
-    const team = 9.1;
+    const technicalFeasibility = 9.5;
+    const potentialImpact = 9.4;
+    const novelty = 9.1;
+    const commercialization = 9.8;
+    const financialFeasibility = 9;
+    const team = 8.9;
 
     return {
       technicalFeasibility,
@@ -186,18 +189,23 @@ export default function NirnayEvaluation() {
   };
 
   useEffect(() => {
-    const timer = setTimeout(() => {
+    const timer1 = setTimeout(() => {
       setIsLoading(false);
+      // setIsEvaluationLoading(true);
     }, 2000);
-    return () => clearTimeout(timer);
-  }, []);
+  //   const timer2 = setTimeout(() => {
+  //     setIsEvaluationLoading(false);
+  // }, 3000);
+    return () => {clearTimeout(timer1) 
+    // clearTimeout(timer2);
+  }}, []);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsExplanationLoading(false);
-    }, 2000);
-    return () => clearTimeout(timer);
-  }, []);
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     setIsEvaluationLoading(false);
+  //   }, 2000);
+  //   return () => clearTimeout(timer);
+  // }, []);
 
   const handleSaveEvaluation = () => {
     toast.success("Evaluation notes saved successfully!");
@@ -213,10 +221,14 @@ export default function NirnayEvaluation() {
       navigate("/naccer");
     }, 1500);
   };
-
+  
   if (isLoading) {
-    return <LoadingAnimation />;
+    return <EvaluationLoader />;
   }
+  // if (isEvaluationLoading) {
+  //   return <LoadingAnimation />;
+  // }
+
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -225,13 +237,7 @@ export default function NirnayEvaluation() {
       <main className="flex-1 container mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-6">
-          <Button
-            variant="outline"
-            onClick={() => navigate("/naccer")}
-            className="mb-4"
-          >
-            ← Back to Proposals
-          </Button>
+          
 
           <div className="bg-white rounded-lg shadow-sm border p-6">
             <h1 className="text-2xl font-bold text-primary mb-2">{proposalData.title}</h1>
@@ -258,12 +264,12 @@ export default function NirnayEvaluation() {
             <div className="mb-6">
               <h4 className="font-medium mb-3">AI Evaluation Explanation</h4>
 
-              {isExplanationLoading ? (
+              {isLoading ? (
                 <div className="flex flex-col items-center justify-center py-10 space-y-3">
                   <div className="relative">
                     <Bot className="h-10 w-10 text-primary animate-spin-slow" />
                   </div>
-                  <p className="text-sm text-muted-foreground">AI is analyzing proposal...</p>
+                  <p className="text-sm text-muted-foreground">AI is analyzing proposal</p>
                 </div>
               ) : (
                 <>
@@ -449,13 +455,31 @@ export default function NirnayEvaluation() {
                     <FileText className="h-4 w-4 mr-2" />
                     View Full Proposal
                   </Button>
+                    
+                    
                 </CardContent>
               </Card>
+                      
             </div>
           </div>
         </div>
       </main>
       <AISuggestedProposals />
+            <div className="w-full h-32 flex mb-10">
+  {/* Left Half - Empty */}
+  <div className="w-1/2 h-full"></div>
+  
+  {/* Right Half - Button More to the Right */}
+  <div className="w-1/2 h-full flex justify-end items-center pr-20">
+    <Button
+      variant="outline"
+      onClick={() => navigate("/naccer")}
+      className="bg-slate-800 text-white hover:bg-slate-700"
+    >
+      ← Back to Proposals
+    </Button>
+  </div>
+</div>
 
       {showChatbot && (
         <ChatbotPopup

@@ -3,7 +3,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Bot } from "lucide-react";
 
-const AnimatedScoreCard = ({ targetScore = 8.24 }) => {
+const AnimatedScoreCard = ({ targetScore = 9.34 }) => {
   const [score, setScore] = useState(0);
   const [progress, setProgress] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
