@@ -14,52 +14,54 @@ import {
   Target,
   Award
 } from "lucide-react";
+import {ReviewImpactChart} from "@/components/ImplementionChart";
 import { BarChart, Bar, PieChart as RePieChart, Pie, Cell, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { useNavigate } from "react-router-dom";
 
 export default function Analytics() {
   const navigate = useNavigate();
 
-  const thrustAreaData = [
-    { name: "Productivity", value: 28, color: "#4F46E5" },
-    { name: "Safety & Health", value: 22, color: "#DC2626" },
-    { name: "Clean Coal", color: "#14B8A6", value: 18 },
-    { name: "Innovation", value: 16, color: "#2563EB" },
-    { name: "Waste to Wealth", value: 10, color: "#06B6D4" },
-    { name: "Exploration", value: 6, color: "#0EA5E9" },
-  ];
+const thrustAreaData = [
+  { name: "Clean Coal", value: 8, color: "#ccfbf1" }, // teal-100
+  { name: "Coal Beneficiation", value: 6, color: "#dbeafe" }, // blue-100
+  { name: "Safety & Environment", value: 5, color: "#fee2e2" }, // red-100
+  { name: "Productivity", value: 4, color: "#e0e7ff" }, // indigo-100
+  { name: "Waste to Wealth", value: 3, color: "#dcfce7" }, // green-100
+  { name: "Exploration", value: 2, color: "#fef3c7" }, // amber-100
+  { name: "Innovation", value: 1, color: "#f3e8ff" }, // purple-100
+];
 
-  const statusData = [
-    { name: "Approved", value: 45, color: "#16A34A" },
-    { name: "Under Review", value: 30, color: "#F59E0B" },
-    { name: "Revision Required", value: 15, color: "#EAB308" },
-    { name: "Rejected", value: 10, color: "#DC2626" },
-  ];
+const statusData = [
+  { name: "Approved", value: 35, color: "#16A34A" }, 
+  { name: "Under Review", value: 25, color: "#F59E0B" },
+  { name: "Revision Required", value: 20, color: "#EAB308" },
+  { name: "Rejected", value: 10, color: "#DC2626" },
+];
+const trendData = [
+  { month: "Apr", submissions: 20, approved: 12 }, // mostly manual
+  { month: "May", submissions: 18, approved: 11 },
+  { month: "Jun", submissions: 22, approved: 14 },
+  { month: "Jul", submissions: 21, approved: 13 },
+  { month: "Aug", submissions: 24, approved: 16 },
+  { month: "Sep", submissions: 23, approved: 17 }, // first system-assisted improvements
+];
 
-  const trendData = [
-    { month: "Jan", submissions: 12, approved: 8 },
-    { month: "Feb", submissions: 15, approved: 10 },
-    { month: "Mar", submissions: 18, approved: 12 },
-    { month: "Apr", submissions: 22, approved: 15 },
-    { month: "May", submissions: 20, approved: 14 },
-    { month: "Jun", submissions: 25, approved: 18 },
-  ];
 
-  const institutionData = [
-    { name: "IIT Delhi", value: 25 },
-    { name: "IIT Kharagpur", value: 22 },
-    { name: "IIT BHU", value: 18 },
-    { name: "NIT Rourkela", value: 15 },
-    { name: "ISM Dhanbad", value: 12 },
-    { name: "Others", value: 8 },
-  ];
 
-  const stats = [
-    { label: "Total Proposals", value: "156", change: "+12%", icon: FileText, color: "text-accent" },
-    { label: "Approved", value: "70", change: "+8%", icon: CheckCircle, color: "text-success" },
-    { label: "Success Rate", value: "45%", change: "+5%", icon: Award, color: "text-royal" },
-    { label: "Avg. Review Time", value: "28 days", change: "-3 days", icon: Clock, color: "text-warning" },
-  ];
+const institutionData = [
+  { name: "IIT (ISM) Dhanbad", value: 30 },
+  { name: "IIT Kharagpur", value: 25 },
+  { name: "IIT Delhi", value: 20 },
+  { name: "NEERI (Nagpur)", value: 15 },
+  { name: "Others", value: 10 },
+];
+const stats = [
+  { label: "Total Proposals", value: "145", change: "+10%", icon: FileText, color: "text-accent" },
+  { label: "Approved", value: "", change: "+7%", icon: CheckCircle, color: "text-success" },
+  { label: "Success Rate", value: "88%", change: "+20%", icon: Award, color: "text-royal" },
+  { label: "Avg. Review Time", value: "10 days", change: "-20 days", icon: Clock, color: "text-warning" },
+];
+
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -71,7 +73,9 @@ export default function Analytics() {
           <h1 className="text-4xl font-bold text-primary mb-2">Analytics Dashboard</h1>
           <p className="text-muted-foreground">Comprehensive insights into R&D proposal evaluations</p>
         </div>
+       
 
+ 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           {stats.map((stat, index) => (
@@ -158,8 +162,27 @@ export default function Analytics() {
             </CardContent>
           </Card>
         </div>
-
-        {/* Trend Analysis */}
+ <Card className="border-2 mb-8">
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <Users className="h-5 w-5 text-accent" />
+              <CardTitle>Top Institutions</CardTitle>
+            </div>
+            <CardDescription>Proposal submissions by institution</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={institutionData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Bar dataKey="value" fill="#F59E0B" radius={[8, 8, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+        {/* // Trend Analysis */}
         <Card className="border-2 mb-8">
           <CardHeader>
             <div className="flex items-center gap-2">
@@ -181,29 +204,11 @@ export default function Analytics() {
               </LineChart>
             </ResponsiveContainer>
           </CardContent>
-        </Card>
+        </Card> 
 
         {/* Institution Performance */}
-        <Card className="border-2">
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Users className="h-5 w-5 text-accent" />
-              <CardTitle>Top Institutions</CardTitle>
-            </div>
-            <CardDescription>Proposal submissions by institution</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={institutionData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="value" fill="#2563EB" radius={[8, 8, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
+       
+         <ReviewImpactChart/>
       </main>
 
       <GovtFooter />

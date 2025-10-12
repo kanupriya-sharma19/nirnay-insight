@@ -6,12 +6,16 @@ const LoadingAnimation = () => {
   return (
     <div
       style={{
-        height: "100vh", // full viewport height
-        width: "100vw",  // full viewport width
-        backgroundColor: "white",
-        display: "flex", // activate flexbox
-        justifyContent: "center", // center horizontally
-        alignItems: "center", // center vertically
+        position: "fixed",      
+        top: 0,
+        left: 0,
+        width: "100vw",
+        height: "100vh",
+        backgroundColor: "white", 
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        zIndex: 9999,           
       }}
     >
       <div style={{ width: 450, height: 450 }}>

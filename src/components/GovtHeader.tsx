@@ -170,10 +170,10 @@ export const GovtHeader = ({
                     Proposals
                   </a>
                   <a
-                    href="#"
+                    href="/analytics"
                     className="text-foreground hover:text-accent transition font-medium"
                   >
-                    Forms
+                    Analytics
                   </a>
           
                   <a

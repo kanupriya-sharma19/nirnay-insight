@@ -26,6 +26,7 @@ import {
   Video,
   Bell,
   TrendingUp,
+  Target,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -47,6 +48,7 @@ import {
   Bar,
   XAxis,
   YAxis,
+  PieChart,
   Tooltip,
   ResponsiveContainer,
   RadarChart,
@@ -54,10 +56,21 @@ import {
   PolarAngleAxis,
   Radar,
 } from "recharts";
+import {
+  PieChart as RePieChart,
+  Pie,
+  Cell,
+  LineChart,
+  Line,
+  CartesianGrid,
+  Legend,
+} from "recharts";
 
 // Upgraded Dashboard component
 import { Shield, Recycle, Zap, Factory, Search, Lightbulb } from "lucide-react"; // make sure to import used icons
 import LoadingAnimation from "@/components/animation/Loader";
+
+
 
 const thrustAreas = {
   "Productivity Improvement": {
@@ -92,10 +105,26 @@ const thrustAreas = {
 
 export default function Dashboard() {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const getThrustColor = (area: string) =>
     thrustAreas[area]?.color || "bg-primary";
   const getThrustIcon = (area: string) => thrustAreas[area]?.icon || FileText;
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
 
+    setLoading(true);
+
+    // Simulate upload delay (replace this with your actual upload logic)
+    setTimeout(() => {
+      setLoading(false);
+      navigate("/naccer");
+    }, 2000);
+  };
+
+  const triggerFileInput = () => {
+    document.getElementById("fileInput").click();
+  };
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -349,8 +378,11 @@ export default function Dashboard() {
   const [showJustification, setShowJustification] = useState(false);
   const [selectedAction, setSelectedAction] = useState<string>("");
   const [justification, setJustification] = useState("");
-    const [showChatbot, setShowChatbot] = useState(false);
-    const [aiResponse, setAiResponse] = useState<{ decision: string; reason: string } | null>(null);
+  const [showChatbot, setShowChatbot] = useState(false);
+  const [aiResponse, setAiResponse] = useState<{
+    decision: string;
+    reason: string;
+  } | null>(null);
 
   // Calculate weighted scores based on evaluation criteria
   const getEvaluationScores = (p: any) => {
@@ -591,12 +623,12 @@ export default function Dashboard() {
       />
 
       <main className="flex-1 container mx-auto px-4 py-8">
-         {showChatbot && (
-  <ChatbotPopup
-    isChatOpen={showChatbot}
-    onClose={() => setShowChatbot(false)}
-  />
-)}
+        {showChatbot && (
+          <ChatbotPopup
+            isChatOpen={showChatbot}
+            onClose={() => setShowChatbot(false)}
+          />
+        )}
         {/* Welcome Banner */}
         <div className="gradient-primary rounded-2xl p-8 mb-8 text-primary-foreground shadow-glow">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
@@ -608,17 +640,31 @@ export default function Dashboard() {
                 Track your proposals and manage R&D projects efficiently
               </p>
             </div>
-            <Button
-              size="lg"
-              className="bg-white text-blue-700 hover:bg-blue-50 shadow-lg"
-            >
-              <Upload className="mr-2 h-5 w-5" />
-              Upload Research Proposal
-            </Button>
+            {loading && <LoadingAnimation />}
+
+            <input
+              type="file"
+              id="fileInput"
+              accept=".zip,.rar,.pdf,.docx,.txt"
+              className="hidden"
+              onChange={handleFileUpload}
+            />
+
+            {!loading && (
+              <Button
+                size="lg"
+                onClick={triggerFileInput}
+                className="bg-white text-blue-700 hover:bg-blue-50 shadow-lg"
+              >
+                <Upload className="mr-2 h-5 w-5" />
+                Upload Research Proposal
+              </Button>
+            )}
 
             {renderStatusSummary()}
           </div>
         </div>
+
         {/* Filter Dropdowns */}
         <div className="bg-white rounded-lg shadow-sm border p-6 mb-6">
           <div className="flex flex-col md:flex-row gap-4">
@@ -1322,8 +1368,8 @@ export default function Dashboard() {
                       .
                     </p>
                   </div>
-                      
-                        {/* {showChatbot && (
+
+                  {/* {showChatbot && (
                                 <ChatbotPopup
                                   isChatOpen={showChatbot}
                                   onClose={() => setShowChatbot(false)}
@@ -1331,17 +1377,15 @@ export default function Dashboard() {
                               )} */}
 
                   <div className="flex gap-3 mb-4">
-                     <Button
+                    <Button
                       onClick={() => {
                         const ai = getAiDecision(selectedProposal);
                         setAiResponse(ai);
                         setShowChatbot(true);
-
                       }}
                     >
                       AI Suggestion
                     </Button>
-                    
 
                     <Button
                       variant="outline"
