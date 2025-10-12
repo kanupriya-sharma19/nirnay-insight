@@ -18,15 +18,7 @@ import ChatbotPopup from "@/pages/ChatbotPopup";
 import {
   FileText,
   Upload,
-  Filter,
-  Clock,
-  CheckCircle,
-  AlertCircle,
-  Plus,
-  Video,
-  Bell,
-  TrendingUp,
-  Target,
+  Filter
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -44,31 +36,17 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  PieChart,
-  Tooltip,
   ResponsiveContainer,
   RadarChart,
   PolarGrid,
   PolarAngleAxis,
   Radar,
 } from "recharts";
-import {
-  PieChart as RePieChart,
-  Pie,
-  Cell,
-  LineChart,
-  Line,
-  CartesianGrid,
-  Legend,
-} from "recharts";
 
 // Upgraded Dashboard component
 import { Shield, Recycle, Zap, Factory, Search, Lightbulb } from "lucide-react"; // make sure to import used icons
 import LoadingAnimation from "@/components/animation/Loader";
+import ProposalsPage from "./Proposals";
 
 
 
@@ -383,6 +361,7 @@ export default function Dashboard() {
     decision: string;
     reason: string;
   } | null>(null);
+  const [showProposalsPage, setShowProposalsPage] = useState(false);
 
   // Calculate weighted scores based on evaluation criteria
   const getEvaluationScores = (p: any) => {
@@ -666,57 +645,80 @@ export default function Dashboard() {
         </div>
 
         {/* Filter Dropdowns */}
-        <div className="bg-white rounded-lg shadow-sm border p-6 mb-6">
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="flex-1">
-              <div className="relative">
+        
+          <div className="bg-white rounded-lg shadow-sm border p-6 mb-6">
+            <div className="flex flex-col md:flex-row items-center gap-4">
+              {/* Search Bar */}
+              <div className="relative w-full md:w-64">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                 <Input
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search proposals by title or submitter..."
+                  placeholder="Search by title or submitter..."
                   className="pl-10"
                 />
               </div>
+
+              {/* Evaluation Filter Buttons */}
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setShowProposalsPage(false)}
+                  className={`px-4 py-2 rounded-full border text-sm font-medium transition ${!showProposalsPage
+                      ? "bg-green-100 text-green-700 border-green-300"
+                      : "bg-gray-50 text-gray-600 border-gray-300 hover:bg-gray-100"
+                    }`}
+                >
+                  Evaluated
+                </button>
+                <button
+                  onClick={() => setShowProposalsPage(true)}
+                  className={`px-4 py-2 rounded-full border text-sm font-medium transition ${showProposalsPage
+                      ? "bg-red-100 text-red-700 border-red-300"
+                      : "bg-gray-50 text-gray-600 border-gray-300 hover:bg-gray-100"
+                    }`}
+                >
+                  Not Evaluated
+                </button>
+              </div>
+
+              {/* Dropdown Filters */}
+              <Select
+                onValueChange={(val) => {
+                  setFilterType(val);
+                  setFilterValue("All");
+                }}
+                value={filterType}
+              >
+                <SelectTrigger className="w-full md:w-44">
+                  <Filter className="h-4 w-4 mr-2" />
+                  <SelectValue placeholder="Filter Type" />
+                </SelectTrigger>
+                <SelectContent>
+                  {Object.keys(filterOptions).map((key) => (
+                    <SelectItem key={key} value={key}>
+                      {key}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              <Select onValueChange={setFilterValue} value={filterValue}>
+                <SelectTrigger className="w-full md:w-52">
+                  <Filter className="h-4 w-4 mr-2" />
+                  <SelectValue placeholder="Select Value" />
+                </SelectTrigger>
+                <SelectContent>
+                  {filterOptions[filterType].map((val) => (
+                    <SelectItem key={val} value={val}>
+                      {val}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
-
-            <Select
-              onValueChange={(val: string) => {
-                setFilterType(val);
-                setFilterValue("All");
-              }}
-              value={filterType}
-            >
-              <SelectTrigger className="w-full md:w-48">
-                <Filter className="h-4 w-4 mr-2" />
-                <SelectValue placeholder="Select Filter Type" />
-              </SelectTrigger>
-              <SelectContent>
-                {Object.keys(filterOptions).map((key) => (
-                  <SelectItem key={key} value={key}>
-                    {key}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-
-            <Select onValueChange={setFilterValue} value={filterValue}>
-              <SelectTrigger className="w-full md:w-56">
-                <Filter className="h-4 w-4 mr-2" />
-                <SelectValue placeholder="Select Value" />
-              </SelectTrigger>
-              <SelectContent>
-                {filterOptions[filterType].map((val) => (
-                  <SelectItem key={val} value={val}>
-                    {val}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
           </div>
-        </div>
+        
 
-        {/* Proposals List */}
         <Card className="border-2">
           <CardHeader>
             <CardTitle className="text-2xl">Proposals</CardTitle>
@@ -724,100 +726,107 @@ export default function Dashboard() {
               Track and manage your research proposals
             </CardDescription>
           </CardHeader>
+
           <CardContent>
-            <div className="space-y-4">
-              {filteredProposals.length === 0 ? (
-                <p className="text-muted-foreground text-center py-4">
-                  No proposals match the selected filter.
-                </p>
-              ) : (
-                filteredProposals.map((proposal) => (
-                  <div
-                    key={proposal.id}
-                    className="p-6 rounded-xl border-2 hover:border-accent transition-colors gradient-card"
-                  >
-                    <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-                      <div className="flex-1">
-                        <div className="flex items-start gap-3 mb-3">
-                          <div className="p-2 bg-accent/10 rounded-lg">
-                            {React.createElement(
-                              getThrustIcon(proposal.thrustArea),
-                              { className: "h-5 w-5 text-accent" }
-                            )}
-                          </div>
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-1">
-                              <h3 className="font-bold text-lg text-primary">
-                                {proposal.title}
-                              </h3>
+            {!showProposalsPage ? (
+              // 🔹 Proposal List Section
+              <div className="space-y-4">
+                {filteredProposals.length === 0 ? (
+                  <p className="text-muted-foreground text-center py-4">
+                    No proposals match the selected filter.
+                  </p>
+                ) : (
+                  filteredProposals.map((proposal) => (
+                    <div
+                      key={proposal.id}
+                      className="p-6 rounded-xl border-2 hover:border-accent transition-colors gradient-card"
+                    >
+                      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                        <div className="flex-1">
+                          <div className="flex items-start gap-3 mb-3">
+                            <div className="p-2 bg-accent/10 rounded-lg">
+                              {React.createElement(
+                                getThrustIcon(proposal.thrustArea),
+                                { className: "h-5 w-5 text-accent" }
+                              )}
                             </div>
-                            <p className="text-sm text-muted-foreground mb-1">
-                              • {proposal.id} • {proposal.instituteName}
-                            </p>
-                            <div className="flex flex-wrap gap-2 mb-3">
-                              <Badge
-                                className={`govt-badge ${getThrustColor(
-                                  proposal.thrustArea
-                                )}`}
-                              >
-                                {proposal.thrustArea}
-                              </Badge>
-                              <Badge
-                                className={`govt-badge ${getStatusBadge(
-                                  proposal.status
-                                )}`}
-                              >
-                                {proposal.status}
-                              </Badge>
-                              <Badge className="govt-badge bg-primary text-white">
-                                Score:{" "}
-                                {proposal.reviewer === "Dr. Sharma"
-                                  ? "9.33"
-                                  : proposal.reviewer === "Dr. Patel"
-                                  ? "3.65"
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2 mb-1">
+                                <h3 className="font-bold text-lg text-primary">
+                                  {proposal.title}
+                                </h3>
+                              </div>
+                              <p className="text-sm text-muted-foreground mb-1">
+                                • {proposal.id} • {proposal.instituteName}
+                              </p>
+                              <div className="flex flex-wrap gap-2 mb-3">
+                                <Badge
+                                  className={`govt-badge ${getThrustColor(
+                                    proposal.thrustArea
+                                  )}`}
+                                >
+                                  {proposal.thrustArea}
+                                </Badge>
+                                <Badge
+                                  className={`govt-badge ${getStatusBadge(
+                                    proposal.status
+                                  )}`}
+                                >
+                                  {proposal.status}
+                                </Badge>
+                                <Badge className="govt-badge bg-primary text-white">
+                                  Score:{" "}
+                                  {proposal.reviewer === "Dr. Sharma"
+                                    ? "9.33"
+                                    : proposal.reviewer === "Dr. Patel"
+                                      ? "3.65"
+                                      : proposal.evaluationScore.toFixed(1)}
+                                  /10
+                                </Badge>
+                              </div>
+
+                              <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                                <span>Submitted: {proposal.submittedDate}</span>
+                                <span>•</span>
+                                <span>Reviewer: {proposal.reviewer}</span>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-2 mt-2">
+                            <span className="text-sm text-muted-foreground">
+                              Evaluation Score:
+                            </span>
+                            <span className="font-semibold text-primary">
+                              {proposal.reviewer === "Dr. Sharma"
+                                ? 9.33
+                                : proposal.reviewer === "Dr. Patel"
+                                  ? 3.65
                                   : proposal.evaluationScore.toFixed(1)}
-                                /10
-                              </Badge>
-                            </div>
-
-                            <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                              <span>Submitted: {proposal.submittedDate}</span>
-                              <span>•</span>
-                              <span>Reviewer: {proposal.reviewer}</span>
-                            </div>
+                              /10
+                            </span>
                           </div>
                         </div>
 
-                        <div className="flex items-center gap-2 mt-2">
-                          <span className="text-sm text-muted-foreground">
-                            Evaluation Score:
-                          </span>
-                          <span className="font-semibold text-primary">
-                            {proposal.reviewer === "Dr. Sharma"
-                              ? 9.33
-                              : proposal.reviewer === "Dr. Patel"
-                              ? 3.65
-                              : proposal.evaluationScore.toFixed(1)}
-                            /10
-                          </span>
+                        <div className="flex lg:flex-col gap-2 w-full lg:w-auto border-t lg:border-t-0 pt-4 lg:pt-0 ">
+                          <Button
+                            variant="outline"
+                            size="lg"
+                            className="bg-slate-800 text-white hover:bg-slate-500 shadow-lg transition"
+                            onClick={() => openDetails(proposal)}
+                          >
+                            View Details
+                          </Button>
                         </div>
-                      </div>
-
-                      <div className="flex lg:flex-col gap-2 w-full lg:w-auto border-t lg:border-t-0 pt-4 lg:pt-0 ">
-                        <Button
-                          variant="outline"
-                          size="lg"
-                          className="bg-slate-800 text-white hover:bg-slate-500 shadow-lg transition"
-                          onClick={() => openDetails(proposal)}
-                        >
-                          View Details
-                        </Button>
                       </div>
                     </div>
-                  </div>
-                ))
-              )}
-            </div>
+                  ))
+                )}
+              </div>
+            ) : (
+              // 🔹 Embedded ProposalsPage Section
+                <ProposalsPage />
+            )}
           </CardContent>
         </Card>
 
@@ -858,8 +867,8 @@ export default function Dashboard() {
                           {selectedProposal.reviewer === "Dr. Sharma"
                             ? 9.33
                             : selectedProposal.reviewer === "Dr. Patel"
-                            ? 3.65
-                            : selectedProposal.evaluationScore.toFixed(1) /
+                              ? 3.65
+                              : selectedProposal.evaluationScore.toFixed(1) /
                               10}{" "}
                           / 10
                         </Badge>
@@ -986,8 +995,8 @@ export default function Dashboard() {
                                   {selectedProposal.reviewer === "Dr. Sharma"
                                     ? "9.33"
                                     : selectedProposal.reviewer === "Dr. Patel"
-                                    ? "3.65"
-                                    : getEvaluationScores(
+                                      ? "3.65"
+                                      : getEvaluationScores(
                                         selectedProposal
                                       ).weightedTotal.toFixed(2)}{" "}
                                   / 10

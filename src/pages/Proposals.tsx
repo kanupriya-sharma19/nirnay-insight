@@ -3,8 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Calendar, User, Building2, Star, FileText } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import {GovtHeader} from "@/components/GovtHeader";
-import {GovtFooter} from "@/components/GovtFooter";
+
 import { useNavigate } from "react-router-dom";
 
 
@@ -15,25 +14,6 @@ const StatusBadge = ({ status }: { status: string }) => (
   </span>
 );
 
-
-
-// // Mock GovtHeader component
-// const GovtHeader = () => (
-//   <div className="bg-gradient-to-r from-orange-500 to-green-600 text-white py-4">
-//     <div className="container mx-auto px-4">
-//       <h1 className="text-2xl font-bold">NACCER - National AI Council</h1>
-//     </div>
-//   </div>
-// );
-
-// // Mock GovtFooter component
-// const GovtFooter = () => (
-//   <div className="bg-gray-800 text-white py-6 mt-12">
-//     <div className="container mx-auto px-4 text-center">
-//       <p className="text-sm">© 2024 Government of India. All rights reserved.</p>
-//     </div>
-//   </div>
-// );
 
 interface Proposal {
   id: number;
@@ -149,15 +129,10 @@ export default function ProposalsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <GovtHeader />
-      
-      <div className="container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Research Proposals</h1>
-          <p className="text-gray-600">Review and evaluate research proposals submitted to NACCER</p>
-        </div>
+    <div className="min-h-screen">
 
+      
+      <div className="container mx-auto px-4 ">
         <div className="space-y-4">
           {proposals.map((proposal) => (
             <Card key={proposal.id} className="hover:shadow-lg transition-shadow duration-200">
@@ -204,11 +179,11 @@ export default function ProposalsPage() {
                         variant="outline"
                         className="w-full bg-slate-800 text-white hover:bg-slate-500 shadow-lg transition"
                       >
-                        <FileText className="h-4 w-4 mr-2" />
-                        View Details
+                        <Star className="h-4 w-4 mr-2" />
+                        Evaluate using NIRNAY
                       </Button>
                       
-                      {proposal.needsEvaluation && (
+                      {/* {proposal.needsEvaluation && (
                         <Button 
                           onClick={() => handleEvaluate(proposal.id , proposal)}
                           className="w-full bg-slate-800 text-white hover:bg-slate-500 shadow-lg transition"
@@ -216,7 +191,7 @@ export default function ProposalsPage() {
                           <Star className="h-4 w-4 mr-2" />
                           Evaluate using NIRNAY
                         </Button>
-                      )}
+                      )} */}
                     </div>
                   </div>
                 </div>
@@ -349,7 +324,7 @@ export default function ProposalsPage() {
         </DialogContent>
       </Dialog>
 
-      <GovtFooter />
+
     </div>
   );
 }
