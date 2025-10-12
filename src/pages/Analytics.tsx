@@ -22,14 +22,15 @@ export default function Analytics() {
   const navigate = useNavigate();
 
 const thrustAreaData = [
-  { name: "Clean Coal", value: 8, color: "#ccfbf1" }, // teal-100
-  { name: "Coal Beneficiation", value: 6, color: "#dbeafe" }, // blue-100
-  { name: "Safety & Environment", value: 5, color: "#fee2e2" }, // red-100
-  { name: "Productivity", value: 4, color: "#e0e7ff" }, // indigo-100
-  { name: "Waste to Wealth", value: 3, color: "#dcfce7" }, // green-100
-  { name: "Exploration", value: 2, color: "#fef3c7" }, // amber-100
-  { name: "Innovation", value: 1, color: "#f3e8ff" }, // purple-100
+  { name: "Clean Coal", value: 8, color: "#14b8a6" }, // teal-500
+  { name: "Coal Beneficiation", value: 6, color: "#3b82f6" }, // blue-500
+  { name: "Safety", value: 5, color: "#ef4444" }, // red-500
+  { name: "Productivity", value: 4, color: "#6366f1" }, // indigo-500
+  { name: "Waste to Wealth", value: 3, color: "#22c55e" }, // green-500
+  { name: "Exploration", value: 2, color: "#f59e0b" }, // amber-500
+  { name: "Innovation", value: 1, color: "#a855f7" }, // purple-500
 ];
+
 
 const statusData = [
   { name: "Approved", value: 35, color: "#16A34A" }, 
@@ -57,7 +58,7 @@ const institutionData = [
 ];
 const stats = [
   { label: "Total Proposals", value: "145", change: "+10%", icon: FileText, color: "text-accent" },
-  { label: "Approved", value: "", change: "+7%", icon: CheckCircle, color: "text-success" },
+  { label: "Approved", value: "50", change: "+7%", icon: CheckCircle, color: "text-success" },
   { label: "Success Rate", value: "88%", change: "+20%", icon: Award, color: "text-royal" },
   { label: "Avg. Review Time", value: "10 days", change: "-20 days", icon: Clock, color: "text-warning" },
 ];
