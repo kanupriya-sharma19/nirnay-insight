@@ -533,6 +533,7 @@ export default function Dashboard() {
       reason: "Low evaluation score and feasibility concerns.",
     };
   };
+  
 
   const openDetails = (p: any) => {
     setSelectedProposal(p);
@@ -1393,7 +1394,7 @@ export default function Dashboard() {
                         setShowChatbot(true);
                       }}
                     >
-                      AI Suggestion
+                      Ask Nirnay 
                     </Button>
 
                     <Button

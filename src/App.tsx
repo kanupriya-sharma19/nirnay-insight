@@ -18,7 +18,7 @@ import UpdateFormPage from "./pages/UpdateForm";
 import ProposalsPage from "./pages/Proposals";
 
 // ✅ Import your new Evaluation page
-import EvaluationPage from "./pages/NirnayEvaluation";
+import EvaluationPage from "./pages/NirnayEvaluation.tsx";
 
 const queryClient = new QueryClient();
 
