@@ -47,12 +47,12 @@ export default function Proposals() {
   }, []);
 
   // Unevaluated proposals
-  const unevaluatedProposals: Proposal[] = [
+  const NotEvaluatedProposals: Proposal[] = [
     {
       id: "UE-2024-001",
       title: "Development of High-Capacity (500T) SAGES-III Goaf Edge Support System",
       thrustArea: "Safety & Environment",
-      status: "Unevaluated",
+      status: "Not Evaluated",
       submittedDate: "2024-12-15",
       instituteName: "IIT (ISM) Dhanbad",
       principalInvestigator: "Dr. Rajesh Kumar",
@@ -62,7 +62,7 @@ export default function Proposals() {
       id: "UE-2024-002",
       title: "AI-Based Coal Quality Prediction System",
       thrustArea: "Coal Beneficiation",
-      status: "Unevaluated",
+      status: "Not Evaluated",
       submittedDate: "2024-12-18",
       instituteName: "NIT Rourkela",
       principalInvestigator: "Dr. Anjali Verma",
@@ -72,7 +72,7 @@ export default function Proposals() {
       id: "UE-2024-003",
       title: "Advanced Methane Detection using Quantum Sensors",
       thrustArea: "Safety & Environment",
-      status: "Unevaluated",
+      status: "Not Evaluated",
       submittedDate: "2024-12-20",
       instituteName: "IIT Kharagpur",
       principalInvestigator: "Dr. Suresh Patel",
@@ -82,7 +82,7 @@ export default function Proposals() {
       id: "UE-2024-004",
       title: "Waste Coal to Energy Conversion Plant",
       thrustArea: "Waste to Wealth",
-      status: "Unevaluated",
+      status: "Not Evaluated",
       submittedDate: "2024-12-22",
       instituteName: "IIT Bombay",
       principalInvestigator: "Dr. Priya Sharma",
@@ -92,7 +92,7 @@ export default function Proposals() {
       id: "UE-2024-005",
       title: "Drone-Based Mine Surveying and Mapping",
       thrustArea: "Exploration",
-      status: "Unevaluated",
+      status: "Not Evaluated",
       submittedDate: "2024-12-25",
       instituteName: "IIT Delhi",
       principalInvestigator: "Dr. Amit Singh",
@@ -100,13 +100,13 @@ export default function Proposals() {
     }
   ];
 
-  const [proposals] = useState<Proposal[]>(unevaluatedProposals);
+  const [proposals] = useState<Proposal[]>(NotEvaluatedProposals);
   const [searchQuery, setSearchQuery] = useState("");
   const [filterType, setFilterType] = useState<string>("Status");
   const [filterValue, setFilterValue] = useState<string>("All");
 
   const filterOptions = {
-    Status: ["All", "Unevaluated"],
+    Status: ["All", "Not Evaluated"],
     "Thrust Area": [
       "All",
       "Productivity Improvement",
@@ -126,7 +126,7 @@ export default function Proposals() {
 
   const getStatusBadge = (status: string) => {
     const styles: Record<string, string> = {
-      "Unevaluated": "bg-yellow-300 text-black",
+      "Not Evaluated": "bg-yellow-300 text-black",
       "Under Review": "bg-blue-500 text-white",
       "Approved": "bg-green-500 text-white",
     };
@@ -135,19 +135,19 @@ export default function Proposals() {
 
   const renderStatusSummary = () => {
     const counts = {
-      Unevaluated: proposals.filter((p) => p.status === "Unevaluated").length,
+      NotEvaluated: proposals.filter((p) => p.status === "Not Evaluated").length,
     };
 
     return (
       <div className="flex flex-wrap gap-3 mb-6">
-        {Object.entries(counts).map(([status, count]) => (
+        {/* {Object.entries(counts).map(([status, count]) => (
           <Badge
             key={status}
             className={`px-8 py-4 text-sm ${getStatusBadge(status)}`}
           >
             {status}: {count}
           </Badge>
-        ))}
+        ))} */}
       </div>
     );
   };
@@ -181,7 +181,7 @@ export default function Proposals() {
     <div className="min-h-screen flex flex-col">
       {/* <GovtHeader /> */}
       
-      <main className="flex-1 container mx-auto px-4 py-8">
+      <main className="flex-1 container mx-auto px-0 py-0">
         {/* Welcome Banner */}
         {/* <div className="gradient-primary rounded-2xl p-8 mb-8 text-primary-foreground shadow-glow">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -247,11 +247,11 @@ export default function Proposals() {
         </div> */}
 
         {/* Proposals List */}
-        <Card className="border-2">
-          <CardHeader>
-            <CardTitle className="text-2xl">Unevaluated Proposals</CardTitle>
+        <Card className="border-0 my-0">
+          {/* <CardHeader>
+            <CardTitle className="text-2xl">Not Evaluated Proposals</CardTitle>
             <CardDescription>Click on a proposal to begin detailed evaluation</CardDescription>
-          </CardHeader>
+          </CardHeader> */}
           <CardContent>
             <div className="space-y-4">
               {filteredProposals.length === 0 ? (
