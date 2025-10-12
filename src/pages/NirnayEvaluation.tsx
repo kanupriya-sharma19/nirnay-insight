@@ -371,7 +371,7 @@ export default function NirnayEvaluation() {
             </Card>
 
             {/* Evaluation Notes */}
-            {/* <Card className="border-2 border-primary/20">
+            <Card className="border-2 border-primary/20">
               <CardHeader>
                 <CardTitle>Your Evaluation Notes</CardTitle>
                 <CardDescription>Add your comments and recommendations</CardDescription>
@@ -394,7 +394,7 @@ export default function NirnayEvaluation() {
                   </Button>
                 </div>
               </CardContent>
-            </Card> */}
+            </Card>
           </div>
 
           {/* Sidebar */}

@@ -167,15 +167,7 @@ const ChatbotPopup: React.FC<ChatbotPopupProps> = ({ isChatOpen, onClose }) => {
       >
         {/* Header */}
         <div
-          style={{
-            backgroundColor: "#004AAD",
-            color: "#fff",
-            padding: "12px 16px",
-            fontWeight: "bold",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
+          className="bg-slate-800 text-white px-4 py-3 font-bold flex justify-between items-center"
         >
           Nirnay Assistant 🤖
           <Dialog.Close
@@ -273,14 +265,7 @@ const ChatbotPopup: React.FC<ChatbotPopupProps> = ({ isChatOpen, onClose }) => {
           />
           <button
             onClick={() => handleSendMessage(inputText)}
-            style={{
-              padding: "10px 16px",
-              borderRadius: 20,
-              border: "none",
-              backgroundColor: "#004AAD",
-              color: "#fff",
-              cursor: "pointer",
-            }}
+            className="px-4 py-2.5 rounded-[20px] bg-slate-800 text-white border-0 cursor-pointer"
           >
             Send
           </button>
