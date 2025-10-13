@@ -112,26 +112,26 @@ export default function Dashboard() {
 
   // sample proposals extended with new fields
   const proposals = [
-    {
-      id: "UE-2024-001",
-      title: "Development of High-Capacity (500T) SAGES-III Goaf Edge Support System",
-      thrustArea: "Safety & Environment",
-      status: "Unevaluated",
-      submittedDate: "2024-12-15",
-      evaluationScore: 8.33,
-      progress: 83.3,
-      reviewer: "Dr. Sharma",
-      instituteName: "IIT (ISM) Dhanbad",
-      pdfLink: "/static/proposals/PRO-2024-002.pdf",
-      financialBreakdown: {
-        requested: 30_00_000,
-        estimatedROIpercent: 20,
-        previousCost: 25_00_000,
-      },
-      subtopics: ["IoT sensors", "Energy optimization"],
-      aiInsights:
-        "Technical feasibility is good; scale-up cost needs attention. The proposed solution is highly beneficial for the coal industry, offering improved operational efficiency, safety, and cost optimization.",
-    },
+    // {
+    //   id: "UE-2024-001",
+    //   title: "Development of High-Capacity (500T) SAGES-III Goaf Edge Support System",
+    //   thrustArea: "Safety & Environment",
+    //   status: "Unevaluated",
+    //   submittedDate: "2024-12-15",
+    //   evaluationScore: 8.33,
+    //   progress: 83.3,
+    //   reviewer: "Dr. Sharma",
+    //   instituteName: "IIT (ISM) Dhanbad",
+    //   pdfLink: "/static/proposals/PRO-2024-002.pdf",
+    //   financialBreakdown: {
+    //     requested: 30_00_000,
+    //     estimatedROIpercent: 20,
+    //     previousCost: 25_00_000,
+    //   },
+    //   subtopics: ["IoT sensors", "Energy optimization"],
+    //   aiInsights:
+    //     "Technical feasibility is good; scale-up cost needs attention. The proposed solution is highly beneficial for the coal industry, offering improved operational efficiency, safety, and cost optimization.",
+    // },
     {
       id: "CC-2024-002",
       title: "Sustainable Mining Practices using IoT",

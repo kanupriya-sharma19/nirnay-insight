@@ -96,7 +96,7 @@ export default function NirnayEvaluation() {
     title: "Development of High-Capacity (500T) SAGES-III Goaf Edge Support System",
     thrustArea: "Safety & Environment",
     instituteName: "IIT (ISM) Dhanbad",
-    principalInvestigator: "Dr. Rajesh Kumar",
+    principalInvestigator: "Prof. U. K. Singh",
     submittedDate: "2024-12-15",
     requestedAmount: 296_00_000,
     estimatedROI: 18,

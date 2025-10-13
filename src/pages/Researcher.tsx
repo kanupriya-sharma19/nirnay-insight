@@ -39,15 +39,15 @@ export default function ResearcherPage() {
   )
 
   const proposals = [
-    {
+      {
       title:
-        "Development and Field Trial of 500 T Capacity SAGES-III for Use with Continuous Miners (Phase-III)",
-      startDate: "01.07.2025",
+        "Assessing the Abiotic and Biotic Factors in Pit Lakes for Sustainable Management of Water and Environment",
+      startDate: "01.09.2025",
       endDate: "30.06.2025",
       status: "Approved",
       thrustArea: "Innovation & Indigenization" as const,
     },
-    {
+      {
       title:
         "Electrostatic deposition and functionalization of MWCNTs for detection of Coal Mine Methane (CMM)",
       startDate: "10.08.2025",
@@ -55,14 +55,17 @@ export default function ResearcherPage() {
       status: "Revision Required",
       thrustArea: "Safety & Environment" as const,
     },
+  
     {
       title:
-        "Development of an instrument for prediction of roof falls in the goaf area in coal mines",
-      startDate: "10.09.2025",
-      endDate: "28.02.2026",
-      status: "Rejected",
-      thrustArea: "Clean Coal Technologies" as const,
+        "Development of High-Capacity (500T) SAGES-III Goaf Edge Support System",
+      startDate: "13.10.2025",
+      endDate: "30.06.2025",
+      status: "Under Review",
+      thrustArea: "Innovation & Indigenization" as const,
     },
+  
+  
   ];
 
 const thrustAreas = {
@@ -166,7 +169,7 @@ const thrustAreas = {
         <div className="rounded-2xl bg-gradient-to-r from-blue-600 to-blue-500 p-8 mb-8 text-white shadow-lg">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
-              <h1 className="text-3xl font-bold mb-1">Welcome back, Dr. Kumar!</h1>
+              <h1 className="text-3xl font-bold mb-1">Welcome back, Prof Singh!</h1>
               <p className="text-blue-100">
                 Track your proposals and manage your R&D projects efficiently
               </p>

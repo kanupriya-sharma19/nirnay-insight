@@ -105,15 +105,15 @@ export const GovtFooter = () => {
           <div>
             <h3 className="font-bold mb-3">Contact</h3>
             <p className="text-sm">
-            CMPDI
+            NIRNAY
             <br />
-Kanke Rd, CMPDI Complex, Gondwana Place         <br />
-  Ranchi, Jharkhand, 834031                 <br />
+Team HackX01    <br />
+                <br />
               <a
                 href="mailto:nirnay@coal.gov.in"
                 className="hover:text-secondary transition"
               >
-                nirnay@coal.gov.in
+              nirnay25180@gmail.com
               </a>
             </p>
           </div>
@@ -125,6 +125,7 @@ Kanke Rd, CMPDI Complex, Gondwana Place         <br />
         <div className="container mx-auto px-4 py-4">
           <div className="flex flex-col md:flex-row justify-between items-center gap-2 text-sm text-primary-foreground/80 font-bold">
             <p>© 2025 HackX01. All rights reserved.</p>
+<p>Made by Hack01</p>
             <div className="flex gap-4">
               <a href="#" className="hover:text-secondary transition">
                 Privacy Policy

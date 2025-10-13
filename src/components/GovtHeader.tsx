@@ -34,14 +34,14 @@ interface Notification {
 export const GovtHeader = ({
   showAuth = true,
   onLogout,
-  userName = "Dr. Rajesh Kumar",
+  userName = "Prof. U. K. Singh",
 }: GovtHeaderProps) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
   const navigate = useNavigate();
   // Notifications based on role/user
   const notifications: Notification[] =
-  userName === "Dr. Rajesh Kumar"
+  userName === "Prof. U. K. Singh"
     ? [
         {
           title: "Development and Field Trial of 500 T Capacity SAGES-III",

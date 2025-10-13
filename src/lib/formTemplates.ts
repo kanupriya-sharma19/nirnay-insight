@@ -167,7 +167,7 @@ export const formTemplates = {
       },
       {
         name: "videoLink",
-        label: "19. Video Pitch (Add a YouTube video link for your 3-minute presentation)",
+        label: "19. Video (Add a YouTube video link)",
         type: "text",
         required: true,
       },

@@ -32,7 +32,7 @@ export default function RevisionPage() {
       "Electrostatic deposition and functionalization of MWCNTs for detection of Coal Mine Methane (CMM)",
     submittedDate: "10.08.2025",
     reviewer: "Dr. Sharma, Senior Scientific Officer",
-    reviewDate: "15.08.2025",
+    reviewDate: "15.10.2025",
     thrustArea: "Safety & Environment",
   };
 
@@ -40,18 +40,19 @@ export default function RevisionPage() {
     {
       section: "Methodology",
       comment:
-        "The proposed electrostatic deposition technique needs more detailed explanation. Please include specific voltage ranges, electrode materials, and deposition time parameters.",
+        "The description of the electrostatic deposition technique is not clear and lacks sufficient detail. Revision is required to clearly explain the procedure, including basic operational parameters and steps followed, to ensure the method can be properly understood and evaluated.",
       severity: "high" as const,
       requirement:
-        "Add detailed technical specifications in Section 3.2 of Form-I",
+        "Revise the methodology section to provide a clearer and more structured explanation of the electrostatic deposition process.",
     },
-    {
-      section: "Budget Justification",
-      comment:
-        "Equipment cost for MWCNT functionalization apparatus appears overestimated. Please provide vendor quotations and justify the requirement.",
-      severity: "high" as const,
-      requirement: "Submit updated Form-IV with vendor quotations attached",
-    },
+   {
+  section: "Details of Proposed Outlay",
+  comment:
+    "The budget allocation for the MWCNT Functionalization Apparatus appears overestimated based on market standards. Revision is required to provide realistic cost estimation supported by vendor quotations and to justify the necessity of each component included in the proposed equipment setup.",
+  severity: "medium" as const,
+  requirement: "Attach vendor quotations and submit revised Form-IV with updated cost details and justification.",
+}
+
   
   ];
 

@@ -55,7 +55,7 @@ export default function Proposals() {
       status: "Not Evaluated",
       submittedDate: "2024-12-15",
       instituteName: "IIT (ISM) Dhanbad",
-      principalInvestigator: "Dr. Rajesh Kumar",
+      principalInvestigator: "Prof. U. K. Singh",
       requestedAmount: 296_00_000
     },
     {
