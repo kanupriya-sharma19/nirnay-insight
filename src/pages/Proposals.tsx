@@ -177,7 +177,8 @@ export default function Proposals() {
     });
   }, [proposals, searchQuery, filterType, filterValue]);
 
-  return isLoading ? <LoadingAnimation /> : (
+  
+  return(
     <div className="min-h-screen flex flex-col">
       {/* <GovtHeader /> */}
       
