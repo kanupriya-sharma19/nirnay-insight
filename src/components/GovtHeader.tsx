@@ -41,53 +41,53 @@ export const GovtHeader = ({
   const navigate = useNavigate();
   // Notifications based on role/user
   const notifications: Notification[] =
-  userName === "Prof. U. K. Singh"
-    ? [
-        {
-          title: "Development and Field Trial of 500 T Capacity SAGES-III",
-          message: "Your proposal has been approved by SSRC",
-          time: "2 hours ago",
-          type: "approved",
-        },
-        {
-          title: "Electrostatic deposition and functionalization of MWCNTs",
-          message: "Revision required — reviewer requested changes",
-          time: "1 day ago",
-          type: "revision",
-        },
-      ]
-    : userName === "Dr. Priya Sharma"
-    ? [
-        {
-          title: "New High-Priority Proposal Received",
-          message:
-            "WW-2024-011: Advanced Coal Waste Recycling Technology - Score: 8.7/10",
-          time: "30 minutes ago",
-          type: "approved",
-        },
-        {
-          title: "Quarterly Review Meeting",
-          message: "Apex Committee meeting scheduled for next week",
-          time: "2 hours ago",
-          type: "revision",
-        },
-      ]
-    : [
-        {
-          title: "New Proposal Received",
-          message: "A new research proposal has been submitted for your review.",
-          time: "1 hour ago",
-          type: "approved",
-        },
-        {
-          title: "Revised Proposal Received",
-          message:
-            "A previously reviewed proposal has been revised and resubmitted.",
-          time: "3 hours ago",
-          type: "revision",
-        },
-      ];
-
+    userName === "Prof. U. K. Singh"
+      ? [
+          {
+            title: "Development and Field Trial of 500 T Capacity SAGES-III",
+            message: "Your proposal has been approved by SSRC",
+            time: "2 hours ago",
+            type: "approved",
+          },
+          {
+            title: "Electrostatic deposition and functionalization of MWCNTs",
+            message: "Revision required — reviewer requested changes",
+            time: "1 day ago",
+            type: "revision",
+          },
+        ]
+      : userName === "Dr. Priya Sharma"
+      ? [
+          {
+            title: "New High-Priority Proposal Received",
+            message:
+              "WW-2024-011: Advanced Coal Waste Recycling Technology - Score: 8.7/10",
+            time: "30 minutes ago",
+            type: "approved",
+          },
+          {
+            title: "Quarterly Review Meeting",
+            message: "Apex Committee meeting scheduled for next week",
+            time: "2 hours ago",
+            type: "revision",
+          },
+        ]
+      : [
+          {
+            title: "New Proposal Received",
+            message:
+              "A new research proposal has been submitted for your review.",
+            time: "1 hour ago",
+            type: "approved",
+          },
+          {
+            title: "Revised Proposal Received",
+            message:
+              "A previously reviewed proposal has been revised and resubmitted.",
+            time: "3 hours ago",
+            type: "revision",
+          },
+        ];
 
   return (
     <>
@@ -139,7 +139,11 @@ export const GovtHeader = ({
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-3">
                 <div className="bg-gradient-primary p-3 rounded-xl shadow-glow">
-          <img src="/logo.png" alt="Logo" className="h-8  object-contain" />
+                  <img
+                    src="/logo.png"
+                    alt="Logo"
+                    className="h-8  object-contain"
+                  />
                 </div>
                 <div>
                   <h1 className="text-2xl font-bold text-primary">
@@ -175,7 +179,7 @@ export const GovtHeader = ({
                   >
                     Analytics
                   </a>
-          
+
                   <a
                     href="#"
                     className="text-foreground hover:text-accent transition font-medium"
@@ -226,15 +230,14 @@ export const GovtHeader = ({
                 <div className="flex items-center gap-2 bg-accent/10 px-3 py-1 rounded-lg">
                   <User className="h-5 w-5 text-accent" />
                   <div className="hidden md:block text-sm">
-                   <p className="font-medium text-foreground">{userName}</p>
-<p className="text-xs text-muted-foreground">
-  {userName === "Dr. Priya Sharma" 
-    ? "Apex Committee Member" 
-    : userName === "Dr. Ghanshyam Tiwari" 
-      ? "NaCCER Reviewer" 
-      : "Researcher"}
-</p>
-
+                    <p className="font-medium text-foreground">{userName}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {userName === "Dr. Priya Sharma"
+                        ? "Apex Committee Member"
+                        : userName === "Dr. Ghanshyam Tiwari"
+                        ? "NaCCER Reviewer"
+                        : "Researcher"}
+                    </p>
                   </div>
                 </div>
                 <Button
@@ -300,7 +303,9 @@ export const GovtHeader = ({
                   <div>
                     <p className="font-medium text-foreground">{userName}</p>
                     <p className="text-xs text-muted-foreground">
-                      {userName === "Dr. Priya Sharma" ? "Apex Committee Member" : "Researcher"}
+                      {userName === "Dr. Priya Sharma"
+                        ? "Apex Committee Member"
+                        : "Researcher"}
                     </p>
                   </div>
                 </div>

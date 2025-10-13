@@ -304,21 +304,22 @@ export default function ApexPage() {
   };
 
   const handleSubmitDecision = () => {
-    if (!justification.trim()) {
-      alert("Please provide a justification for your decision.");
-      return;
-    }
+    // if (!justification.trim()) {
+    //   alert("Please provide a justification for your decision.");
+    //   return;
+    // }
+    navigate("/apex");
 
-    let message = "";
-    if (selectedAction === "revision") {
-      message = `Decision: Request Revision\nJustification: ${justification}\n\nThe proposer will be notified to revise and resubmit.`;
-    } else if (selectedAction === "accept") {
-      message = `Decision: Accept & Forward\nJustification: ${justification}\n\nProposal will be forwarded to implementation phase.`;
-    } else if (selectedAction === "reject") {
-      message = `Decision: Reject & Notify\nJustification: ${justification}\n\nOfficial rejection mail will be sent to proposer.`;
-    }
+    // let message = "";
+    // if (selectedAction === "revision") {
+    //   message = `Decision: Request Revision\nJustification: ${justification}\n\nThe proposer will be notified to revise and resubmit.`;
+    // } else if (selectedAction === "accept") {
+    //   message = `Decision: Accept & Forward\nJustification: ${justification}\n\nProposal will be forwarded to implementation phase.`;
+    // } else if (selectedAction === "reject") {
+    //   message = `Decision: Reject & Notify\nJustification: ${justification}\n\nOfficial rejection mail will be sent to proposer.`;
+    // }
 
-    alert(message);
+    // alert(message);
     closeDetails();
   };
 
