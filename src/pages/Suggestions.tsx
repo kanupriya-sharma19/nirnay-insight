@@ -57,7 +57,7 @@ const AISuggestedProposals: React.FC = () => {
     <div className="container mx-auto px-2 py-8">
       <Card className="border-0 shadow-none">
         <CardHeader>
-          <CardTitle className="text-2xl font-semibold">AI Suggested Proposals</CardTitle>
+          <CardTitle className="text-2xl font-semibold">Similar Proposals</CardTitle>
           <CardDescription>Proposals recommended by the AI evaluation engine</CardDescription>
         </CardHeader>
         <CardContent>
