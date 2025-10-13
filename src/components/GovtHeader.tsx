@@ -226,10 +226,15 @@ export const GovtHeader = ({
                 <div className="flex items-center gap-2 bg-accent/10 px-3 py-1 rounded-lg">
                   <User className="h-5 w-5 text-accent" />
                   <div className="hidden md:block text-sm">
-                    <p className="font-medium text-foreground">{userName}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {userName === "Dr. Priya Sharma" ? "Apex Committee Member" : "Researcher"}
-                    </p>
+                   <p className="font-medium text-foreground">{userName}</p>
+<p className="text-xs text-muted-foreground">
+  {userName === "Dr. Priya Sharma" 
+    ? "Apex Committee Member" 
+    : userName === "Dr. Ghanshyam Tiwari" 
+      ? "NaCCER Reviewer" 
+      : "Researcher"}
+</p>
+
                   </div>
                 </div>
                 <Button

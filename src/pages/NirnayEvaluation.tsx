@@ -232,7 +232,7 @@ export default function NirnayEvaluation() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <GovtHeader showAuth userName="NACCER Evaluator" onLogout={() => navigate("/")} />
+      <GovtHeader showAuth userName="Dr. Ghanshyam Tiwari" onLogout={() => navigate("/")} />
 
       <main className="flex-1 container mx-auto px-4 py-8">
         {/* Header */}
