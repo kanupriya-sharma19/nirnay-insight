@@ -118,7 +118,7 @@ export default function Dashboard() {
       thrustArea: "Safety & Environment",
       status: "Evaluated by NIRNAY",
       submittedDate: "2024-12-15",
-      evaluationScore: 8.33,
+      evaluationScore: 10,
       progress: 83.3,
       reviewer: "Dr. Sharma",
       instituteName: "IIT (ISM) Dhanbad",
@@ -388,23 +388,23 @@ export default function Dashboard() {
     // Base calculations using the overall score
     const technicalFeasibility = Math.min(
       10,
-      p.evaluationScore * 0.95 + Math.random() * 0.5
+      p.evaluationScore * 0.93 + Math.random() * 0.5
     );
     const potentialImpact = Math.min(
       10,
-      p.evaluationScore * 0.92 + Math.random() * 0.3
+      p.evaluationScore * 0.94 + Math.random() * 0.3
     );
     const novelty = Math.min(
       10,
-      p.evaluationScore * 0.88 + Math.random() * 0.4
+      p.evaluationScore * 0.93 + Math.random() * 0.4
     );
     const commercialization = Math.min(
       10,
-      p.evaluationScore * 0.98 - Math.random() * 0.2
+      p.evaluationScore * 0.92 - Math.random() * 0.2
     );
     const financialFeasibility = Math.min(
       10,
-      p.evaluationScore * 0.9 + Math.random() * 0.4
+      p.evaluationScore * 0.88 + Math.random() * 0.3
     );
     const team = Math.min(10, p.evaluationScore * 0.96 + Math.random() * 0.3);
 

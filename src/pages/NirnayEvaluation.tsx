@@ -105,12 +105,12 @@ export default function NirnayEvaluation() {
 
   // Generate evaluation scores
   const getEvaluationScores = (): EvaluationScores => {
-    const technicalFeasibility = 9.5;
-    const potentialImpact = 9.4;
-    const novelty = 9.1;
-    const commercialization = 9.8;
-    const financialFeasibility = 9;
-    const team = 8.9;
+    const technicalFeasibility = 9.32;
+    const potentialImpact = 9.55;
+    const novelty = 9.63;
+    const commercialization = 9.02;
+    const financialFeasibility = 8.83;
+    const team = 9.84;
 
     return {
       technicalFeasibility,
