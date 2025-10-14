@@ -309,7 +309,7 @@ export default function ApexPage() {
     //   return;
     // }
     navigate("/apex");
-
+ window.scrollTo(0, 0); 
     // let message = "";
     // if (selectedAction === "revision") {
     //   message = `Decision: Request Revision\nJustification: ${justification}\n\nThe proposer will be notified to revise and resubmit.`;
