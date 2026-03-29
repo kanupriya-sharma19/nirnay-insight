@@ -1,6 +1,6 @@
 
 
-# 🧠 NIRNAY AI
+# 🧠 NIRNAY
 
 🚀 **Multi-Agent AI Platform for Automated R&D Proposal Evaluation**
 
@@ -10,7 +10,7 @@ AutoGen • LangChain • SBERT • GCN • PPO-RL • Neo4j • Milvus • Flas
 
 ## 📌 Overview
 
-NIRNAY AI is an **intelligent multi-agent evaluation platform** designed to automate and optimize the assessment of **R&D proposals**.
+NIRNAY is an **intelligent multi-agent evaluation platform** designed to automate and optimize the assessment of **R&D proposals**.
 
 It addresses critical challenges like **manual bias**, **subjective evaluation**, and **inefficient review processes** by leveraging **AI-driven decision systems, knowledge graphs, and reinforcement learning**.
 
@@ -99,7 +99,7 @@ The system enables **accurate, scalable, and explainable evaluation** of proposa
 
 ## 👥 Team
 
-**Official Repository for NIRNAY AI**
+**Official Repository for NIRNAY**
 
 Maintained by:
 
